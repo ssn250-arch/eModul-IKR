@@ -82,7 +82,7 @@ export default function PortalIKR() {
             <div className="h-6 md:h-8 w-px bg-slate-300 hidden sm:block"></div>
             <h1 className="text-lg md:text-2xl font-black tracking-tight hidden sm:flex items-center gap-1.5 md:gap-2">
               <Box className="text-indigo-600 w-5 h-5 md:w-6 md:h-6"/>
-              <span className="text-slate-800">Portal</span>
+              <span className="text-slate-800">eModul</span>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">IKR</span>
             </h1>
           </div>
