@@ -25,15 +25,24 @@ export default function PortalIKR() {
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900 flex flex-col selection:bg-blue-200">
       {/* Header Portal */}
+      {/* Header Portal */}
       <header className="bg-white border-b border-slate-200 shadow-sm sticky top-0 z-50">
         <div className="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <div className="bg-indigo-600 text-white p-2 rounded-lg shadow-md">
-              <Box size={24} />
-            </div>
-            <h1 className="text-2xl font-black text-slate-800 tracking-tight">Portal <span className="text-indigo-600">IKR</span></h1>
+            
+            {/* Logo dari Google Drive dimasukkan di sini */}
+            <img 
+              src="https://drive.google.com/uc?export=view&id=1-GIzt1KglG-BrTMPISr1VYBW62qrWBw_" 
+              alt="Logo ADTEC/IKR" 
+              className="h-10 md:h-12 w-auto object-contain drop-shadow-sm hover:scale-105 transition-transform"
+            />
+            
+            <h1 className="text-2xl font-black text-slate-800 tracking-tight ml-1">
+              Portal <span className="text-indigo-600">IKR</span>
+            </h1>
           </div>
-          <div className="text-sm font-bold text-slate-500 bg-slate-100 px-4 py-2 rounded-full border border-slate-200">
+          
+          <div className="text-sm font-bold text-slate-500 bg-slate-100 px-4 py-2 rounded-full border border-slate-200 hidden sm:block">
             Pusat E-Pembelajaran
           </div>
         </div>
