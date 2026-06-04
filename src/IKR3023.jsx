@@ -1991,7 +1991,7 @@ export default function ModuleIKR3023({ onBackToPortal }) {
               style={{ border: 0 }}
               allowFullScreen={true}
               allow="autoplay; fullscreen; xr-spatial-tracking" 
-              src="https://skfb.ly/ADNW"
+              src="https://sketchfab.com?utm_medium=embed&utm_campaign=share-popup&utm_content=f24594ece9634cec9c1210c041838371" target="_blank" rel="nofollow" style="font-weight: bold; color: #1CAAD9"
               className="w-full h-full outline-none"
             ></iframe>
             
