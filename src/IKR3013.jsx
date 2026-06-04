@@ -3807,5 +3807,3 @@ export default function ModuleIKR3013({ onBackToPortal }) {
     </div>
   );
 };
-
-export default App;
