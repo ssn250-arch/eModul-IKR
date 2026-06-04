@@ -1,143 +1,204 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Cpu, CircuitBoard, Network, Cable, ChevronRight, Sparkles } from 'lucide-react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
+import { Box, Cpu, CircuitBoard, Network, Cable, ChevronRight, Loader2, Code2, Server, Database } from 'lucide-react';
 
-// Import logo dari folder lokal anda (pastikan fail logo.png ada dalam folder src)
 import logoADTEC from './logo.png';
 
-// Import komponen dari fail modul anda (Pastikan fail dinamakan IKR3013.jsx dan IKR3023.jsx)
-import ModuleIKR3013 from './IKR3013'; 
-import ModuleIKR3023 from './IKR3023';
+// Import modul menggunakan lazy loading
+const ModuleIKR3013 = lazy(() => import('./IKR3013')); 
+const ModuleIKR3023 = lazy(() => import('./IKR3023'));
+
+// Komponen Skrin Loading
+const LoadingScreen = () => (
+  <div className="min-h-screen flex flex-col items-center justify-center bg-slate-900 text-white relative overflow-hidden">
+    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-900/20 via-slate-900 to-slate-900"></div>
+    <Loader2 size={48} className="text-blue-500 animate-spin mb-4 relative z-10" />
+    <h2 className="text-2xl font-bold relative z-10 tracking-wide">Memuatkan Sistem...</h2>
+    <p className="text-slate-400 text-sm mt-2 relative z-10">Menyediakan persekitaran pembelajaran.</p>
+  </div>
+);
 
 export default function PortalIKR() {
   const [activeModule, setActiveModule] = useState(null);
 
-  // Animasi skrol ke atas apabila modul bertukar
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [activeModule]);
 
-  // Routing Modul
   if (activeModule === 'IKR3013') {
-    return <ModuleIKR3013 onBackToPortal={() => setActiveModule(null)} />;
+    return (
+      <Suspense fallback={<LoadingScreen />}>
+        <ModuleIKR3013 onBackToPortal={() => setActiveModule(null)} />
+      </Suspense>
+    );
   }
+  
   if (activeModule === 'IKR3023') {
-    return <ModuleIKR3023 onBackToPortal={() => setActiveModule(null)} />;
+    return (
+      <Suspense fallback={<LoadingScreen />}>
+        <ModuleIKR3023 onBackToPortal={() => setActiveModule(null)} />
+      </Suspense>
+    );
   }
 
-  // Paparan Lalai (Landing Page Portal)
+  // Paparan Landing Page Moden
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-900 flex flex-col selection:bg-blue-200">
-      {/* Header Portal */}
-      <header className="bg-white border-b border-slate-200 shadow-sm sticky top-0 z-50">
-        <div className="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-3">
-            
-            {/* Gambar Logo Tempatan */}
+    <div className="min-h-screen font-sans flex flex-col selection:bg-blue-300 selection:text-blue-900 bg-slate-50 relative overflow-hidden">
+      
+      {/* KOD CSS ANIMASI (Auto-inject) */}
+      <style>{`
+        @keyframes blob {
+          0% { transform: translate(0px, 0px) scale(1); }
+          33% { transform: translate(30px, -50px) scale(1.1); }
+          66% { transform: translate(-20px, 20px) scale(0.9); }
+          100% { transform: translate(0px, 0px) scale(1); }
+        }
+        .animate-blob { animation: blob 7s infinite; }
+        .animation-delay-2000 { animation-delay: 2s; }
+        .animation-delay-4000 { animation-delay: 4s; }
+      `}</style>
+
+      {/* 1. LATAR BELAKANG TEMA IT (Grid + Glowing Orbs) */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        {/* Corak Grid Teknikal */}
+        <div 
+          className="absolute inset-0 opacity-[0.04]" 
+          style={{ 
+            backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)', 
+            backgroundSize: '32px 32px' 
+          }}>
+        </div>
+        
+        {/* Cahaya Bernyawa (Glowing Orbs) */}
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] max-w-2xl max-h-2xl bg-blue-400 rounded-full mix-blend-multiply filter blur-[100px] opacity-30 animate-blob"></div>
+        <div className="absolute top-[20%] right-[-10%] w-[40%] h-[40%] max-w-2xl max-h-2xl bg-indigo-400 rounded-full mix-blend-multiply filter blur-[100px] opacity-30 animate-blob animation-delay-2000"></div>
+        <div className="absolute bottom-[-20%] left-[20%] w-[40%] h-[40%] max-w-2xl max-h-2xl bg-purple-400 rounded-full mix-blend-multiply filter blur-[100px] opacity-30 animate-blob animation-delay-4000"></div>
+      </div>
+
+      {/* 2. HEADER GLASSMORPHISM */}
+      <header className="bg-white/60 backdrop-blur-xl border-b border-white shadow-sm sticky top-0 z-50">
+        <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+          <div className="flex items-center gap-4">
             <img 
               src={logoADTEC} 
-              alt="Logo ADTEC/IKR" 
+              alt="Logo ADTEC" 
               className="h-10 md:h-12 w-auto object-contain drop-shadow-sm hover:scale-105 transition-transform"
             />
-            
-            <h1 className="text-2xl font-black text-slate-800 tracking-tight ml-1">
-              eModul <span className="text-indigo-600">IKR</span>
+            <div className="h-8 w-px bg-slate-300 hidden sm:block"></div>
+            <h1 className="text-xl md:text-2xl font-black tracking-tight hidden sm:flex items-center gap-2">
+              <Box className="text-indigo-600" size={24}/>
+              <span className="text-slate-800">Portal</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">IKR</span>
             </h1>
           </div>
-          <div className="text-sm font-bold text-slate-500 bg-slate-100 px-4 py-2 rounded-full border border-slate-200 hidden sm:block">
-            Pusat E-Pembelajaran
+          <div className="flex items-center gap-4">
+             {/* Icon Hiasan IT */}
+             <div className="hidden md:flex gap-3 text-slate-400 mr-2">
+                <Code2 size={20} className="hover:text-blue-500 transition-colors cursor-pointer"/>
+                <Server size={20} className="hover:text-blue-500 transition-colors cursor-pointer"/>
+                <Database size={20} className="hover:text-blue-500 transition-colors cursor-pointer"/>
+             </div>
+             <div className="text-xs font-bold text-blue-700 bg-blue-100/80 border border-blue-200 px-4 py-2 rounded-full shadow-inner">
+               Pusat E-Pembelajaran
+             </div>
           </div>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="flex-1 max-w-5xl mx-auto w-full px-4 py-10">
+      {/* 3. KANDUNGAN UTAMA */}
+      <main className="flex-1 max-w-6xl mx-auto w-full px-4 py-12 relative z-10 flex flex-col justify-center">
         
-        {/* Banner Selamat Datang */}
-        <div className="bg-gradient-to-br from-indigo-900 via-slate-800 to-indigo-950 rounded-3xl p-8 md:p-12 text-white shadow-2xl relative overflow-hidden mb-12 animate-fade-in border border-indigo-800/50">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500 opacity-20 blur-[100px] pointer-events-none"></div>
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-500 opacity-20 blur-[100px] pointer-events-none"></div>
-          
-          <div className="relative z-10 text-center max-w-2xl mx-auto">
-            <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-indigo-500/30 rounded-full text-indigo-200 text-xs font-bold mb-6 border border-indigo-400/30 backdrop-blur-sm">
-              <Sparkles size={14} /> Selamat Datang ke Sistem Bersepadu
+        {/* HERO SECTION IT */}
+        <div className="text-center max-w-3xl mx-auto mb-16 mt-8 md:mt-12">
+          {/* Lencana Status */}
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm border border-slate-200 shadow-sm text-xs font-bold text-slate-600 mb-8 hover:shadow-md transition-shadow cursor-default">
+            <span className="flex h-2.5 w-2.5 relative">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
             </span>
-            <h2 className="text-3xl md:text-5xl font-extrabold mb-4 leading-tight">
-              Pilih Modul Pembelajaran Anda
-            </h2>
-            <p className="text-indigo-100/80 text-base md:text-lg">
-              Akses nota interaktif, model AR 3D, perunding AI, dan uji kefahaman anda melalui modul-modul vokasional yang disediakan di bawah.
-            </p>
+            Sistem Dalam Talian Aktif
           </div>
+          
+          <h2 className="text-4xl md:text-6xl font-extrabold mb-6 tracking-tight text-slate-900 leading-[1.1]">
+            Langkah ke Masa Depan <br className="hidden md:block"/>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">
+              Teknologi Rangkaian
+            </span>
+          </h2>
+          
+          <p className="text-slate-600 text-base md:text-lg leading-relaxed mb-10 max-w-2xl mx-auto font-medium">
+            Teroka nota teori interaktif, model AR 3D, perunding infrastruktur AI, dan simulasi perkakasan sebenar. Pilih modul di bawah untuk memulakan sesi.
+          </p>
         </div>
 
-        {/* Pilihan Modul */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-slide-up">
+        {/* 4. GRID KAD MODUL */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pb-12">
           
-          {/* Kad Modul IKR3013 */}
+          {/* KAD IKR3013 */}
           <button 
             onClick={() => setActiveModule('IKR3013')}
-            className="group text-left bg-white rounded-3xl p-6 md:p-8 border-2 border-slate-100 shadow-lg hover:shadow-2xl hover:border-blue-400 transition-all duration-300 relative overflow-hidden flex flex-col h-full"
+            className="group text-left bg-white/70 backdrop-blur-xl rounded-[2rem] p-8 border border-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(37,99,235,0.12)] hover:-translate-y-2 hover:border-blue-200 transition-all duration-500 relative overflow-hidden flex flex-col h-full"
           >
-            <div className="absolute -top-10 -right-10 text-slate-100 group-hover:text-blue-50 transition-colors pointer-events-none transform group-hover:scale-110 duration-500">
-              <Cpu size={200} />
-            </div>
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-blue-100 to-transparent rounded-bl-full -z-10 transition-transform group-hover:scale-125 duration-700"></div>
             
             <div className="relative z-10 flex-1">
-              <div className="bg-blue-100 text-blue-600 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 shadow-inner group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                <CircuitBoard size={32} />
+              <div className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white w-16 h-16 rounded-2xl flex items-center justify-center mb-8 shadow-lg shadow-blue-500/30 group-hover:shadow-blue-500/50 transition-shadow">
+                <Cpu size={32} />
               </div>
               
-              <h3 className="text-2xl font-bold text-slate-800 mb-2 group-hover:text-blue-700 transition-colors">IKR3013</h3>
-              <h4 className="text-lg font-bold text-slate-600 mb-4">Computer Hardware & Software</h4>
+              <div className="inline-block px-3 py-1 bg-blue-50/80 border border-blue-100 text-blue-700 text-[10px] font-black rounded-lg mb-4 tracking-widest uppercase shadow-sm">
+                Modul IKR 3013
+              </div>
+              <h3 className="text-2xl font-black text-slate-800 mb-4 group-hover:text-blue-700 transition-colors">Computer Hardware & Software</h3>
               
-              <p className="text-slate-500 text-sm leading-relaxed mb-6">
-                Ketahui anatomi dalaman komputer, evolusi komponen fizikal, sistem operasi, dan gunakan Perunding AI untuk spesifikasi PC anda.
+              <p className="text-slate-500 text-sm leading-relaxed mb-8 font-medium">
+                Pelajari anatomi dalaman komputer, evolusi komponen fizikal, sistem operasi, dan gunakan Perunding AI untuk mereka spesifikasi PC.
               </p>
             </div>
 
-            <div className="relative z-10 mt-auto border-t border-slate-100 pt-4 flex items-center justify-between">
-              <span className="text-sm font-bold text-blue-600">Buka Modul</span>
-              <div className="bg-blue-50 p-2 rounded-full text-blue-600 group-hover:translate-x-2 transition-transform">
+            <div className="relative z-10 mt-auto flex items-center gap-4">
+              <div className="bg-slate-900 text-white p-3 rounded-xl group-hover:bg-blue-600 transition-colors shadow-md">
                 <ChevronRight size={20} />
               </div>
+              <span className="text-sm font-bold text-slate-700 group-hover:text-blue-600 transition-colors uppercase tracking-wide">Buka Modul</span>
             </div>
           </button>
 
-          {/* Kad Modul IKR3023 */}
+          {/* KAD IKR3023 */}
           <button 
             onClick={() => setActiveModule('IKR3023')}
-            className="group text-left bg-white rounded-3xl p-6 md:p-8 border-2 border-slate-100 shadow-lg hover:shadow-2xl hover:border-emerald-400 transition-all duration-300 relative overflow-hidden flex flex-col h-full"
+            className="group text-left bg-white/70 backdrop-blur-xl rounded-[2rem] p-8 border border-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(16,185,129,0.12)] hover:-translate-y-2 hover:border-emerald-200 transition-all duration-500 relative overflow-hidden flex flex-col h-full"
           >
-            <div className="absolute -top-10 -right-10 text-slate-100 group-hover:text-emerald-50 transition-colors pointer-events-none transform group-hover:scale-110 duration-500">
-              <Network size={200} />
-            </div>
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-emerald-100 to-transparent rounded-bl-full -z-10 transition-transform group-hover:scale-125 duration-700"></div>
             
             <div className="relative z-10 flex-1">
-              <div className="bg-emerald-100 text-emerald-600 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 shadow-inner group-hover:bg-emerald-600 group-hover:text-white transition-colors">
-                <Cable size={32} />
+              <div className="bg-gradient-to-br from-emerald-500 to-teal-600 text-white w-16 h-16 rounded-2xl flex items-center justify-center mb-8 shadow-lg shadow-emerald-500/30 group-hover:shadow-emerald-500/50 transition-shadow">
+                <Network size={32} />
               </div>
               
-              <h3 className="text-2xl font-bold text-slate-800 mb-2 group-hover:text-emerald-700 transition-colors">IKR3023</h3>
-              <h4 className="text-lg font-bold text-slate-600 mb-4">Network Structured Cabling</h4>
+              <div className="inline-block px-3 py-1 bg-emerald-50/80 border border-emerald-100 text-emerald-700 text-[10px] font-black rounded-lg mb-4 tracking-widest uppercase shadow-sm">
+                Modul IKR 3023
+              </div>
+              <h3 className="text-2xl font-black text-slate-800 mb-4 group-hover:text-emerald-700 transition-colors">Network Structured Cabling</h3>
               
-              <p className="text-slate-500 text-sm leading-relaxed mb-6">
-                Pelajari topologi rangkaian, standard pengkabelan bangunan, jenis kabel, fungsi Patch Panel, dan simulasi Rak Server.
+              <p className="text-slate-500 text-sm leading-relaxed mb-8 font-medium">
+                Kuasai topologi rangkaian, standard pengkabelan, jenis media kabel, fungsi Patch Panel, dan simulasi Rak Server 3D maya.
               </p>
             </div>
 
-            <div className="relative z-10 mt-auto border-t border-slate-100 pt-4 flex items-center justify-between">
-              <span className="text-sm font-bold text-emerald-600">Buka Modul</span>
-              <div className="bg-emerald-50 p-2 rounded-full text-emerald-600 group-hover:translate-x-2 transition-transform">
+            <div className="relative z-10 mt-auto flex items-center gap-4">
+              <div className="bg-slate-900 text-white p-3 rounded-xl group-hover:bg-emerald-600 transition-colors shadow-md">
                 <ChevronRight size={20} />
               </div>
+              <span className="text-sm font-bold text-slate-700 group-hover:text-emerald-600 transition-colors uppercase tracking-wide">Buka Modul</span>
             </div>
           </button>
 
         </div>
       </main>
 
-      <footer className="w-full py-6 bg-white border-t border-slate-200 text-center shadow-inner mt-auto">
-        <p className="text-slate-500 font-semibold text-sm tracking-wide">
+      {/* 5. FOOTER */}
+      <footer className="w-full py-8 bg-transparent text-center relative z-10 border-t border-slate-200/50">
+        <p className="text-slate-500 font-bold text-xs tracking-widest uppercase">
           Copyright &copy; TKR ADTEC Sandakan 2026
         </p>
       </footer>
