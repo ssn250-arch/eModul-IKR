@@ -1,5 +1,6 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
-import { Box, Cpu, CircuitBoard, Network, Cable, ChevronRight, Loader2, Code2, Server, Database } from 'lucide-react';
+// Saya tambah import 'GraduationCap' di sini untuk ikon e-pembelajaran
+import { Box, Cpu, CircuitBoard, Network, Cable, ChevronRight, Loader2, Code2, Server, Database, GraduationCap } from 'lucide-react';
 
 import logoADTEC from './logo.png';
 
@@ -44,7 +45,7 @@ export default function PortalIKR() {
   return (
     <div className="min-h-screen font-sans flex flex-col selection:bg-blue-300 selection:text-blue-900 bg-slate-50 relative overflow-hidden">
       
-      {/* KOD CSS ANIMASI (Auto-inject) */}
+      {/* KOD CSS ANIMASI */}
       <style>{`
         @keyframes blob {
           0% { transform: translate(0px, 0px) scale(1); }
@@ -57,9 +58,8 @@ export default function PortalIKR() {
         .animation-delay-4000 { animation-delay: 4s; }
       `}</style>
 
-      {/* 1. LATAR BELAKANG TEMA IT (Grid + Glowing Orbs) */}
+      {/* LATAR BELAKANG TEMA IT */}
       <div className="fixed inset-0 z-0 pointer-events-none">
-        {/* Corak Grid Teknikal */}
         <div 
           className="absolute inset-0 opacity-[0.04]" 
           style={{ 
@@ -68,13 +68,12 @@ export default function PortalIKR() {
           }}>
         </div>
         
-        {/* Cahaya Bernyawa (Glowing Orbs) */}
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] max-w-2xl max-h-2xl bg-blue-400 rounded-full mix-blend-multiply filter blur-[100px] opacity-30 animate-blob"></div>
         <div className="absolute top-[20%] right-[-10%] w-[40%] h-[40%] max-w-2xl max-h-2xl bg-indigo-400 rounded-full mix-blend-multiply filter blur-[100px] opacity-30 animate-blob animation-delay-2000"></div>
         <div className="absolute bottom-[-20%] left-[20%] w-[40%] h-[40%] max-w-2xl max-h-2xl bg-purple-400 rounded-full mix-blend-multiply filter blur-[100px] opacity-30 animate-blob animation-delay-4000"></div>
       </div>
 
-      {/* 2. HEADER GLASSMORPHISM */}
+      {/* HEADER GLASSMORPHISM */}
       <header className="bg-white/60 backdrop-blur-xl border-b border-white shadow-sm sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center gap-4">
@@ -86,38 +85,31 @@ export default function PortalIKR() {
             <div className="h-8 w-px bg-slate-300 hidden sm:block"></div>
             <h1 className="text-xl md:text-2xl font-black tracking-tight hidden sm:flex items-center gap-2">
               <Box className="text-indigo-600" size={24}/>
-              <span className="text-slate-800">Portal</span>
+              <span className="text-slate-800">eModul</span>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">IKR</span>
             </h1>
           </div>
           <div className="flex items-center gap-4">
-             {/* Icon Hiasan IT */}
              <div className="hidden md:flex gap-3 text-slate-400 mr-2">
                 <Code2 size={20} className="hover:text-blue-500 transition-colors cursor-pointer"/>
                 <Server size={20} className="hover:text-blue-500 transition-colors cursor-pointer"/>
                 <Database size={20} className="hover:text-blue-500 transition-colors cursor-pointer"/>
              </div>
-             <div className="text-xs font-bold text-blue-700 bg-blue-100/80 border border-blue-200 px-4 py-2 rounded-full shadow-inner">
+             
+             {/* Ikon GraduationCap ditambah di sebelah teks Pusat E-Pembelajaran */}
+             <div className="flex items-center gap-2 text-xs font-bold text-blue-700 bg-blue-100/80 border border-blue-200 px-4 py-2 rounded-full shadow-inner">
+               <GraduationCap size={16} className="text-blue-600" />
                Pusat E-Pembelajaran
              </div>
           </div>
         </div>
       </header>
 
-      {/* 3. KANDUNGAN UTAMA */}
+      {/* KANDUNGAN UTAMA */}
       <main className="flex-1 max-w-6xl mx-auto w-full px-4 py-12 relative z-10 flex flex-col justify-center">
         
-        {/* HERO SECTION IT */}
+        {/* HERO SECTION IT - Lencana telah dibuang */}
         <div className="text-center max-w-3xl mx-auto mb-16 mt-8 md:mt-12">
-          {/* Lencana Status */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm border border-slate-200 shadow-sm text-xs font-bold text-slate-600 mb-8 hover:shadow-md transition-shadow cursor-default">
-            <span className="flex h-2.5 w-2.5 relative">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
-            </span>
-            Sistem Dalam Talian Aktif
-          </div>
-          
           <h2 className="text-4xl md:text-6xl font-extrabold mb-6 tracking-tight text-slate-900 leading-[1.1]">
             Langkah ke Masa Depan <br className="hidden md:block"/>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">
@@ -130,7 +122,7 @@ export default function PortalIKR() {
           </p>
         </div>
 
-        {/* 4. GRID KAD MODUL */}
+        {/* GRID KAD MODUL */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pb-12">
           
           {/* KAD IKR3013 */}
@@ -196,7 +188,7 @@ export default function PortalIKR() {
         </div>
       </main>
 
-      {/* 5. FOOTER */}
+      {/* FOOTER */}
       <footer className="w-full py-8 bg-transparent text-center relative z-10 border-t border-slate-200/50">
         <p className="text-slate-500 font-bold text-xs tracking-widest uppercase">
           Copyright &copy; TKR ADTEC Sandakan 2026
