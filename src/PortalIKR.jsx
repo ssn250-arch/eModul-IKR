@@ -40,7 +40,7 @@ export default function PortalIKR() {
             />
             
             <h1 className="text-2xl font-black text-slate-800 tracking-tight ml-1">
-              Portal <span className="text-indigo-600">IKR</span>
+              eModul <span className="text-indigo-600">IKR</span>
             </h1>
           </div>
           <div className="text-sm font-bold text-slate-500 bg-slate-100 px-4 py-2 rounded-full border border-slate-200 hidden sm:block">
