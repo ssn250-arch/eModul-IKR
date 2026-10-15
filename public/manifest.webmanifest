@@ -1,15 +1,22 @@
 {
   "id": "/eModul-IKR/",
-  "short_name": "eModul IKR",
-  "name": "eModul-IKR | ADTEC JTM Kampus Sandakan",
-  "description": "Pembelajaran interaktif SKM Tahap 3 untuk IKR3013 dan IKR3023.",
+  "name": "eModul-IKR | Pembelajaran Digital TVET",
+  "short_name": "eModul-IKR",
+  "description": "Platform pembelajaran digital TVET untuk IKR3013 dan IKR3023. Created by Ts. Syed Mohd Yusri.",
   "start_url": "/eModul-IKR/",
   "scope": "/eModul-IKR/",
   "display": "standalone",
+  "orientation": "any",
   "background_color": "#f8fafc",
-  "theme_color": "#283c91",
+  "theme_color": "#4f46e5",
   "lang": "ms-MY",
   "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "300x300",
+      "type": "image/png",
+      "purpose": "any"
+    },
     {
       "src": "icons/icon-192.png",
       "sizes": "192x192",
@@ -21,6 +28,18 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "icons/maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }

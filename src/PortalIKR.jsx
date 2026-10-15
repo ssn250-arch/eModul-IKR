@@ -94,8 +94,8 @@ export default function PortalIKR() {
 
       {/* HEADER GLASSMORPHISM (Responsif) */}
       <header ref={headerRef} className="bg-white/80 backdrop-blur-xl border-b border-white shadow-sm sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 py-3 md:py-4 flex justify-between items-center">
-          <div className="flex items-center gap-2 md:gap-4">
+        <div className="max-w-6xl mx-auto px-3 sm:px-4 py-3 md:py-4 flex justify-between items-center gap-2">
+          <div className="flex min-w-0 items-center gap-2 md:gap-4">
             <img 
               src={logoADTEC} 
               alt="Logo ADTEC" 

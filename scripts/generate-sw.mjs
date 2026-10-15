@@ -14,7 +14,7 @@ function gather(dir) {
 const assets = gather(dist)
  .filter(fp => !fp.endsWith('.map') && !fp.endsWith('sw.js'))
  .map(fp => base + path.relative(dist, fp).split(path.sep).join('/'));
-const version = crypto.createHash('sha256').update(assets.map(p=>p+':'+fs.statSync(path.join(dist,p.slice(base.length))).size).join('|')).digest('hex').slice(0,10);
+const version = crypto.createHash('sha256').update(assets.map(p => p + ':' + crypto.createHash('sha256').update(fs.readFileSync(path.join(dist,p.slice(base.length)))).digest('hex')).join('|')).digest('hex').slice(0,10);
 const serviceWorker = `// eModul-IKR GitHub Pages PWA (same-origin assets only)
 const CACHE = 'emodul-ikr-newic-${version}';
 const SCOPE = ${JSON.stringify(base)};

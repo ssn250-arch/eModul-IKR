@@ -1,1 +1,19 @@
 @import "tailwindcss";
+
+/* Responsive guardrails; retains the existing design and all learning modules. */
+:root { color-scheme: light; }
+html { min-width: 0; scroll-behavior: smooth; }
+body { min-width: 0; margin: 0; overflow-x: clip; -webkit-text-size-adjust: 100%; }
+#root { min-width: 0; min-height: 100dvh; }
+img, picture, video, canvas { max-width: 100%; }
+iframe { max-width: 100%; }
+button, a { -webkit-tap-highlight-color: transparent; }
+:focus-visible { outline: 3px solid #4f46e5; outline-offset: 3px; }
+@media (max-width: 420px) {
+  /* Avoid long technical headings/URLs forcing horizontal scrolling. */
+  main h1, main h2, main h3, main p, main li { overflow-wrap: anywhere; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
