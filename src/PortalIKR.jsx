@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense, lazy } from 'react';
+import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
 import { Box, Cpu, CircuitBoard, Network, Cable, ChevronRight, Loader2, Code2, Server, Database, GraduationCap, Map, ArrowLeft, CheckCircle2 } from 'lucide-react';
 
 import logoADTEC from './logo.png';
@@ -20,10 +20,30 @@ const LoadingScreen = () => (
 export default function PortalIKR() {
   const [activeModule, setActiveModule] = useState(null);
   const [showCurriculum, setShowCurriculum] = useState(false);
+  const headerRef = useRef(null);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [activeModule]);
+
+  // Tutup panel jika klik di luar header atau tekan Escape.
+  useEffect(() => {
+    if (!showCurriculum) return undefined;
+    const closeOnEscape = (event) => {
+      if (event.key === 'Escape') setShowCurriculum(false);
+    };
+    const closeOnOutside = (event) => {
+      if (headerRef.current && !headerRef.current.contains(event.target)) {
+        setShowCurriculum(false);
+      }
+    };
+    document.addEventListener('keydown', closeOnEscape);
+    document.addEventListener('pointerdown', closeOnOutside);
+    return () => {
+      document.removeEventListener('keydown', closeOnEscape);
+      document.removeEventListener('pointerdown', closeOnOutside);
+    };
+  }, [showCurriculum]);
 
 
   if (activeModule === 'IKR3013') {
@@ -73,7 +93,7 @@ export default function PortalIKR() {
       </div>
 
       {/* HEADER GLASSMORPHISM (Responsif) */}
-      <header className="bg-white/60 backdrop-blur-xl border-b border-white shadow-sm sticky top-0 z-50">
+      <header ref={headerRef} className="bg-white/80 backdrop-blur-xl border-b border-white shadow-sm sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 py-3 md:py-4 flex justify-between items-center">
           <div className="flex items-center gap-2 md:gap-4">
             <img 
@@ -88,19 +108,91 @@ export default function PortalIKR() {
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">IKR</span>
             </h1>
           </div>
-          <div className="flex items-center gap-4">
-             <div className="hidden md:flex gap-3 text-slate-400 mr-2">
-                <Code2 size={20} className="hover:text-blue-500 transition-colors cursor-pointer"/>
-                <Server size={20} className="hover:text-blue-500 transition-colors cursor-pointer"/>
-                <Database size={20} className="hover:text-blue-500 transition-colors cursor-pointer"/>
-             </div>
-             
-             <div className="flex items-center gap-1.5 md:gap-2 text-[10px] md:text-xs font-bold text-blue-700 bg-blue-100/80 border border-blue-200 px-3 md:px-4 py-1.5 md:py-2 rounded-full shadow-inner">
-               <GraduationCap size={16} className="text-blue-600 w-4 h-4 md:w-5 md:h-5" />
-               <span className="whitespace-nowrap">Pusat E-Pembelajaran</span>
-             </div>
-          </div>
+          <nav className="flex items-center gap-2 sm:gap-3" aria-label="Navigasi portal">
+            <button
+              type="button"
+              aria-expanded={showCurriculum}
+              aria-controls="panel-peta-kp"
+              onClick={() => setShowCurriculum((value) => !value)}
+              className={`group inline-flex items-center gap-2 rounded-full border px-3 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm font-extrabold shadow-sm transition-all duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${showCurriculum ? 'bg-indigo-600 text-white border-indigo-600 shadow-indigo-200' : 'bg-white/85 text-indigo-700 border-indigo-100 hover:bg-indigo-50 hover:border-indigo-300 hover:shadow-md'}`}
+            >
+              <Map size={18} className="shrink-0" aria-hidden="true" />
+              <span className="whitespace-nowrap">Peta KP</span>
+              <span className={`hidden sm:inline-flex min-w-6 justify-center rounded-full px-1.5 py-0.5 text-[10px] ${showCurriculum ? 'bg-white/20 text-white' : 'bg-indigo-100 text-indigo-700'}`}>9</span>
+              <ChevronRight size={14} className={`hidden sm:block transition-transform duration-200 ${showCurriculum ? 'rotate-90' : ''}`} aria-hidden="true" />
+            </button>
+            <div className="hidden md:flex items-center gap-1.5 text-[11px] lg:text-xs font-bold text-blue-700 bg-blue-100/80 border border-blue-200 px-3 lg:px-4 py-2 rounded-full shadow-inner">
+              <GraduationCap size={17} className="text-blue-600 shrink-0" />
+              <span className="whitespace-nowrap">Pusat E-Pembelajaran</span>
+            </div>
+          </nav>
         </div>
+
+        {showCurriculum && (
+          <div
+            id="panel-peta-kp"
+            className="absolute inset-x-0 top-full px-3 pt-2 sm:px-6"
+            aria-label="Peta Kertas Penerangan JTM"
+          >
+            <div className="mx-auto max-w-6xl overflow-hidden rounded-[24px] border border-indigo-100/80 bg-white/95 shadow-[0_24px_70px_-20px_rgba(30,41,59,0.38)] backdrop-blur-2xl">
+              <div className="max-h-[min(76vh,650px)] overflow-y-auto overscroll-contain">
+                <div className="flex flex-wrap items-start justify-between gap-4 border-b border-indigo-100 bg-gradient-to-r from-slate-950 via-indigo-950 to-indigo-800 px-5 py-5 text-white sm:px-7">
+                  <div className="flex items-start gap-3">
+                    <div className="rounded-2xl bg-white/10 p-3 ring-1 ring-white/15"><Map size={25} /></div>
+                    <div>
+                      <span className="inline-block rounded-full bg-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-indigo-100">Kurikulum JTM • Tahap 3</span>
+                      <h2 className="mt-2 text-xl font-black sm:text-2xl">Peta Kertas Penerangan</h2>
+                      <p className="mt-1 text-xs text-indigo-100 sm:text-sm">J619-003-3:2023 • Computer Network Services • 9 KP</p>
+                    </div>
+                  </div>
+                  <button type="button" onClick={() => setShowCurriculum(false)} className="rounded-xl border border-white/20 px-3 py-2 text-xs font-bold text-white transition hover:bg-white/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white" aria-label="Tutup peta KP">Tutup ✕</button>
+                </div>
+                <div className="grid grid-cols-1 gap-5 p-4 sm:p-6 lg:grid-cols-2">
+                {[
+                  { code:'IKR3013', entries:[
+                    ['KP(1/5)','Pengenalan Komponen Komputer'], ['KP(2/5)','Pengenalan kepada Perkakasan Komputer'],
+                    ['KP(3/5)','Pengenalan kepada Sistem Komputer'], ['KP(4/5)','Pengenalan kepada Aplikasi Komputer'],
+                    ['KP(5/5)','Pengenalan kepada Rekod Pemasangan Perkakasan dan Sistem Komputer']
+                  ]},
+                  { code:'IKR3023', entries:[
+                    ['KP(1/4)','Pengenalan kepada Rangkaian'], ['KP(2/4)','Pengenalan kepada Perkakasan Rangkaian'],
+                    ['KP(3/4)','Pengenalan kepada Pelan Rangkaian'], ['KP(4/4)','Pengenalan kepada Pemasangan Kabel']
+                  ]},
+                ].map(group => (
+                    <section key={group.code} className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50 p-4 sm:p-5">
+                      <div className="mb-4 flex items-center justify-between gap-3">
+                        <div className="flex items-center gap-2">
+                          <span className={`rounded-xl p-2.5 ${group.code === 'IKR3013' ? 'bg-blue-100 text-blue-700' : 'bg-emerald-100 text-emerald-700'}`}>
+                            {group.code === 'IKR3013' ? <Cpu size={18}/> : <Network size={18}/>}</span>
+                          <h3 className="text-lg font-black text-slate-900">{group.code}</h3>
+                        </div>
+                        <span className="rounded-full border border-slate-200 bg-white px-3 py-1 text-[11px] font-bold text-slate-500">{group.entries.length} KP</span>
+                      </div>
+                      <ol className="space-y-2">
+                        {group.entries.map(([code, title], idx) => (
+                          <li key={code} className="group flex items-start gap-3 rounded-xl border border-slate-100 bg-white px-3 py-3 transition-colors hover:border-indigo-200 hover:bg-indigo-50/60">
+                            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-indigo-50 text-xs font-black text-indigo-700">{idx + 1}</span>
+                            <span className="text-sm leading-snug text-slate-700"><span className="font-black text-indigo-700">{code}</span><span className="block mt-0.5">{title}</span></span>
+                          </li>
+                        ))}
+                      </ol>
+                      <button
+                        type="button"
+                        onClick={() => { setShowCurriculum(false); setActiveModule(group.code); }}
+                        className="mt-4 inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-2.5 text-xs font-bold text-white shadow transition hover:-translate-y-0.5 hover:bg-indigo-700"
+                      >
+                        Buka Modul {group.code} <ChevronRight size={15} />
+                      </button>
+                    </section>
+                  ))}
+                </div>
+                <p className="border-t border-slate-100 bg-slate-50 px-5 py-3 text-[11px] leading-relaxed text-slate-500 sm:px-7">
+                  Peta ini ialah rujukan tajuk KP rasmi, bukan pengesahan bahawa semua kriteria amali telah dinilai. Gunakan Kertas Penerangan JTM dan instrumen pentaksiran rasmi sebagai sumber utama.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* KANDUNGAN UTAMA (Responsif) */}
@@ -185,43 +277,7 @@ export default function PortalIKR() {
 
         </div>
 
-        <section className="mx-auto w-full max-w-5xl pb-10" aria-label="Aktiviti dan peta kompetensi">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-            <button type="button" aria-expanded={showCurriculum} onClick={() => setShowCurriculum(v => !v)} className="rounded-2xl bg-white text-slate-800 p-6 shadow-lg border border-slate-200 text-left hover:border-indigo-300 transition-all focus-visible:outline focus-visible:outline-4 focus-visible:outline-indigo-400">
-              <Map size={30} className="mb-3 text-indigo-700" />
-              <h3 className="text-xl font-bold">Peta Kertas Penerangan JTM</h3>
-              <p className="mt-2 text-sm text-slate-600">Rujuk KP rasmi bagi kedua-dua modul dan hubungannya dengan aktiviti pembelajaran digital.</p>
-              <span className="mt-3 inline-block text-xs bg-indigo-50 text-indigo-800 px-3 py-1 rounded-full">{showCurriculum ? 'Tutup peta KP' : 'Lihat 9 KP'}</span>
-            </button>
-          </div>
-          {showCurriculum && (
-            <div className="mt-5 rounded-2xl bg-white border border-slate-200 shadow-md p-5 md:p-7" aria-label="Senarai KP rasmi">
-              <p className="text-xs font-semibold uppercase tracking-widest text-indigo-700">J619-003-3:2023 • Computer Network Services • Tahap 3</p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-                {[
-                  { code:'IKR3013', entries:[
-                    ['KP(1/5)','Pengenalan Komponen Komputer'], ['KP(2/5)','Pengenalan kepada Perkakasan Komputer'],
-                    ['KP(3/5)','Pengenalan kepada Sistem Komputer'], ['KP(4/5)','Pengenalan kepada Aplikasi Komputer'],
-                    ['KP(5/5)','Pengenalan kepada Rekod Pemasangan Perkakasan dan Sistem Komputer']
-                  ]},
-                  { code:'IKR3023', entries:[
-                    ['KP(1/4)','Pengenalan kepada Rangkaian'], ['KP(2/4)','Pengenalan kepada Perkakasan Rangkaian'],
-                    ['KP(3/4)','Pengenalan kepada Pelan Rangkaian'], ['KP(4/4)','Pengenalan kepada Pemasangan Kabel']
-                  ]},
-                ].map(group => (
-                  <div key={group.code}>
-                    <h4 className="font-black text-slate-800 mb-3">{group.code}</h4>
-                    <ul className="space-y-2">
-                      {group.entries.map(([code,title])=><li key={code} className="flex gap-2 items-start text-sm text-slate-700"><CheckCircle2 className="w-4 h-4 mt-0.5 shrink-0 text-indigo-600"/><span><strong>{code}</strong> — {title}</span></li>)}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-              <p className="text-xs text-slate-500 mt-5">Peta ini ialah rujukan tajuk KP rasmi, bukan pengesahan bahawa semua kriteria amali telah dinilai. Gunakan Kertas Penerangan JTM dan instrumen pentaksiran rasmi sebagai sumber utama.</p>
-            </div>
-          )}
-        </section>
       </main>
 
       {/* FOOTER */}

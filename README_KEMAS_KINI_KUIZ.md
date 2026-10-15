@@ -1,9 +1,9 @@
 # eModul-IKR — Kekalkan Reka Bentuk Asal + Kuiz Unlock 5 Soalan
 
 ## Apa yang dikekalkan
-- **Reka bentuk asal** kad IKR3013 dan IKR3023, warna tema, header, animasi, kad menu.
+- **Reka bentuk asal** kad IKR3013 dan IKR3023, warna tema, animasi, kad menu serta fungsi pembelajaran.
 - **Semua kandungan nota asal** dalam kedua-dua modul, termasuk bahagian Nota Asas / Teknologi Terkini, gambar, infografik, visualisasi 3D, panduan/pemeriksaan dan pencadang spesifikasi.
-- Peta Kertas Penerangan JTM pada halaman Portal.
+- Semua kandungan Peta Kertas Penerangan JTM: 9 KP (5 KP IKR3013 dan 4 KP IKR3023).
 - Struktur React + Vite untuk GitHub Pages dan fail PWA daripada pakej terdahulu.
 
 ## Perubahan
@@ -11,7 +11,7 @@
 2. **Variasi soalan bagi 29 pelajar**. Setiap topik ada **8 soalan berlainan**, dan sistem memilih 5 dengan kombinasi berbeza bagi nombor pelajar 1–29. Turutan soalan dan jawapan juga dipelbagaikan. **29 pelajar perlu diberikan nombor unik yang berbeza** oleh pensyarah. Nama atau login tidak diperlukan.
 3. **Kemajuan berasingan setiap pelajar** berdasarkan nombor pelajar dan modul pada satu peranti, menggunakan localStorage (contohnya pelajar 3 berbeza daripada pelajar 4). Data tidak terselaras antara peranti dan tidak disahkan dengan akaun pelajar; ini alat PdP, bukan pengesahan identiti rasmi.
 4. **Penilaian akhir modul** menggantikan kuiz penilaian lama: **IKR3013 → https://pcnexus.netlify.app/** dan **IKR3023 → https://cablelabx.netlify.app/**. Kad akhir aktif selepas semua checkpoint modul lulus.
-5. **Simulasi Diagnostik Kabel** di portal dibuang berdasarkan permintaan terdahulu; Peta KP dikekalkan.
+5. **Simulasi Diagnostik Kabel** dibuang berdasarkan permintaan terdahulu. **Kad Peta KP besar di bawah portal dipadam**, kini peta disediakan melalui butang **Peta KP (9)** dalam header portal, membuka panel responsif di bawah header.
 6. **Kunci versi baharu**: kemajuan lama yang dibuka hanya melalui bacaan tidak dipindahkan secara automatik ke kemajuan kuiz.
 
 ## Fail baharu/diubah
@@ -20,7 +20,7 @@
 - `src/TopicUnlockQuiz.jsx` — antara muka kuiz beranimasi, nombor pelajar, paparan soalan dan keputusan, ulang cuba.
 - `src/TopicUnlockBanks.js` — bank 8 soalan untuk setiap 16 topik.
 - `src/TopicQuizEngine.js` — penghasil kombinasi 5 soalan mengikut nombor pelajar.
-- `src/PortalIKR.jsx` — buang sahaja kad Simulasi Diagnostik Kabel; gaya dan peta KP kekal.
+- `src/PortalIKR.jsx` — pindahkan Peta KP daripada kad portal ke navigasi header; senarai KP kekal, panel responsif dengan kawalan tutup, dan pautan ke kedua-dua modul.
 - `scripts/smoke-check.mjs`, `scripts/test-quiz-sets.mjs` — semakan struktur dan keunikan set kuiz.
 
 ## Cara guna dalam VS Code
@@ -39,7 +39,7 @@
 5. Jika semua stabil, jalankan `npm run build` kemudian deploy melalui kaedah GitHub Pages yang bro sedia gunakan.
 6. Jika fail statik masih ter-cache, lakukan hard refresh dan semak service worker selepas deploy.
 
-## Status ujian 15 Oktober 2026
+## Status ujian dan perubahan 15 Oktober 2026
 - LULUS semakan sintaks JSX/JS untuk semua fail kod yang diubah (parser TypeScript).
 - LULUS `npm run check:structure`.
 - LULUS `npm run test:quiz`: **464 set kuiz** (16 topik × 29 nombor), 5 soalan/set, tiada set awal yang berganda dalam topik yang sama.
@@ -50,3 +50,11 @@
 - Data kemajuan dalam localStorage boleh dipadam dengan reset/clear browser dan tidak diikuti automatik pada peranti lain.
 - Soalan 5/8 rawak tidak membuktikan pelajar membaca semua ayat nota. Jika perlukan bukti audit rasmi, pertimbangkan login atau backend berpusat dan rekod masa/penilaian.
 - Link luar PC Nexus dan CableLabX memerlukan internet dan tertakluk kepada ketersediaan laman luar.
+
+## Kemas kini khusus: Peta KP Dalam Header
+- Kad besar **Peta Kertas Penerangan JTM** di bawah pilihan modul IKR3013 dan IKR3023 telah dibuang.
+- Butang baharu **Peta KP (9)** berada di sudut kanan header dan kekal kelihatan ketika skrol.
+- Apabila diklik, panel senarai KP terbuka tepat di bawah header; dua kolum pada desktop dan satu kolum pada telefon.
+- Tutup panel menggunakan butang Tutup, kekunci Escape atau klik di luar panel.
+- Tajuk dan susunan semua 9 KP asal dikekalkan, dengan tambahan akses pantas ke kedua-dua modul.
+- Perubahan kali ini hanya melibatkan `src/PortalIKR.jsx` dan dokumentasi. Semua fail kuiz, kad topik dan nota asal kekal sama seperti ZIP terdahulu.
