@@ -1,0 +1,26 @@
+{
+  "id": "/eModul-IKR/",
+  "short_name": "eModul IKR",
+  "name": "eModul-IKR | ADTEC JTM Kampus Sandakan",
+  "description": "Pembelajaran interaktif SKM Tahap 3 untuk IKR3013 dan IKR3023.",
+  "start_url": "/eModul-IKR/",
+  "scope": "/eModul-IKR/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#283c91",
+  "lang": "ms-MY",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
