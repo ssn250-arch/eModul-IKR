@@ -5,7 +5,7 @@ const root = process.cwd();
 const files = [
   'index.html', 'package.json','package-lock.json','vite.config.js',
   'src/main.jsx','src/App.jsx','src/PortalIKR.jsx', 'src/IKR3013.jsx',
-  'src/IKR3023.jsx','src/CableDiagnostic.jsx','src/index.css','src/logo.png',
+  'src/IKR3023.jsx','src/TopicUnlockQuiz.jsx','src/TopicUnlockBanks.js','src/TopicQuizEngine.js','src/index.css','src/logo.png',
   'public/manifest.webmanifest','public/icons/icon-192.png','public/icons/icon-512.png',
   'scripts/generate-sw.mjs'
 ];
@@ -26,7 +26,9 @@ const checks = [
  ['Correct JSX import', fs.readFileSync('src/main.jsx','utf8').includes("'./App.jsx'")],
  ['SW relative base', fs.readFileSync('src/main.jsx','utf8').includes('import.meta.env.BASE_URL')],
  ['Peta KP', portal.includes('KP(5/5)') && portal.includes('KP(4/4)')],
- ['Simulasi', portal.includes('CableDiagnostic')],
+ ['Diagnostic telah dibuang', !portal.includes('CableDiagnostic') && !fs.existsSync('src/CableDiagnostic.jsx')],
+ ['Link PC Nexus', fs.readFileSync('src/IKR3013.jsx','utf8').includes('https://pcnexus.netlify.app/')],
+ ['Link CableLabX', fs.readFileSync('src/IKR3023.jsx','utf8').includes('https://cablelabx.netlify.app/')],
 ];
 for (const [label,ok] of checks) { console.log(ok?'PASS':'FAIL',label); if(!ok)error=true; }
 if (error) process.exit(1);

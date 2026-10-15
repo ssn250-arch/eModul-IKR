@@ -1,12 +1,11 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
-import { Box, Cpu, CircuitBoard, Network, Cable, ChevronRight, Loader2, Code2, Server, Database, GraduationCap, ClipboardCheck, Map, ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { Box, Cpu, CircuitBoard, Network, Cable, ChevronRight, Loader2, Code2, Server, Database, GraduationCap, Map, ArrowLeft, CheckCircle2 } from 'lucide-react';
 
 import logoADTEC from './logo.png';
 
 // Import modul menggunakan lazy loading untuk penjimatan data internet
 const ModuleIKR3013 = lazy(() => import('./IKR3013')); 
 const ModuleIKR3023 = lazy(() => import('./IKR3023'));
-const CableDiagnostic = lazy(() => import('./CableDiagnostic')); 
 
 // Komponen Skrin Loading (Responsif)
 const LoadingScreen = () => (
@@ -26,9 +25,6 @@ export default function PortalIKR() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [activeModule]);
 
-  if (activeModule === 'SIMULASI') {
-    return <Suspense fallback={<LoadingScreen />}><CableDiagnostic onBack={() => setActiveModule(null)} /></Suspense>;
-  }
 
   if (activeModule === 'IKR3013') {
     return (
@@ -191,12 +187,7 @@ export default function PortalIKR() {
 
         <section className="mx-auto w-full max-w-5xl pb-10" aria-label="Aktiviti dan peta kompetensi">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <button type="button" onClick={() => setActiveModule('SIMULASI')} className="rounded-2xl bg-indigo-950 text-white p-6 shadow-lg text-left hover:bg-indigo-900 transition-all focus-visible:outline focus-visible:outline-4 focus-visible:outline-indigo-400">
-              <ClipboardCheck size={30} className="mb-3 text-yellow-300" />
-              <h3 className="text-xl font-bold">Simulasi Diagnostik Kabel</h3>
-              <p className="mt-2 text-sm text-indigo-100">Latihan berasaskan senario: baca petunjuk Cable Tester, kenal pasti punca dan lihat penerangan penyelesaian.</p>
-              <span className="mt-3 inline-block text-xs bg-indigo-700 px-3 py-1 rounded-full">Latihan pengayaan IKR3023 KP(4/4)</span>
-            </button>
+
             <button type="button" aria-expanded={showCurriculum} onClick={() => setShowCurriculum(v => !v)} className="rounded-2xl bg-white text-slate-800 p-6 shadow-lg border border-slate-200 text-left hover:border-indigo-300 transition-all focus-visible:outline focus-visible:outline-4 focus-visible:outline-indigo-400">
               <Map size={30} className="mb-3 text-indigo-700" />
               <h3 className="text-xl font-bold">Peta Kertas Penerangan JTM</h3>
