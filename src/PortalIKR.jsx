@@ -283,7 +283,7 @@ export default function PortalIKR() {
       {/* FOOTER */}
       <footer className="w-full py-6 md:py-8 bg-transparent text-center relative z-10 border-t border-slate-200/50">
         <p className="text-slate-500 font-bold text-[10px] md:text-xs tracking-widest uppercase px-4">
-          Copyright &copy; TKR ADTEC JTM Kampus Sandakan 2026 • Rujukan JTM J619-003-3:2023
+          Copyright &copy; TKR ADTEC JTM Kampus Sandakan 2026
         </p>
       </footer>
     </div>
