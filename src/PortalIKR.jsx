@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
 import { Box, Cpu, CircuitBoard, Network, Cable, ChevronRight, Loader2, Code2, Server, Database, GraduationCap, Map, ArrowLeft, CheckCircle2 } from 'lucide-react';
 
-import logoADTEC from './logo.png';
+import logoEmodul from './logo-emodul-mark.png';
 
 // Import modul menggunakan lazy loading untuk penjimatan data internet
 const ModuleIKR3013 = lazy(() => import('./IKR3013')); 
@@ -94,19 +94,20 @@ export default function PortalIKR() {
 
       {/* HEADER GLASSMORPHISM (Responsif) */}
       <header ref={headerRef} className="bg-white/80 backdrop-blur-xl border-b border-white shadow-sm sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-3 sm:px-4 py-3 md:py-4 flex justify-between items-center gap-2">
-          <div className="flex min-w-0 items-center gap-2 md:gap-4">
-            <img 
-              src={logoADTEC} 
-              alt="Logo ADTEC" 
-              className="h-8 sm:h-10 md:h-12 w-auto object-contain drop-shadow-sm hover:scale-105 transition-transform"
+        <div className="max-w-6xl mx-auto px-3 sm:px-4 py-2.5 md:py-3 flex justify-between items-center gap-2">
+          {/* Logo eModul-IKR baharu: ikon asal + teks jelas pada mobile dan desktop */}
+          <div className="flex min-w-0 shrink-0 items-center gap-1.5 sm:gap-3" aria-label="eModul-IKR">
+            <img
+              src={logoEmodul}
+              alt=""
+              aria-hidden="true"
+              className="h-11 w-auto shrink-0 object-contain drop-shadow-sm transition-transform duration-300 hover:scale-105 sm:h-14 md:h-16"
             />
-            <div className="h-6 md:h-8 w-px bg-slate-300 hidden sm:block"></div>
-            <h1 className="text-lg md:text-2xl font-black tracking-tight hidden sm:flex items-center gap-1.5 md:gap-2">
-              <Box className="text-indigo-600 w-5 h-5 md:w-6 md:h-6"/>
-              <span className="text-slate-800">eModul</span>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">IKR</span>
-            </h1>
+            <div className="flex items-center whitespace-nowrap text-base font-black tracking-tight sm:text-xl md:text-2xl">
+              <span className="text-[#121f64]">eModul</span>
+              <span className="text-amber-500">-</span>
+              <span className="text-[#4d46ee]">IKR</span>
+            </div>
           </div>
           <nav className="flex items-center gap-2 sm:gap-3" aria-label="Navigasi portal">
             <button
@@ -176,13 +177,6 @@ export default function PortalIKR() {
                           </li>
                         ))}
                       </ol>
-                      <button
-                        type="button"
-                        onClick={() => { setShowCurriculum(false); setActiveModule(group.code); }}
-                        className="mt-4 inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-2.5 text-xs font-bold text-white shadow transition hover:-translate-y-0.5 hover:bg-indigo-700"
-                      >
-                        Buka Modul {group.code} <ChevronRight size={15} />
-                      </button>
                     </section>
                   ))}
                 </div>
