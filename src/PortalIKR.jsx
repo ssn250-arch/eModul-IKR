@@ -176,13 +176,7 @@ export default function PortalIKR() {
                           </li>
                         ))}
                       </ol>
-                      //<button
-                      //  type="button"
-                      //  onClick={() => { setShowCurriculum(false); setActiveModule(group.code); }}
-                      //  className="mt-4 inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-2.5 text-xs font-bold text-white shadow transition hover:-translate-y-0.5 hover:bg-indigo-700"
-                      >
-                        //Buka Modul {group.code} <ChevronRight size={15} />
-                      //</button>
+                      
                     </section>
                   ))}
                 </div>
