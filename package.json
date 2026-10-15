@@ -14,7 +14,8 @@
     "check:structure": "node scripts/smoke-check.mjs",
     "test:quiz": "node scripts/test-quiz-sets.mjs",
     "test:chat": "node scripts/test-chatbot.mjs",
-    "test:i18n": "node scripts/test-bilingual.mjs"
+    "test:i18n": "node scripts/test-bilingual.mjs",
+    "test:cards": "node scripts/test-card-english.mjs"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.2.4",

@@ -33,7 +33,7 @@ function LiveTextTranslation({ language }) {
     };
     const applyAttrs = (element) => {
       if (element.closest('[data-no-translate]')) return;
-      const attrs = ['placeholder','aria-label','title'];
+      const attrs = ['placeholder','aria-label','title','alt'];
       let map = attrRecords.current.get(element);
       if (!map) { map = {}; attrRecords.current.set(element, map); }
       for (const attr of attrs) {

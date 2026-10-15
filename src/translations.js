@@ -1,7 +1,32 @@
 import { NOTE_EN } from './noteTranslations.js';
+import { CARD_EN } from './cardTranslations.js';
 // Selected UI and learning-card text translated into simple classroom English.
 // Original Malay is never overwritten in React state or the source files.
 const EN = {
+ // Kemajuan penguasaan dan kawalan pelajar — meliputi komponen lama yang dipaparkan secara dinamik.
+ 'Kemajuan Penguasaan Anda':'Your Learning Progress',
+ 'Status Bacaan Modul':'Module Learning Progress',
+ 'Sila pelajari topik ini:':'Please study this topic:',
+ 'Sila teliti nota:':'Please read the notes:',
+ 'Topik Lulus Kuiz':'Topics Passed',
+ 'Belum dipilih':'Not selected',
+ 'Pelajar:':'Student:',
+ 'Tukar':'Change',
+ 'Selesai Dibaca':'Completed',
+ 'Semua topik lulus! Buka penilaian PC Nexus.':'All topics passed! Open the PC Nexus assessment.',
+ 'Selesai! Anda kini layak menduduki Ujian.':'Completed! You can now take the final assessment.',
+ 'Kunci: Lulus kuiz topik sebelumnya dahulu':'Locked: Pass the previous topic quiz first',
+ 'Nombor pelajar (1 hingga 30):':'Student number (1 to 30):',
+ 'Sila pilih nombor 1 hingga 30.':'Please choose a number from 1 to 30.',
+ 'Adakah anda pasti mahu set semula (reset) semua kemajuan bacaan anda dari awal?':'Are you sure you want to reset all your learning progress?',
+ 'Muat Turun Nota PDF':'Download PDF Notes',
+ 'Muat Turun Nota':'Download Notes',
+ 'Lulus semua kuiz topik dahulu':'Pass all topic quizzes first',
+ 'Buka sistem penilaian luar di tab baharu.':'Open the external assessment in a new tab.',
+ 'Tips memilih komponen yang serasi.':'Tips for choosing compatible components.',
+ 'Panduan Pemilihan':'Component Selection Guide',
+ 'Amalan anti-statik & penyelenggaraan.':'Anti-static and maintenance practices.',
+ 'Lihat model 3D perkakasan rak server.':'Explore a 3D model of server rack equipment.',
  'Memuatkan Sistem...':'Loading system...',
  'Menyediakan persekitaran pembelajaran.':'Preparing your learning space.',
  'Peta KP':'KP Map',
@@ -242,6 +267,9 @@ const EN = {
 };
 
 const DYNAMIC_PATTERNS = [
+ [/^Pelajar:\s*(Belum dipilih|\d+)\s*•\s*Tukar$/i,(_,id)=>`Student: ${id === 'Belum dipilih' ? 'Not selected' : id} • Change`],
+ [/^(\d+)\s+daripada\s+(\d+)\s+Topik Lulus Kuiz$/i,(_,passed,total)=>`${passed} of ${total} Topics Passed`],
+ [/^(\d+)\s*\/\s*(\d+)\s+Topik Lulus Kuiz$/i,(_,passed,total)=>`${passed} of ${total} Topics Passed`],
  [/^Pelajar\s+(\d+)$/i,(_,n)=>`Student ${n}`],
  [/^Pelajar\s*#(\d+)$/i,(_,n)=>`Student #${n}`],
  [/^Soalan\s+(\d+)\s+daripada\s+(\d+)$/i,(_,n,total)=>`Question ${n} of ${total}`],
@@ -255,9 +283,10 @@ export function translateVisibleText(input) {
  if (!text) return input;
  if (Object.hasOwn(EN,text)) return lead+EN[text]+trail;
  if (Object.hasOwn(NOTE_EN,text)) return lead+NOTE_EN[text]+trail;
+ if (Object.hasOwn(CARD_EN,text)) return lead+CARD_EN[text]+trail;
  for (const [regex,fn] of DYNAMIC_PATTERNS) if (regex.test(text)) return lead+text.replace(regex,fn)+trail;
  // Some instructional text is split between React elements (for example, a bold number).
  // Translate only safe, complete phrase fragments; leave technical details untouched.
  return input;
 }
-export const getCoverageKeys = () => [...Object.keys(EN),...Object.keys(NOTE_EN)];
+export const getCoverageKeys = () => [...Object.keys(EN),...Object.keys(NOTE_EN),...Object.keys(CARD_EN)];

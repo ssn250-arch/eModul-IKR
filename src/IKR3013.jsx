@@ -1,4 +1,6 @@
 import { EnglishStudyGuide } from './EnglishGuides';
+import { useLanguage } from './LanguageContext';
+import { translateVisibleText } from './translations.js';
 import StudyChatbot from './StudyChatbot';
 import React, { useState, useEffect, useRef } from 'react';
 import { 
@@ -600,6 +602,9 @@ const quizQuestions = [
 // KOMPONEN UTAMA
 // ==========================================
 export default function ModuleIKR3013({ onBackToPortal }) {
+  // BM/EN menggunakan React Context: semua label utama terus dikemas kini apabila bahasa bertukar.
+  const { language, t } = useLanguage();
+  const localiseTopic = (title) => language === 'en' ? translateVisibleText(title || '') : title;
   // State Pembelajaran
   const [view, setView] = useState('menu');
   const [activeTopic, setActiveTopic] = useState(null);
@@ -665,11 +670,11 @@ export default function ModuleIKR3013({ onBackToPortal }) {
   };
 
   const changeStudent = () => {
-    const input = window.prompt('Nombor pelajar (1 hingga 30):', String(studentNumber || ''));
+    const input = window.prompt(t('Nombor pelajar (1 hingga 30):', 'Student number (1 to 30):'), String(studentNumber || ''));
     if (input === null) return;
     const number = Number(input);
     if (!Number.isInteger(number) || number < 1 || number > 30) {
-      window.alert('Sila pilih nombor 1 hingga 30.');
+      window.alert(t('Sila pilih nombor 1 hingga 30.', 'Please choose a number from 1 to 30.'));
       return;
     }
     handleStudentSelected(number);
@@ -1097,13 +1102,13 @@ export default function ModuleIKR3013({ onBackToPortal }) {
 
           <div className="relative z-10">
                 <button onClick={onBackToPortal} className="mb-4 inline-flex items-center gap-2 text-white bg-black/20 hover:bg-black/30 px-4 py-2 rounded-xl transition-all text-sm font-bold backdrop-blur-sm border border-white/20 z-50 relative">
-                    <Home size={18} /> Kembali ke Portal Utama
+                    <Home size={18} /> {t('Kembali ke Portal Utama', 'Back to Main Portal')}
                 </button>
               
-              <h1 className="text-3xl font-bold mb-2">Modul IKR3013: Computer Hardware & Software</h1>
+              <h1 className="text-3xl font-bold mb-2">{t('Modul IKR3013: Computer Hardware & Software', 'Module IKR3013: Computer Hardware & Software')}</h1>
               
               <div className="mt-4 mb-6 inline-block bg-blue-800/50 backdrop-blur-sm px-4 py-1 rounded-full text-xs font-semibold border border-blue-600">
-              E-Learning Interaktif
+              {t('E-Learning Interaktif', 'Interactive E-Learning')}
               </div>
               
               <div className="flex justify-center mt-2">
@@ -1114,7 +1119,7 @@ export default function ModuleIKR3013({ onBackToPortal }) {
                       className="flex items-center gap-2 px-6 py-3 bg-white text-blue-800 rounded-xl font-bold hover:bg-blue-50 hover:scale-105 transition-all shadow-md group"
                   >
                       <Download size={20} className="group-hover:animate-bounce" />
-                      Muat Turun Nota PDF
+                      {t('Muat Turun Nota PDF', 'Download PDF Notes')}
                   </a>
               </div>
           </div>
@@ -1128,12 +1133,12 @@ export default function ModuleIKR3013({ onBackToPortal }) {
             <div className="flex justify-between items-end mb-3 relative z-10">
               <div>
                 <h3 className="font-bold text-slate-800 flex items-center gap-2 text-lg">
-                  <Award className="text-amber-500" size={24} /> Kemajuan Penguasaan Anda
+                  <Award className="text-amber-500" size={24} /> {t('Kemajuan Penguasaan Anda', 'Your Learning Progress')}
                 </h3>
                 <p className="text-sm text-slate-500 mt-1">
                   {unlockedTopicIndex < topics.length 
-                    ? <span className="flex items-center gap-1.5"><ChevronRight size={16} className="text-blue-500"/> Sila pelajari topik ini: <strong className="text-blue-600">{nextTopic?.title}</strong></span> 
-                    : <span className="flex items-center gap-1.5 text-green-600 font-bold"><CheckCircle size={16}/> Semua topik lulus! Buka penilaian PC Nexus.</span>}
+                    ? <span className="flex items-center gap-1.5"><ChevronRight size={16} className="text-blue-500"/> {t('Sila pelajari topik ini:', 'Please study this topic:')} <strong className="text-blue-600">{localiseTopic(nextTopic?.title)}</strong></span> 
+                    : <span className="flex items-center gap-1.5 text-green-600 font-bold"><CheckCircle size={16}/> {t('Semua topik lulus! Buka penilaian PC Nexus.', 'All topics passed! Open the PC Nexus assessment.')}</span>}
                 </p>
               </div>
               <div className="text-right">
@@ -1153,10 +1158,10 @@ export default function ModuleIKR3013({ onBackToPortal }) {
               </div>
             </div>
             
-            <div className="flex justify-between text-xs font-bold text-slate-400 relative z-10">
-              <span>Mula</span>
-              <span>{Math.min(unlockedTopicIndex, topics.length)} daripada {topics.length} Topik Lulus Kuiz</span>
-              <button type="button" onClick={changeStudent} className="font-bold text-blue-600 hover:underline">Pelajar: {studentNumber || 'Belum dipilih'} • Tukar</button>
+            <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 text-xs font-bold text-slate-400 relative z-10">
+              <span>{t('Mula', 'Start')}</span>
+              <span>{Math.min(unlockedTopicIndex, topics.length)} {t('daripada', 'of')} {topics.length} {t('Topik Lulus Kuiz', 'Topics Passed')}</span>
+              <button type="button" onClick={changeStudent} className="font-bold text-blue-600 hover:underline">{t('Pelajar:', 'Student:')} {studentNumber || t('Belum dipilih', 'Not selected')} • {t('Tukar', 'Change')}</button>
             </div>
 
             {/* BUTANG RESET PROGRESS UNTUK PENGUJI / PELAJAR */}
@@ -1164,7 +1169,7 @@ export default function ModuleIKR3013({ onBackToPortal }) {
               <div className="mt-4 text-center relative z-10">
                 <button 
                   onClick={() => {
-                    if(window.confirm('Adakah anda pasti mahu set semula (reset) semua kemajuan bacaan anda dari awal?')) {
+                    if(window.confirm(t('Adakah anda pasti mahu set semula (reset) semua kemajuan bacaan anda dari awal?', 'Are you sure you want to reset all your learning progress?'))) {
                       setUnlockedTopicIndex(0);
                       setQuizCompleted(false);
                       setQuizScore(0);
@@ -1174,7 +1179,7 @@ export default function ModuleIKR3013({ onBackToPortal }) {
                   }}
                   className="text-[10px] sm:text-xs text-slate-400 hover:text-red-500 underline transition-colors"
                 >
-                  Mula Semula (Reset Progress)
+                  {t('Mula Semula (Reset Progress)', 'Start Again (Reset Progress)')}
                 </button>
               </div>
             )}
@@ -1197,7 +1202,7 @@ export default function ModuleIKR3013({ onBackToPortal }) {
                 }`}
               >
                 {isCompleted && (
-                  <div className="absolute top-3 right-3 text-green-500 bg-green-50 rounded-full p-1 shadow-sm border border-green-100 z-20" title="Selesai Dibaca">
+                  <div className="absolute top-3 right-3 text-green-500 bg-green-50 rounded-full p-1 shadow-sm border border-green-100 z-20" title={t('Selesai Dibaca', 'Completed')}>
                     <Check size={16} strokeWidth={3} />
                   </div>
                 )}
@@ -1206,10 +1211,10 @@ export default function ModuleIKR3013({ onBackToPortal }) {
                 </div>
                 <div className="z-10 flex-1 pr-6">
                   <h3 className={`text-xl font-bold ${isLocked ? 'text-gray-500' : 'text-gray-800 group-hover:text-blue-600'} transition-colors`}>
-                    {topic.title}
+                    {localiseTopic(topic.title)}
                   </h3>
                   <p className="text-gray-500 text-sm mt-1">
-                    {isLocked ? 'Kunci: Lulus kuiz topik sebelumnya dahulu' : topic.description}
+                    {isLocked ? t('Kunci: Lulus kuiz topik sebelumnya dahulu', 'Locked: Pass the previous topic quiz first') : localiseTopic(topic.description)}
                   </p>
                 </div>
                 {!isLocked && <ChevronRight className="ml-auto text-gray-300 group-hover:text-blue-500 z-10" />}

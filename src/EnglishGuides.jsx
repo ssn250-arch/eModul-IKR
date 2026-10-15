@@ -34,6 +34,6 @@ export function EnglishStudyGuide({ moduleCode, topicId }) {
    <h3 className="mb-2 text-xl font-black text-slate-900">{guide.title}</h3>
    <p className="mb-4 text-sm leading-relaxed text-slate-700">{guide.overview}</p>
    <ul className="space-y-2">{guide.points.map((point,i)=><li key={i} className="flex gap-2 text-sm leading-relaxed text-slate-700"><CheckCircle2 className="mt-0.5 shrink-0 text-indigo-500" size={16}/><span>{point}</span></li>)}</ul>
-   <p className="mt-4 border-t border-indigo-100 pt-3 text-xs leading-relaxed text-slate-500">The original detailed notes and technical demonstrations remain below. Some specialist content may still be in Malay; use the BM button to read the full original text.</p>
+   <p className="mt-4 border-t border-indigo-100 pt-3 text-xs leading-relaxed text-slate-500">Continue below for detailed explanations, diagrams and practical activities. Select BM at any time to compare terms with the original Malay notes.</p>
  </section>;
 }
