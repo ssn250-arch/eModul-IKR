@@ -13,7 +13,8 @@
     "postbuild": "node scripts/generate-sw.mjs",
     "check:structure": "node scripts/smoke-check.mjs",
     "test:quiz": "node scripts/test-quiz-sets.mjs",
-    "test:chat": "node scripts/test-chatbot.mjs"
+    "test:chat": "node scripts/test-chatbot.mjs",
+    "test:i18n": "node scripts/test-bilingual.mjs"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.2.4",

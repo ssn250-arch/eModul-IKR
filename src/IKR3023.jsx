@@ -1,3 +1,4 @@
+import { EnglishStudyGuide } from './EnglishGuides';
 import StudyChatbot from './StudyChatbot';
 import React, { useState, useEffect, useRef } from 'react';
 import { 
@@ -1032,6 +1033,7 @@ export default function ModuleIKR3023({ onBackToPortal }) {
           </div>
         </div>
 
+        <EnglishStudyGuide moduleCode="IKR3023" topicId={activeTopic?.id} />
         <div className="flex border-b border-gray-200">
           <button
             className={`flex-1 py-4 text-center font-semibold transition-colors ${activeTab === 'basic' ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50' : 'text-gray-500 hover:text-gray-700'}`}

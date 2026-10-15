@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
 import { Box, Cpu, CircuitBoard, Network, Cable, ChevronRight, Loader2, Code2, Server, Database, GraduationCap, Map, ArrowLeft, CheckCircle2 } from 'lucide-react';
 
 import logoEmodul from './logo-emodul-mark.png';
+import { LanguageSwitcher } from './LanguageContext';
 
 // Import modul menggunakan lazy loading untuk penjimatan data internet
 const ModuleIKR3013 = lazy(() => import('./IKR3013')); 
@@ -48,17 +49,23 @@ export default function PortalIKR() {
 
   if (activeModule === 'IKR3013') {
     return (
-      <Suspense fallback={<LoadingScreen />}>
-        <ModuleIKR3013 onBackToPortal={() => setActiveModule(null)} />
-      </Suspense>
+      <>
+        <LanguageSwitcher floating />
+        <Suspense fallback={<LoadingScreen />}>
+          <ModuleIKR3013 onBackToPortal={() => setActiveModule(null)} />
+        </Suspense>
+      </>
     );
   }
   
   if (activeModule === 'IKR3023') {
     return (
-      <Suspense fallback={<LoadingScreen />}>
-        <ModuleIKR3023 onBackToPortal={() => setActiveModule(null)} />
-      </Suspense>
+      <>
+        <LanguageSwitcher floating />
+        <Suspense fallback={<LoadingScreen />}>
+          <ModuleIKR3023 onBackToPortal={() => setActiveModule(null)} />
+        </Suspense>
+      </>
     );
   }
 
@@ -110,6 +117,7 @@ export default function PortalIKR() {
             </div>
           </div>
           <nav className="flex items-center gap-2 sm:gap-3" aria-label="Navigasi portal">
+            <LanguageSwitcher />
             <button
               type="button"
               aria-expanded={showCurriculum}

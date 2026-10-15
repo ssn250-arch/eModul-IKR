@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { ArrowLeft, Award, CheckCircle, ChevronRight, LockKeyhole, RefreshCw, Sparkles, XCircle } from 'lucide-react';
 import { getQuizQuestions, MAX_STUDENTS } from './TopicQuizEngine.js';
+import { useLanguage } from './LanguageContext';
 
 export const UNLOCK_PASS_MARK = 3;
 const STUDENT_KEY = 'emodul_ikr_student_number_v1';
@@ -15,6 +16,7 @@ export const getStudentNumber = () => {
 // Enumerate 5-question combinations in increasing order. The first 30
 // permutations are guaranteed distinct when the bank has >= 8 questions.
 export default function TopicUnlockQuiz({ moduleCode, topic, onBack, onPassed, onNextTopic, onStudentSelected, isLastTopic = false }) {
+  const { language } = useLanguage();
   const [studentNumber, setStudentNumber] = useState(getStudentNumber);
   const [pendingStudent, setPendingStudent] = useState('');
   const [attempt, setAttempt] = useState(0);
@@ -23,7 +25,7 @@ export default function TopicUnlockQuiz({ moduleCode, topic, onBack, onPassed, o
   const [isFinished, setIsFinished] = useState(false);
   const [showChangeStudent, setShowChangeStudent] = useState(false);
 
-  const questions = useMemo(() => studentNumber ? getQuizQuestions(moduleCode, topic.id, studentNumber, attempt) : [], [moduleCode, topic.id, studentNumber, attempt]);
+  const questions = useMemo(() => studentNumber ? getQuizQuestions(moduleCode, topic.id, studentNumber, attempt, language) : [], [moduleCode, topic.id, studentNumber, attempt, language]);
   const result = useMemo(() => questions.reduce((sum, question, i) => sum + (answers[i] === question.correct ? 1 : 0), 0), [questions, answers]);
   const passed = isFinished && result >= UNLOCK_PASS_MARK;
 

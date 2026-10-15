@@ -1,3 +1,4 @@
+import { EN_QUIZ_BANKS } from './QuizEnglish.js';
 import { TOPIC_UNLOCK_BANKS } from './TopicUnlockBanks.js';
 export const MAX_STUDENTS = 30;
 
@@ -52,7 +53,7 @@ const seededShuffle = (items, seed) => {
   return output;
 };
 
-export const getQuizQuestions = (moduleCode, topicId, studentNumber, attempt = 0) => {
+export const getQuizQuestions = (moduleCode, topicId, studentNumber, attempt = 0, language = 'ms') => {
   const pool = TOPIC_UNLOCK_BANKS[moduleCode]?.[topicId];
   if (!pool || pool.length < 8) throw new Error(`Bank topik belum lengkap: ${moduleCode}/${topicId}`);
   const totalCombinations = (() => {
@@ -62,7 +63,9 @@ export const getQuizQuestions = (moduleCode, topicId, studentNumber, attempt = 0
   })();
   const topicShift = seededNumber(`${moduleCode}:${topicId}:questions`) % totalCombinations;
   const uniqueStudentSet = (topicShift + studentNumber - 1 + attempt * MAX_STUDENTS) % totalCombinations;
-  const selected = nthCombination(pool.length, 5, uniqueStudentSet).map((idx) => pool[idx]);
+  const english = EN_QUIZ_BANKS[moduleCode]?.[topicId];
+  const selected = nthCombination(pool.length, 5, uniqueStudentSet).map((idx) => language === 'en' && english?.[idx]
+    ? { ...pool[idx], question: english[idx].question, options: english[idx].options } : pool[idx]);
   const questionSeed = seededNumber(`${moduleCode}:${topicId}:${studentNumber}:${attempt}`);
   return seededShuffle(selected, questionSeed).map((q, index) => {
     const choices = seededShuffle(q.options.map((text, originalIndex) => ({ text, originalIndex })), questionSeed + 151 * (index + 1));
