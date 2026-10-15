@@ -1,57 +1,22 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ms">
   <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="/logo.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <!-- Warna tema diselaraskan dengan warna Indigo portal kita -->
-    <meta name="theme-color" content="#4f46e5" /> 
-    
-    <title>Portal eModul IKR - ADTEC Sandakan</title>
-    <meta name="description" content="Portal E-Pembelajaran Interaktif untuk modul IKR3013 dan IKR3023." />
-
-    <!-- Open Graph (Bila share link di WhatsApp/Telegram, paparan akan jadi cantik) -->
-    <meta property="og:title" content="Portal eModul IKR - ADTEC Sandakan" />
-    <meta property="og:description" content="Akses nota interaktif, model AR 3D, dan perunding AI secara pantas di sini." />
-    <meta property="og:image" content="/logo.png" />
-    <meta property="og:url" content="https://ssn250-arch.github.io/eModul-IKR3013/" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#283c91" />
+    <meta name="description" content="Portal pembelajaran TVET SKM Tahap 3 IKR3013 dan IKR3023, visualisasi 3D dan latihan diagnostik rangkaian." />
+    <link rel="icon" type="image/png" href="%BASE_URL%icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="%BASE_URL%icons/icon-192.png" />
+    <link rel="manifest" href="%BASE_URL%manifest.webmanifest" />
     <meta property="og:type" content="website" />
-
-    <link rel="apple-touch-icon" href="/logo.png" />
-    <!-- Hanya aktifkan manifest jika bro ada fail manifest.json dalam folder 'public' -->
-    <!-- <link rel="manifest" href="/manifest.json" /> -->
-
-    <!-- Kod Halang Browser Cache -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
-    
-    <style>
-      body {
-        margin: 0;
-        /* Warna latar belakang slate-50 yang serasi dengan Tailwind portal kita */
-        background-color: #f8fafc; 
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      }
-      .dark body { background-color: #0f172a; }
-    </style>
+    <meta property="og:title" content="eModul-IKR | ADTEC JTM Kampus Sandakan" />
+    <meta property="og:description" content="Platform pembelajaran interaktif TVET: IKR3013 dan IKR3023." />
+    <meta property="og:url" content="https://ssn250-arch.github.io/eModul-IKR/" />
+    <meta property="og:image" content="https://ssn250-arch.github.io/eModul-IKR/icons/icon-512.png" />
+    <title>eModul-IKR | ADTEC JTM Kampus Sandakan</title>
   </head>
   <body>
-    <noscript>Anda perlu mengaktifkan JavaScript untuk menggunakan portal ini.</noscript>
     <div id="root"></div>
-
-    <!-- SCRIPT PENTING UNTUK VITE (Wajib ada supaya React berfungsi) -->
     <script type="module" src="/src/main.jsx"></script>
-
-    <!-- Script PWA Service Worker (Jika bro ingin jadikan ia aplikasi yang boleh di-install) -->
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js')
-            .then(reg => console.log('PWA Service Worker didaftarkan berjaya.', reg))
-            .catch(err => console.log('PWA Service Worker gagal didaftarkan:', err));
-        });
-      }
-    </script>
   </body>
 </html>

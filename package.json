@@ -1,15 +1,17 @@
 {
-  "name": "eModul-IKR",
+  "name": "emodul-ikr",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.1.0-newic",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "predeploy": "npm run build",       
-    "deploy": "gh-pages -d dist"
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
+    "postbuild": "node scripts/generate-sw.mjs",
+    "check:structure": "node scripts/smoke-check.mjs"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.2.4",

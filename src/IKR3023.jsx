@@ -83,9 +83,9 @@ const topics = [
         }
       ],
       advanced: [
-        { title: "Topologi Bintang (Star)", desc: "Semua peranti dihubungkan ke satu titik pusat (switch/hub). Paling stabil dan paling banyak digunakan hari ini." },
-        { title: "Topologi Mesh", desc: "Setiap peranti berhubung dengan peranti lain. Tiada titik kegagalan tunggal (Sangat selamat tapi kos kabel mahal)." },
-        { title: "Topologi Pokok (Tree)", desc: "Gabungan topologi Bintang dan Bas dalam struktur hierarki (Core, Distribution, Access). Sesuai untuk organisasi besar." }
+        { title: "Topologi Bintang (Star)", desc: "Setiap peranti disambungkan ke peranti pusat seperti switch. Mudah diurus dan lazim digunakan, tetapi kegagalan switch pusat boleh menjejaskan sambungan." },
+        { title: "Topologi Mesh", desc: "Topologi full mesh menghubungkan setiap nod kepada nod lain; partial mesh menyediakan sebahagian laluan redundan. Ketahanan rangkaian bergantung pada reka bentuk dan konfigurasi." },
+        { title: "Topologi Pokok (Tree)", desc: "Susunan hierarki bercabang yang lazimnya menggabungkan beberapa rangkaian bintang pada peringkat access, distribution dan core." }
       ]
     }
   },
@@ -101,7 +101,7 @@ const topics = [
           title: "Perancangan Asas",
           points: [
             "Pelan Susun Atur (Plan Layout): Reka bentuk penempatan peranti dan laluan kabel untuk memudahkan pengurusan.",
-            "Jarak/Panjang Kabel: Jarak maksimum kabel UTP (Cat5e/Cat6) biasanya terhad kepada 100 meter.",
+            "Jarak/Panjang Kabel: Bagi saluran Ethernet tembaga berstruktur biasa, had reka bentuk lazim ialah 100 m (90 m permanent link dan jumlah 10 m patch cord); had bergantung pada kategori, aplikasi dan keadaan pemasangan.",
             "Cable Trunking: Struktur paip/saluran (PVC atau Logam) untuk melindungi dan menyusun kabel supaya teratur."
           ]
         }
@@ -132,7 +132,7 @@ const topics = [
       ], 
       advanced: [
         { title: "Fiber Optik - Single Mode", desc: "Teras kecil, menggunakan cahaya laser. Direka untuk penghantaran data berkelajuan tinggi jarak jauh (merentas bandar)." },
-        { title: "Fiber Optik - Multimode", desc: "Teras lebih besar, menggunakan cahaya LED. Sesuai untuk jarak dekat (LAN) dalam bangunan." },
+        { title: "Fiber Optik - Multimode", desc: "Teras lebih besar; Ethernet multimode moden lazimnya menggunakan pemancar laser VCSEL pada 850 nm. Sesuai untuk pautan jarak dekat hingga sederhana, bergantung pada standard optik." },
         { title: "Penyambung Fiber", desc: "Terdapat pelbagai kepala penyambung untuk fiber optik, antaranya LC, SC, FC, dan ST." }
       ]
     }
@@ -155,9 +155,9 @@ const topics = [
         }
       ], 
       advanced: [
-        { title: "10GBase-T (10 Gigabit)", desc: "Kelajuan 10 Gbps. Digunakan dalam pusat data, memerlukan kabel Cat6a atau Cat7." },
-        { title: "40GBase-T (40 Gigabit)", desc: "Kelajuan ekstrem 40 Gbps. Kebanyakannya menggunakan fiber optik untuk kelajuan maksimum tanpa had jarak." },
-        { title: "Had Jarak (Distance Limit)", desc: "Bagi kabel tembaga UTP, walau sepantas mana kelajuannya, jaraknya kekal terhad kepada maksimum 100 meter." }
+        { title: "10GBase-T (10 Gigabit)", desc: "10GBASE-T menyediakan 10 Gbps sehingga 100 m menggunakan Cat6A yang mematuhi standard; Cat6 mungkin sesuai pada jarak lebih pendek selepas pengujian." },
+        { title: "40GBase-T (40 Gigabit)", desc: "40GBASE-T ialah Ethernet 40 Gbps melalui kabel tembaga Cat8 pada saluran sehingga kira-kira 30 m. Untuk jarak lain, pelbagai jenis transceiver gentian optik mempunyai had tersendiri." },
+        { title: "Had Jarak (Distance Limit)", desc: "Had jarak Ethernet berbeza mengikut standard dan medium. Banyak saluran twisted-pair ialah 100 m, manakala 25/40GBASE-T pada Cat8 direka untuk jarak sehingga 30 m." }
       ]
     }
   },
@@ -198,7 +198,7 @@ const topics = [
           points: [
             "Tangga (Ladder): Diperlukan untuk pemasangan kabel di atas siling dan kawasan tinggi. Perlu stabil (Lipat/Telescopic).",
             "Peralatan Pelabelan (Label Printer): Untuk mencetak nama/kod port supaya kabel mudah dikesan ketika penyelenggaraan.",
-            "Cable Tester: Alat elektronik pemancar & penerima untuk menguji sama ada isyarat kabel RJ45 berfungsi dengan baik atau gagal."
+            "Cable tester asas memeriksa kesinambungan, susunan pin (wiremap), litar pintas dan sambungan terbuka; ujian prestasi seperti NEXT/return loss memerlukan alat pensijilan kabel."
           ]
         }
       ], 
@@ -227,8 +227,8 @@ const topics = [
         }
       ], 
       advanced: [
-        { title: "Kabel Straight-Through", desc: "Susunan warna dikedua-dua hujung kabel adalah sama (T568B-T568B). Digunakan untuk peranti berbeza (PC ke Switch)." },
-        { title: "Kabel Crossover", desc: "Susunan warna berbeza di kedua hujung (T568A-T568B). Digunakan untuk peranti sama jenis (PC ke PC / Switch ke Switch)." },
+        { title: "Kabel Straight-Through", desc: "Susunan pin sama pada kedua-dua hujung (T568A-A atau T568B-B). Digunakan secara tradisional untuk PC-ke-switch; port Auto-MDI/MDIX moden biasanya menerima kedua-dua jenis." },
+        { title: "Kabel Crossover", desc: "Hujung T568A dan T568B menghasilkan susunan crossover klasik, berguna pada peranti lama tanpa Auto-MDI/MDIX; peranti moden sering mengesan jenis sambungan secara automatik." },
         { title: "Standard T568B", desc: "Susunan warna industri: Putih/Oren, Oren, Putih/Hijau, Biru, Putih/Biru, Hijau, Putih/Coklat, Coklat." }
       ]
     }
@@ -252,7 +252,7 @@ const topics = [
       ], 
       advanced: [
         { title: "Standard Ujian Fluke", desc: "Penamatan yang tidak kemas (jaket terlalu jauh, wayar terdedah) boleh menyebabkan masalah 'Near-End Crosstalk' (NEXT)." },
-        { title: "Prosedur 'Untwist' Minimum", desc: "Hanya buka pintalan (untwist) wayar tembaga maksimum 13mm (0.5 inci) sahaja untuk mengekalkan kualiti isyarat." }
+        { title: "Prosedur 'Untwist' Minimum", desc: "Kekalkan pintalan pasangan wayar sedekat mungkin dengan titik penamatan; bagi latihan Cat5e/Cat6 lazimnya digunakan sasaran kira-kira 13 mm atau kurang, serta ikut keperluan penyambung/piawaian berkaitan." }
       ]
     }
   }
@@ -275,7 +275,7 @@ const rawQuizQuestions = [
   { question: "Apakah perbezaan utama penggunaan antara kabel straight-through dan crossover dalam sistem rangkaian tradisional?", options: ["Kabel crossover digunakan untuk menyambungkan peranti yang berlainan jenis seperti komputer ke switch.", "Kabel straight-through digunakan untuk menyambungkan peranti berbeza jenis seperti switch ke router, manakala kabel crossover menyambungkan peranti sama jenis seperti komputer ke komputer.", "Kabel straight-through mempunyai susunan warna yang berbeza pada kedua-dua hujung kabel mengikut standard T568A dan T568B.", "Kabel crossover berfungsi menghantar isyarat data dalam bentuk cahaya bagi sambungan jarak jauh manakala kabel straight-through menggunakan isyarat elektrik."], correct: 1 },
   { question: "Mengapakah pelabelan menggunakan Unique Identifier sangat ditekankan dalam pengurusan kabel?", options: ["Untuk memberikan pemberat tambahan kepada kabel agar kedudukannya tidak mudah berubah atau beralih.", "Bagi menggantikan peranan cable tie dalam menyusun kumpulan kabel agar kelihatan lebih kemas dan teratur.", "Untuk mengurangkan rintangan elektrik di dalam konduktor tembaga bagi memastikan isyarat data bergerak lebih pantas.", "Memudahkan juruteknik mengenal pasti setiap kabel dengan cepat serta memendekkan masa penyelesaian masalah semasa aktiviti penyelenggaraan."], correct: 3 },
   { question: "Semasa melakukan pengujian kabel menggunakan Cable Tester , didapati lampu LED pada pin 1 dan 2 tidak menyala pada hujung penerima. Apakah kemungkinan masalah tersebut?", options: ["Panjang kabel telah melebihi had jarak maksimum 100 meter sehingga isyarat gagal dikesan.", "Kabel tersebut telah ditamatkan mengikut standard crossover yang menyebabkan pin tidak sejajar.", "Kabel yang digunakan adalah kategori lama yang hanya mempunyai empat pengalir dalaman sahaja.", "Sambungan wayar putih-oren dan oren terputus atau tidak ditekan dengan sempurna pada blok terminal."], correct: 3 },
-  { question: "Bagi menjamin keselamatan peranti daripada kerosakan haba di dalam rak pelayan ( server rack ) 19 inci, apakah tindakan paling tepat berkaitan pengurusan persekitaran yang perlu diambil oleh juruteknik komputerr rangkaian?", options: ["Menggunakan standard penamatan T568A bagi setiap kabel untuk mempercepatkan aliran data.", "Melekatkan label unik pada setiap port suis untuk memudahkan pemutusan bekalan kuasa utama.", "Menetapkan skala pelan lantai pada 1:20 supaya kedudukan rak tidak menghalang pintu kecemasan.", "Merancang susunan peralatan mengikut unit ketinggian (1U, 2U, atau 3U) bagi memastikan ruang pengudaraan yang mencukupi."], correct: 3 },
+  { question: "Bagi menjamin keselamatan peranti daripada kerosakan haba di dalam rak pelayan ( server rack ) 19 inci, apakah tindakan paling tepat berkaitan pengurusan persekitaran yang perlu diambil oleh juruteknik komputer rangkaian?", options: ["Menggunakan standard penamatan T568A bagi setiap kabel untuk mempercepatkan aliran data.", "Melekatkan label unik pada setiap port suis untuk memudahkan pemutusan bekalan kuasa utama.", "Menetapkan skala pelan lantai pada 1:20 supaya kedudukan rak tidak menghalang pintu kecemasan.", "Merancang susunan peralatan mengikut unit ketinggian (1U, 2U, atau 3U) bagi memastikan ruang pengudaraan yang mencukupi."], correct: 3 },
   { question: "Apakah yang dimaksudkan dengan Horizontal Cabling dalam infrastruktur rangkaian bangunan?", options: ["Sambungan kabel yang menyambungkan rangkaian antara beberapa bangunan yang berbeza di dalam satu kawasan kampus.", "Sambungan kabel yang menghubungkan outlet pengguna (Information Outlet) ke bilik telekomunikasi pada tingkat yang sama.", "Sambungan kabel yang menghubungkan bilik komunikasi (IDF) antara tingkat-tingkat yang berbeza di dalam sebuah bangunan.", "Laluan kabel utama yang bertindak sebagai tulang belakang bagi menghubungkan kemudahan pintu masuk bangunan dengan bilik pelayan utama."], correct: 1 },
   { question: "Apakah nama teknik menarik kabel rangkaian melalui ruang yang sukar dijangkau atau kawasan tertutup seperti di dalam dinding dan siling dengan menggunakan peralatan bantuan seperti Fish Tape atau Cable Rod?", options: ["Cable Fixing", "Cable Sorting", "Cable Fishing", "Cable Termination"], correct: 2 },
   { question: "Apakah fungsi utama Backbone Cabling dalam infrastruktur pengkabelan berstruktur?", options: ["Menyambungkan komputer stesen kerja pengguna ke outlet data di dinding.", "Menentukan susunan kod warna wayar mengikut standard T568A bagi penyambung RJ45.", "Melindungi kabel rangkaian daripada kerosakan mekanikal secara langsung melalui saluran paip.", "Menyambungkan bilik telekomunikasi atau pusat pengagihan utama antara tingkat dan bangunan yang berbeza."], correct: 3 },
@@ -439,7 +439,7 @@ const copperCablesData = [
 const ethernetEvolutionData = [
   { category: 'Cat5e', speed: '1 Gbps', freq: '100 MHz', icon: <Activity size={24} className="text-orange-400"/>, bgColor: 'bg-orange-900/20', borderColor: 'border-orange-500/30', headerColor: 'text-orange-400', pros: ['Murah & fleksibel.'], cons: ['Crosstalk tinggi.'], aplikasi: 'Rumah & SOHO.' },
   { category: 'Cat6', speed: '1 Gbps - 10 Gbps*', freq: '250 MHz', icon: <Gauge size={24} className="text-amber-400"/>, bgColor: 'bg-amber-900/20', borderColor: 'border-amber-500/30', headerColor: 'text-amber-400', pros: ['Ada pemisah silang (Spline).'], cons: ['Kabel keras.'], aplikasi: 'Bangunan komersial.' },
-  { category: 'Cat6a / 7', speed: '10 Gbps', freq: '500 MHz', icon: <TrendingUp size={24} className="text-rose-400"/>, bgColor: 'bg-rose-900/20', borderColor: 'border-rose-500/30', headerColor: 'text-rose-400', pros: ['Kelajuan maksimum stabil.'], cons: ['Sangat mahal & rumit.'], aplikasi: 'Pusat Data (Data Center).' }
+  { category: 'Cat6A', speed: '10 Gbps', freq: '500 MHz', icon: <TrendingUp size={24} className="text-rose-400"/>, bgColor: 'bg-rose-900/20', borderColor: 'border-rose-500/30', headerColor: 'text-rose-400', pros: ['Kelajuan maksimum stabil.'], cons: ['Sangat mahal & rumit.'], aplikasi: 'Pusat Data (Data Center).' }
 ];
 
 const toolsData = [
@@ -562,7 +562,7 @@ const componentsData = [
     ),
     fungsi: "Laluan paip dan saluran untuk menyembunyikan, menyusun, serta melindungi kabel dari kerosakan fizikal, haba, atau haiwan.", 
     ciri: [
-      <span key="1"><strong className="text-slate-200">PVC:</strong> Ringan, kos rendah & kalis api (Untuk ruang pejabat/dalaman).</span>,
+      <span key="1"><strong className="text-slate-200">PVC:</strong> Ringan dan kos lebih rendah; pilih jenis dengan penarafan keselamatan kebakaran sesuai untuk lokasi pemasangan.</span>,
       <span key="2"><strong className="text-slate-200">Steel (Keluli):</strong> Tahan impak mekanikal tinggi (Sesuai untuk kilang industri).</span>,
       <span key="3"><strong className="text-slate-200">Glass Reinforced Polyester (GRP):</strong> Kalis karat & tahan bahan kimia (Cuaca ekstrem).</span>,
       <span key="4"><strong className="text-slate-200">Galvanized Rigid Conduit (GRC):</strong> Paip besi bergalvani tebal (Bawah tanah & luaran).</span>
@@ -572,11 +572,11 @@ const componentsData = [
 
 const terminationSteps = {
   rj45: [
-    { step: 1, title: "Kupas Jaket Kabel", desc: "Gunakan Cable Stripper untuk membuang lebih kurang 2 inci jaket luaran PVC. Jangan sampai terpotong wayar di dalam." },
+    { step: 1, title: "Kupas Jaket Kabel", desc: "Kupas jaket luaran secukupnya mengikut jenis penyambung dan alat (contohnya sekitar 2–3 cm), tanpa merosakkan konduktor. Kekalkan pintalan pasangan sehampir mungkin dengan titik penamatan." },
     { step: 2, title: "Asing & Luruskan", desc: "Buka pintalan 4 pasang wayar. Luruskan setiap helaian menggunakan jari atau batang pen." },
     { step: 3, title: "Susun Kod Warna", desc: "Susun rapat rapat mengikut standard T568B dari kiri ke kanan (P-Oren, Oren, P-Hijau, Biru, P-Biru, Hijau, P-Coklat, Coklat)." },
     { step: 4, title: "Potong Rata (Trim)", desc: "Gunakan Wire Cutter untuk memotong hujung wayar supaya lurus sekata. Tinggalkan panjang lebih kurang 1.5 cm." },
-    { step: 5, title: "Masukkan ke RJ45", desc: "Tolak wayar masuk ke dalam kepala RJ45 (pin besi menghadap muka anda). Pastikan semua wayar rapat ke dinding hujung pin." },
+    { step: 5, title: "Masukkan ke RJ45", desc: "Ikut rajah orientasi pin 1–8 pada penyambung yang digunakan; pastikan kedudukan klip/kontak konsisten. Semua konduktor mesti sampai ke hujung dan jaket kabel berada di bawah pengapit." },
     { step: 6, title: "Ketip (Crimp) & Uji", desc: "Masukkan kepala RJ45 ke dalam Crimping Tool dan ketip dengan kuat. Uji kabel menggunakan Cable Tester." }
   ],
   patchPanel: [
@@ -604,7 +604,7 @@ export default function ModuleIKR3023({ onBackToPortal }) {
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [quizAnswers, setQuizAnswers] = useState({});
   const [unlockedTopicIndex, setUnlockedTopicIndex] = useState(() => {
-    try { const saved = localStorage.getItem('ikr3023_progress'); return saved !== null ? parseInt(saved, 10) : 0; } catch (e) { return 0; }
+    try { const saved = localStorage.getItem('ikr3023_progress'); return saved !== null && Number.isFinite(Number(saved)) ? Math.max(0, Math.min(topics.length, Number(saved))) : 0; } catch (e) { return 0; }
   }); 
 
   // STATE UNTUK KUIZ SHUFFLE
@@ -685,11 +685,11 @@ export default function ModuleIKR3023({ onBackToPortal }) {
   );
 
   const createSearchLink = (query) => `https://www.google.com/search?q=${encodeURIComponent(query + " malaysia shopee lazada")}`;
-  const generateRecommendation = () => {
+  const generateRecommendation = (preferences = recPreferences) => {
     setRecLoading(true);
     setTimeout(() => {
       let recommendation = { title: '', aiAnalysis: '', specs: { router: '', switch: '', cable: '', ap: '' }, examples: [], warning: null };
-      const { env, budget } = recPreferences;
+      const { env, budget } = preferences;
 
       if (env === 'home') {
         recommendation.title = 'Infrastruktur Rangkaian Rumah Pintar';
@@ -708,7 +708,7 @@ export default function ModuleIKR3023({ onBackToPortal }) {
           recommendation.specs = { router: 'VPN Router', switch: '16-Port Smart Switch', cable: 'Cat6 UTP', ap: 'Standalone Ceiling AP' };
           recommendation.examples = [{ name: 'TP-Link Omada ER605', link: createSearchLink('TP-Link ER605') }];
         } else {
-          recommendation.specs = { router: 'Enterprise Firewall', switch: '24-Port PoE+ Managed', cable: 'Cat6A / Cat7', ap: 'Wi-Fi 6 Cloud AP' };
+          recommendation.specs = { router: 'Enterprise Firewall', switch: '24-Port PoE+ Managed', cable: 'Cat6A', ap: 'Wi-Fi 6 Cloud AP' };
           recommendation.examples = [{ name: 'Ubiquiti UniFi UDM Pro', link: createSearchLink('Ubiquiti UDM Pro') }];
         }
       }
@@ -718,8 +718,13 @@ export default function ModuleIKR3023({ onBackToPortal }) {
   };
 
   const handleRecSelect = (category, value) => {
-    setRecPreferences(prev => ({ ...prev, [category]: value }));
-    setTimeout(() => { if (category === 'budget') generateRecommendation(); else setRecStep(prev => prev + 1); }, 300);
+    // Bina snapshot state terkini supaya cadangan bajet tidak tersasar.
+    const next = { ...recPreferences, [category]: value };
+    setRecPreferences(next);
+    setTimeout(() => {
+      if (category === 'budget') generateRecommendation(next);
+      else setRecStep(prev => prev + 1);
+    }, 300);
   };
   const resetRecommender = () => { setRecStep(0); setRecPreferences({ env: '', type: '', budget: '' }); setRecResult(null); };
   const exitRecommender = () => { setIsRecommenderStarted(false); resetRecommender(); setView('menu'); };
@@ -786,7 +791,7 @@ export default function ModuleIKR3023({ onBackToPortal }) {
             </div>
             <div className="flex justify-between text-xs font-bold text-slate-400 relative z-10">
               <span>Mula</span>
-              <span>{Math.min(unlockedTopicIndex, topics.length)} / {topics.length} Modul Dilengkapkan</span>
+              <span>{Math.min(unlockedTopicIndex, topics.length)} / {topics.length} Topik Dibuka</span>
             </div>
             {unlockedTopicIndex > 0 && (
               <div className="mt-4 text-center relative z-10">
@@ -846,8 +851,8 @@ export default function ModuleIKR3023({ onBackToPortal }) {
           <div className="bg-gradient-to-r from-slate-900 via-indigo-900 to-slate-800 rounded-2xl p-8 text-white shadow-xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between border border-indigo-800">
             <div className="relative z-10 text-center md:text-left mb-6 md:mb-0">
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-500/30 rounded-full text-indigo-200 text-xs font-bold mb-3 border border-indigo-400/30 backdrop-blur-sm"><Network size={14} /> Bot Perunding Percuma</div>
-              <h2 className="text-2xl md:text-3xl font-bold mb-2 tracking-tight">Perunding Rangkaian <span className="text-indigo-400">AI</span></h2>
-              <p className="text-indigo-100 max-w-lg text-sm md:text-base opacity-90">Biar sistem AI membantu anda merangka spesifikasi dan bahan keperluan pengkabelan (Switch, Router, AP) berdasarkan bajet organisasi anda.</p>
+              <h2 className="text-2xl md:text-3xl font-bold mb-2 tracking-tight">Pencadang Rangkaian <span className="text-indigo-400">Pintar</span></h2>
+              <p className="text-indigo-100 max-w-lg text-sm md:text-base opacity-90">Sistem memadankan keperluan asas kepada spesifikasi Switch, Router, kabel dan AP berpandukan kategori penggunaan dan bajet.</p>
             </div>
             <button onClick={() => { setView('recommender'); setIsRecommenderStarted(false); }} className="group relative z-10 bg-white text-indigo-900 px-8 py-4 rounded-xl font-bold hover:bg-indigo-50 hover:scale-105 transition-all shadow-[0_0_30px_rgba(99,102,241,0.3)] flex items-center gap-3 whitespace-nowrap">
               <Sparkles size={20} className="text-indigo-600" /> Dapatkan Spesifikasi<ChevronRight className="group-hover:translate-x-1 transition-transform" />
@@ -867,13 +872,13 @@ export default function ModuleIKR3023({ onBackToPortal }) {
       return (
         <div className="min-h-screen bg-slate-50 font-sans text-slate-800 selection:bg-indigo-200 flex flex-col w-full relative">
           <nav className="bg-white px-4 md:px-6 py-4 shadow-sm flex justify-between items-center z-10">
-            <div className="flex items-center gap-2 md:gap-4"><button onClick={() => setView('menu')} className="inline-flex items-center gap-2 text-gray-600 bg-gray-100 hover:bg-indigo-100 hover:text-indigo-700 px-4 py-2 rounded-xl transition-all text-sm font-bold border border-gray-200"><Home size={18} /> <span className="hidden md:inline">Menu Utama</span></button><div className="w-px h-6 bg-slate-200 mx-2 hidden md:block"></div><div className="flex items-center gap-2 text-indigo-700 font-extrabold text-xl tracking-tight"><Network size={28} className="text-indigo-600" /> Cabling<span className="text-slate-800">Pintar</span> AI</div></div>
+            <div className="flex items-center gap-2 md:gap-4"><button onClick={() => setView('menu')} className="inline-flex items-center gap-2 text-gray-600 bg-gray-100 hover:bg-indigo-100 hover:text-indigo-700 px-4 py-2 rounded-xl transition-all text-sm font-bold border border-gray-200"><Home size={18} /> <span className="hidden md:inline">Menu Utama</span></button><div className="w-px h-6 bg-slate-200 mx-2 hidden md:block"></div><div className="flex items-center gap-2 text-indigo-700 font-extrabold text-xl tracking-tight"><Network size={28} className="text-indigo-600" /> Cabling<span className="text-slate-800">Pintar</span></div></div>
           </nav>
           <main className="flex-1 flex flex-col justify-center items-center text-center px-4 py-16 md:py-24 bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 text-white relative overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-20 pointer-events-none"><div className="absolute -top-24 -left-24 w-64 md:w-96 h-64 md:h-96 rounded-full bg-indigo-500 blur-3xl"></div></div>
             <div className="relative z-10 max-w-3xl mx-auto flex flex-col items-center">
-              <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold tracking-tight mb-4 md:mb-6 leading-tight">Pakar Arkitek Rangkaian <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-300">AI Peribadi</span></h1>
-              <p className="text-base sm:text-lg md:text-xl text-indigo-100 mb-8 md:mb-10 max-w-2xl font-light px-4">Bina topologi rumah atau pejabat anda! Masukkan skala dan bajet, AI akan menjana senarai peralatan (Router, Switch, Kabel) yang bersesuaian.</p>
+              <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold tracking-tight mb-4 md:mb-6 leading-tight">Pakar Arkitek Rangkaian <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-300">Berpandukan Keperluan</span></h1>
+              <p className="text-base sm:text-lg md:text-xl text-indigo-100 mb-8 md:mb-10 max-w-2xl font-light px-4">Bina topologi rumah atau pejabat anda! Masukkan skala dan bajet, sistem akan memilih cadangan peralatan (Router, Switch, Kabel) yang bersesuaian.</p>
               <button onClick={() => setIsRecommenderStarted(true)} className="group flex items-center gap-3 bg-white text-indigo-900 px-6 md:px-8 py-3 md:py-4 rounded-full text-base md:text-lg font-bold hover:bg-indigo-50 hover:scale-105 transition-all shadow-[0_0_40px_rgba(99,102,241,0.5)]">Jana Infrastruktur Sekarang <ChevronRight className="group-hover:translate-x-1 transition-transform" /></button>
             </div>
           </main>
@@ -885,7 +890,7 @@ export default function ModuleIKR3023({ onBackToPortal }) {
       <div className="bg-slate-50 font-sans text-slate-800 flex flex-col items-center selection:bg-indigo-200 pt-2">
         <div className="w-full flex justify-between items-center mb-6 px-1">
           <button onClick={exitRecommender} className="inline-flex items-center gap-2 text-gray-600 bg-white hover:bg-indigo-100 hover:text-indigo-700 px-4 py-2 rounded-xl transition-all text-sm font-bold border border-gray-200 shadow-sm"><Home size={18} /> <span className="hidden sm:inline">Menu Utama</span></button>
-          <div className="flex items-center gap-2 text-slate-400 font-bold text-lg"><Network size={20} /> Cabling<span className="text-slate-600">Pintar</span> AI</div>
+          <div className="flex items-center gap-2 text-slate-400 font-bold text-lg"><Network size={20} /> Cabling<span className="text-slate-600">Pintar</span></div>
         </div>
         <div className="w-full bg-white rounded-3xl shadow-xl overflow-hidden ring-1 ring-slate-100">
           <div className="bg-gradient-to-r from-indigo-700 to-slate-800 p-6 text-white text-center">
@@ -909,13 +914,13 @@ export default function ModuleIKR3023({ onBackToPortal }) {
               {recLoading && (
                 <div className="text-center py-16 flex flex-col items-center animate-fade-in">
                   <div className="relative w-20 h-20 mb-6"><div className="absolute inset-0 border-4 border-indigo-100 rounded-full"></div><div className="absolute inset-0 border-4 border-indigo-600 rounded-full border-t-transparent animate-spin"></div><Network className="absolute inset-0 m-auto text-indigo-600" size={24} /></div>
-                  <h3 className="text-2xl font-bold text-slate-800">AI Merangka Topologi...</h3><p className="text-slate-500 mt-2 font-medium">Memilih spesifikasi Suis, Router, dan Kabel yang serasi...</p>
+                  <h3 className="text-2xl font-bold text-slate-800">Sistem Menyediakan Cadangan...</h3><p className="text-slate-500 mt-2 font-medium">Memilih spesifikasi Suis, Router, dan Kabel yang serasi...</p>
                 </div>
               )}
               {recStep === 4 && recResult && (
                 <div className="animate-fade-in">
                   <div className="bg-green-50 border border-green-200 rounded-2xl p-5 mb-8 text-center shadow-sm"><h2 className="text-green-800 font-extrabold text-xl mb-1">Reka Bentuk Selesai!</h2><p className="text-green-700 font-medium">{recResult.title}</p></div>
-                  <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-6 mb-8 relative shadow-sm"><div className="absolute -top-3 left-6 bg-indigo-600 text-white text-xs px-3 py-1.5 rounded-full shadow-md flex items-center gap-1.5 font-bold uppercase tracking-wider"><Sparkles size={14}/> Nota Jurutera AI</div><p className="text-indigo-900 font-medium leading-relaxed pt-2">"{recResult.aiAnalysis}"</p></div>
+                  <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-6 mb-8 relative shadow-sm"><div className="absolute -top-3 left-6 bg-indigo-600 text-white text-xs px-3 py-1.5 rounded-full shadow-md flex items-center gap-1.5 font-bold uppercase tracking-wider"><Sparkles size={14}/> Rumusan Cadangan Rangkaian</div><p className="text-indigo-900 font-medium leading-relaxed pt-2">"{recResult.aiAnalysis}"</p></div>
                   <div className="bg-white border-2 border-slate-100 rounded-2xl p-6 mb-8 shadow-sm">
                     <h3 className="font-bold text-slate-800 mb-5 border-b-2 border-slate-100 pb-3">Perkakasan Disyorkan</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1315,7 +1320,7 @@ export default function ModuleIKR3023({ onBackToPortal }) {
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="font-bold text-rose-300 flex items-center gap-2"><TrendingUp size={16}/> 10GBase-T (10 Gigabit)</span>
-                        <span className="bg-rose-900/50 text-rose-300 border border-rose-500/30 px-3 py-1 rounded text-xs font-bold shadow-[0_0_10px_rgba(244,63,94,0.2)]">10 Gbps (Cat6a / Cat7)</span>
+                        <span className="bg-rose-900/50 text-rose-300 border border-rose-500/30 px-3 py-1 rounded text-xs font-bold shadow-[0_0_10px_rgba(244,63,94,0.2)]">10 Gbps (Cat6A)</span>
                       </div>
                     </div>
                   </div>

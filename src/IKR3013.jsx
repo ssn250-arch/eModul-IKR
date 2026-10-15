@@ -89,14 +89,14 @@ const topics = [
           points: [
             "Berfungsi sebagai 'otak' komputer.",
             "Merupakan cip IC yang mengawal keseluruhan sistem, melakukan pengiraan, dan menjalankan tugas.",
-            "Tidak boleh bekerja sendiri; memerlukan sokongan HDD dan RAM."
+            "Memerlukan papan induk, bekalan kuasa dan memori kerja untuk melaksanakan tugas; HDD atau SSD digunakan untuk menyimpan data dan perisian secara kekal."
           ]
         }
       ],
       advanced: [
-        { title: "Hybrid Architecture CPU", desc: "CPU moden (Intel Gen 12+) kini mempunyai P-Cores (Performance) dan E-Cores (Efficiency) untuk jimat tenaga." },
+        { title: "Hybrid Architecture CPU", desc: "Sesetengah CPU moden menggunakan seni bina hibrid yang menggabungkan P-core (prestasi) dan E-core (kecekapan); reka bentuk berbeza mengikut model dan pengeluar." },
         { title: "NPU AI Processor", desc: "Processor terkini (seperti Intel Core Ultra & Ryzen AI) mempunyai cip khas untuk AI secara terbina." },
-        { title: "Nanometer Technology", desc: "Transistor semakin kecil (3nm, 5nm), membolehkan lebih kuasa dalam saiz cip yang sama." }
+        { title: "Nanometer Technology", desc: "Nama nod pembuatan seperti 3 nm dan 5 nm ialah penamaan generasi proses; bukan ukuran literal panjang setiap transistor. Kecekapan bergantung pada seni bina dan reka bentuk cip." }
       ]
     }
   },
@@ -110,8 +110,8 @@ const topics = [
     content: {
       basics: [], 
       advanced: [
-        { title: "PCIe 5.0", desc: "Standard sambungan terpantas masa kini untuk GPU dan SSD, dengan kelajuan data berganda berbanding PCIe 4.0." },
-        { title: "Wi-Fi 7 Technology", desc: "Banyak papan induk moden kini dilengkapi sambungan rangkaian tanpa wayar dan berwayar terpantas secara terbina." },
+        { title: "PCIe 5.0", desc: "PCIe 5.0 digunakan pada banyak PC berprestasi tinggi dan menawarkan dua kali kadar pemindahan per lorong berbanding PCIe 4.0. Spesifikasi PCIe 6.0 dan 7.0 juga telah diterbitkan, tetapi penggunaan pada PC pengguna berbeza mengikut peranti." },
+        { title: "Wi-Fi 7 Technology", desc: "Sesetengah papan induk moden menyediakan Wi-Fi 7 terbina; prestasi sebenar bergantung pada penghala, jalur frekuensi, gangguan dan keserasian peranti." },
         { title: "DDR5 Motherboard Support", desc: "Papan induk terkini menyokong slot memori DDR5 yang jauh lebih pantas." }
       ]
     }
@@ -126,9 +126,9 @@ const topics = [
     content: {
       basics: [], 
       advanced: [
-        { title: "DDR5 RAM", desc: "Standard terkini dengan kelajuan asas 4800MHz ke atas, pengurusan tenaga lebih baik (PMIC pada stik RAM)." },
-        { title: "CAMM2 Memory", desc: "Format baharu untuk laptop yang menggantikan slot SO-DIMM tradisional untuk menjimatkan ruang dan meningkatkan kelajuan." },
-        { title: "ECC On-Die DDR5", desc: "DDR5 mempunyai ciri pembetulan ralat (Error Correction) terbina untuk kestabilan sistem yang lebih tinggi." }
+        { title: "DDR5 RAM", desc: "DDR5 ialah generasi RAM arus perdana moden; kadar pemindahan data dinyatakan dalam MT/s (contohnya DDR5-4800 = 4,800 MT/s), bukan semestinya frekuensi jam 4,800 MHz. Banyak modul DDR5 mempunyai PMIC." },
+        { title: "CAMM2 Memory", desc: "CAMM2 ialah bentuk modul memori alternatif bagi sesetengah komputer riba dan peranti; ia belum menggantikan SO-DIMM pada semua model." },
+        { title: "ECC On-Die DDR5", desc: "DDR5 biasanya mempunyai on-die ECC untuk mengesan dan membetulkan ralat dalaman cip DRAM. Ini tidak sama dengan ECC RAM sistem yang melindungi laluan data antara modul dan pengawal memori." }
       ]
     }
   },
@@ -142,9 +142,9 @@ const topics = [
     content: {
       basics: [], 
       advanced: [
-        { title: "NVMe Gen 5 SSD", desc: "SSD generasi baru yang mencapai kelajuan bacaan sehingga 12,000 MB/s (12GB/s)." },
-        { title: "3D NAND QLC PLC", desc: "Teknologi menyusun sel memori secara bertingkat untuk memuatkan kapasiti besar (4TB, 8TB) dalam saiz kecil." },
-        { title: "DirectStorage Technology", desc: "Teknologi yang membolehkan GPU mengambil data terus dari SSD tanpa membebankan CPU (penting untuk gaming)." }
+        { title: "NVMe Gen 5 SSD", desc: "SSD PCIe 5.0 NVMe berprestasi tinggi boleh mencapai bacaan berurutan melebihi 12,000 MB/s pada model tertentu; prestasi sebenar bergantung pada model, suhu dan sistem." },
+        { title: "3D NAND QLC PLC", desc: "3D NAND menyusun lapisan sel memori secara menegak; QLC dan PLC pula merujuk bilangan bit setiap sel. Kapasiti, ketahanan dan prestasi berbeza mengikut reka bentuk SSD." },
+        { title: "DirectStorage Technology", desc: "Microsoft DirectStorage mengoptimumkan laluan input/output dan pemprosesan data permainan untuk mengurangkan overhead CPU; hasilnya bergantung pada permainan, GPU, storan dan sokongan sistem." }
       ]
     }
   },
@@ -157,8 +157,8 @@ const topics = [
     content: {
       basics: [], 
       advanced: [
-        { title: "ATX 3.0 Standard", desc: "Standard bekalan kuasa terkini yang mampu menampung lonjakan kuasa tinggi dari kad grafik (GPU) generasi baru." },
-        { title: "12VHPWR Cable", desc: "Kabel kuasa khusus 16-pin yang direka untuk siri Nvidia RTX 40 bagi menggantikan palam 8-pin tradisional." },
+        { title: "ATX 3.0 Standard", desc: "ATX 3.0 memperkenalkan keperluan untuk lonjakan kuasa GPU; ATX 3.1 mengemas kini spesifikasi berkaitan, termasuk sokongan penyambung 12V-2x6 pada PSU yang berkenaan." },
+        { title: "12VHPWR Cable", desc: "12VHPWR digunakan pada sebahagian GPU moden; penyambung 12V-2x6 ialah reka bentuk yang dikemas kini. Gunakan kabel mengikut spesifikasi PSU dan GPU, serta pastikan penyambung terpasang sepenuhnya." },
         { title: "Titanium Efficiency", desc: "Tahap kecekapan premium yang membazirkan sangat sedikit haba berbanding PSU biasa." }
       ]
     }
@@ -173,7 +173,7 @@ const topics = [
       basics: [], 
       advanced: [
         { title: "Custom Loop Water Cooling", desc: "Sistem penyejukan air tegar yang direka khas dan disambung sendiri oleh pengguna secara manual. Harga premium dan estetik." },
-        { title: "Liquid Metal Thermal Paste", desc: "Pes terma berasaskan logam cecair yang mempunyai tahap kekonduksian haba (thermal conductivity) luar biasa berbanding silikon biasa." },
+        { title: "Liquid Metal Thermal Paste", desc: "Logam cecair boleh menawarkan kekonduksian haba tinggi tetapi biasanya mengalirkan elektrik dan berisiko merosakkan komponen jika terkena litar. Tidak sesuai untuk amali pemula tanpa pengawasan." },
         { title: "Vapor Chamber Technology", desc: "Ruang wap nipis di dalam heatsink laptop berprestasi tinggi yang sangat cekap menyebarkan haba berbanding paip haba tembaga konvensional." }
       ]
     }
@@ -367,7 +367,7 @@ const quizQuestions = [
     correct: 0
   },
   {
-    question: "Apakah maksud unit 'MHz' atau 'MT/s' yang sering terpapar pada spesifikasi sekeping RAM (contoh: 3200MHz)?",
+    question: "Apakah maksud unit MT/s yang digunakan pada spesifikasi kadar pemindahan memori DDR (contoh: DDR4-3200)?",
     options: ["Harga kos memori", "Jumlah ruang memori untuk fail", "Kadar kelajuan pemindahan data", "Jangka hayat memori"],
     correct: 2
   },
@@ -476,7 +476,7 @@ const quizQuestions = [
     correct: 2
   },
   {
-    question: "Jika anda memasang PC Gaming berprestasi tinggi yang menggunakan kad siri NVIDIA RTX 40-Series terkini, apakah standard kabel kuasa baharu yang sering disertakan?",
+    question: "Jika anda memasang PC Gaming berprestasi tinggi yang menggunakan kad siri NVIDIA RTX 40-Series, apakah standard kabel kuasa baharu yang sering disertakan?",
     options: ["Kabel PS/2 Klasik", "Kabel 12VHPWR (16-pin)", "Kabel SATA", "Kabel USB Type-C 100W"],
     correct: 1
   },
@@ -607,13 +607,13 @@ export default function ModuleIKR3013({ onBackToPortal }) {
   const [unlockedTopicIndex, setUnlockedTopicIndex] = useState(() => {
     try {
       const saved = localStorage.getItem('ikr3013_progress');
-      return saved !== null ? parseInt(saved, 10) : 0;
+      return saved !== null && Number.isFinite(Number(saved)) ? Math.max(0, Math.min(topics.length, Number(saved))) : 0;
     } catch (e) {
       return 0; // Pelindung (Fallback) jika browser sekat storan
     }
   }); // <-- Fungsi jejak progress bacaan pelajar kekal dengan localStorage
 
-  // State Recommender AI
+  // State Pencadang Spesifikasi (rule-based)
   const [isRecommenderStarted, setIsRecommenderStarted] = useState(false);
   const [recStep, setRecStep] = useState(0);
   const [recLoading, setRecLoading] = useState(false);
@@ -680,10 +680,10 @@ export default function ModuleIKR3013({ onBackToPortal }) {
     </div>
   );
 
-  // --- Fungsi Recommender AI ---
+  // --- Fungsi Pencadang Spesifikasi (rule-based) ---
   const createSearchLink = (query) => `https://www.google.com/search?q=${encodeURIComponent(query + " harga malaysia review")}`;
 
-  const generateRecommendation = () => {
+  const generateRecommendation = (preferences = recPreferences) => {
     setRecLoading(true);
     
     setTimeout(() => {
@@ -695,7 +695,7 @@ export default function ModuleIKR3013({ onBackToPortal }) {
         warning: null
       };
 
-      const { usage, type, budget } = recPreferences;
+      const { usage, type, budget } = preferences;
 
       // KATEGORI 1: GAMING
       if (usage === 'gaming') {
@@ -977,19 +977,15 @@ export default function ModuleIKR3013({ onBackToPortal }) {
   };
 
   const handleRecSelect = (category, value) => {
-    setRecPreferences(prev => ({ ...prev, [category]: value }));
-    if (category === 'budget' || (category === 'type' && recPreferences.usage === 'creative')) {
-       setTimeout(() => {
-         if (category === 'budget') generateRecommendation(); 
-         else if (category === 'type' && recPreferences.usage === 'creative') {
-            setRecPreferences(prev => ({...prev, budget: 'mid'}));
-            generateRecommendation();
-         }
-         else setRecStep(prev => prev + 1);
-       }, 300);
-    } else {
-      setTimeout(() => setRecStep(prev => prev + 1), 300);
-    }
+    // Snapshot pilihan terkini mengelakkan cadangan menggunakan state lama.
+    const next = { ...recPreferences, [category]: value };
+    const autoCreative = category === 'type' && next.usage === 'creative';
+    if (autoCreative) next.budget = 'mid';
+    setRecPreferences(next);
+    setTimeout(() => {
+      if (category === 'budget' || autoCreative) generateRecommendation(next);
+      else setRecStep(prev => prev + 1);
+    }, 300);
   };
 
   const resetRecommender = () => {
@@ -1256,8 +1252,8 @@ export default function ModuleIKR3013({ onBackToPortal }) {
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/30 rounded-full text-blue-200 text-xs font-bold mb-3 border border-blue-400/30 backdrop-blur-sm">
                 <Sparkles size={14} /> Ciri Baharu
               </div>
-              <h2 className="text-2xl md:text-3xl font-bold mb-2 tracking-tight">Pakar Perunding AI PC<span className="text-blue-400">Pintar</span></h2>
-              <p className="text-blue-100 max-w-lg text-sm md:text-base opacity-90">Tidak pasti nak beli model apa? Biar AI analisis bajet & kegunaan anda untuk padankan laptop atau PC terbaik dalam masa 60 saat.</p>
+              <h2 className="text-2xl md:text-3xl font-bold mb-2 tracking-tight">Pencadang Spesifikasi PC<span className="text-blue-400">Pintar</span></h2>
+              <p className="text-blue-100 max-w-lg text-sm md:text-base opacity-90">Tidak pasti nak beli model apa? Padankan bajet dan kegunaan dengan cadangan spesifikasi serta contoh model. Sila semak harga dan stok semasa.</p>
             </div>
             <button
               onClick={() => {
@@ -1293,7 +1289,7 @@ export default function ModuleIKR3013({ onBackToPortal }) {
               </button>
               <div className="w-px h-6 bg-slate-200 mx-2 hidden md:block"></div>
               <div className="flex items-center gap-2 text-blue-700 font-extrabold text-xl tracking-tight">
-                <Cpu size={28} className="text-blue-600" /> PC<span className="text-slate-800">Pintar</span> AI
+                <Cpu size={28} className="text-blue-600" /> PC<span className="text-slate-800">Pintar</span>
               </div>
             </div>
             <a href="#" className="text-sm font-semibold text-slate-500 hover:text-blue-600 transition-colors hidden md:block">Bagaimana Ia Berfungsi?</a>
@@ -1307,15 +1303,15 @@ export default function ModuleIKR3013({ onBackToPortal }) {
   
             <div className="relative z-10 max-w-3xl mx-auto flex flex-col items-center">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-200 text-xs md:text-sm font-semibold mb-6 md:mb-8 backdrop-blur-sm">
-                <Sparkles size={16} /> Dikemaskini untuk harga pasaran Malaysia
+                <Sparkles size={16} /> Contoh model: semak harga dan stok semasa
               </div>
               
               <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold tracking-tight mb-4 md:mb-6 leading-tight">
-                Pakar Perunding PC & Laptop <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">AI Peribadi Anda</span>
+                Pakar Perunding PC & Laptop <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">Cadangan Pintar</span>
               </h1>
               
               <p className="text-base sm:text-lg md:text-xl text-blue-100 mb-8 md:mb-10 max-w-2xl font-light px-4">
-                Pening kepala dengan terma teknikal? Tidak pasti nak beli yang mana? Biar sistem AI kami bantu padankan laptop atau PC yang tepat dengan bajet dan kegunaan anda dalam masa 60 saat.
+                Pening kepala dengan terma teknikal? Tidak pasti nak beli yang mana? Sistem menggunakan peraturan pemilihan untuk mencadangkan spesifikasi berdasarkan bajet dan kegunaan. Harga serta ketersediaan perlu disemak sendiri.
               </p>
   
               <button 
@@ -1347,8 +1343,8 @@ export default function ModuleIKR3013({ onBackToPortal }) {
                   <div className="bg-indigo-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 text-indigo-600">
                     <Zap size={32} />
                   </div>
-                  <h3 className="text-xl font-bold mb-3">2. AI Buat Analisis</h3>
-                  <p className="text-slate-500">Sistem menyemak ratusan data model dan harga pasaran Malaysia serta-merta.</p>
+                  <h3 className="text-xl font-bold mb-3">2. Sistem Padankan Keperluan</h3>
+                  <p className="text-slate-500">Sistem memadankan pilihan kepada senarai model contoh; harga dan stok semasa perlu diperiksa melalui pautan carian.</p>
                 </div>
   
                 <div className="bg-slate-50 p-8 rounded-2xl text-center border border-slate-100 hover:shadow-lg transition-shadow">
@@ -1373,14 +1369,14 @@ export default function ModuleIKR3013({ onBackToPortal }) {
           <Home size={18} /> <span className="hidden sm:inline">Menu Utama</span>
         </button>
         <div className="flex items-center gap-2 text-slate-400 font-bold text-lg">
-          <Cpu size={20} /> PC<span className="text-slate-600">Pintar</span> AI
+          <Cpu size={20} /> PC<span className="text-slate-600">Pintar</span>
         </div>
       </div>
 
       <div className="w-full bg-white rounded-3xl shadow-xl overflow-hidden ring-1 ring-slate-100">
         <div className="bg-gradient-to-r from-blue-700 to-indigo-800 p-6 text-white text-center">
             <h1 className="text-2xl font-bold flex items-center justify-center gap-2">
-              <Sparkles className="text-yellow-300" /> Sesi Konsultasi AI
+              <Sparkles className="text-yellow-300" /> Sesi Pencadang Spesifikasi
             </h1>
             <p className="text-blue-100 mt-2 font-light">Jawab soalan di bawah dengan jujur untuk hasil terbaik.</p>
           </div>
@@ -1455,8 +1451,7 @@ export default function ModuleIKR3013({ onBackToPortal }) {
                     title="Bajet Rendah (< RM 2,500)" 
                     desc="Pilihan bajet ketat untuk prestasi asas"
                     onClick={() => {
-                        setRecPreferences(prev => ({...prev, budget: 'low'}));
-                        generateRecommendation();
+                        handleRecSelect('budget', 'low');
                     }}
                   />
                   <OptionCard 
@@ -1464,8 +1459,7 @@ export default function ModuleIKR3013({ onBackToPortal }) {
                     title="Bajet Pertengahan (RM 2,500 - RM 4,500)" 
                     desc="Keseimbangan terbaik antara harga dan prestasi"
                     onClick={() => {
-                        setRecPreferences(prev => ({...prev, budget: 'mid'}));
-                        generateRecommendation();
+                        handleRecSelect('budget', 'mid');
                     }}
                   />
                   <OptionCard 
@@ -1473,8 +1467,7 @@ export default function ModuleIKR3013({ onBackToPortal }) {
                     title="Bajet Tinggi (> RM 4,500)" 
                     desc="Prestasi tinggi, kualiti premium, dan teknologi terkini"
                     onClick={() => {
-                        setRecPreferences(prev => ({...prev, budget: 'high'}));
-                        generateRecommendation();
+                        handleRecSelect('budget', 'high');
                     }}
                   />
                 </div>
@@ -1488,7 +1481,7 @@ export default function ModuleIKR3013({ onBackToPortal }) {
                   <div className="absolute inset-0 border-4 border-blue-600 rounded-full border-t-transparent animate-spin"></div>
                   <Sparkles className="absolute inset-0 m-auto text-blue-600" size={24} />
                 </div>
-                <h3 className="text-2xl font-bold text-slate-800">AI sedang menganalisis data...</h3>
+                <h3 className="text-2xl font-bold text-slate-800">Sistem sedang memadankan pilihan...</h3>
                 <p className="text-slate-500 mt-2 font-medium">Memadankan spek terbaik dengan bajet RM{recPreferences.budget === 'low' ? '2500 ke bawah' : recPreferences.budget === 'mid' ? '2500-4500' : '4500 ke atas'}...</p>
               </div>
             )}
@@ -1502,7 +1495,7 @@ export default function ModuleIKR3013({ onBackToPortal }) {
                 
                 <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-6 mb-8 relative shadow-sm">
                    <div className="absolute -top-3 left-6 bg-indigo-600 text-white text-xs px-3 py-1.5 rounded-full shadow-md flex items-center gap-1.5 font-bold uppercase tracking-wider">
-                      <Sparkles size={14}/> Analisis Pakar AI
+                      <Sparkles size={14}/> Rumusan Cadangan Spesifikasi
                    </div>
                    <p className="text-indigo-900 font-medium leading-relaxed pt-2">"{recResult.aiAnalysis}"</p>
                    
@@ -3326,7 +3319,7 @@ export default function ModuleIKR3013({ onBackToPortal }) {
                         </div>
                         <h5 className="font-bold text-slate-800 text-lg mb-2">Apple macOS</h5>
                         <p className="text-sm text-slate-600 leading-relaxed mb-4">Sistem operasi eksklusif untuk komputer keluaran Apple (MacBook / iMac). Terkenal dengan kestabilan, keselamatan tinggi, dan pilihan utama industri kreatif & pereka.</p>
-                        <span className="text-xs bg-slate-200 text-slate-800 px-3 py-1 rounded-full font-bold">Cth: macOS Sonoma</span>
+                        <span className="text-xs bg-slate-200 text-slate-800 px-3 py-1 rounded-full font-bold">Cth: macOS (versi semasa yang disokong)</span>
                       </div>
 
                       <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 shadow-sm hover:border-orange-400 transition-all text-center group">
@@ -3334,7 +3327,7 @@ export default function ModuleIKR3013({ onBackToPortal }) {
                           <Terminal size={32}/>
                         </div>
                         <h5 className="font-bold text-slate-800 text-lg mb-2">Linux (Open Source)</h5>
-                        <p className="text-sm text-slate-600 leading-relaxed mb-4">Sistem berasaskan sumber terbuka yang percuma. Sangat kebal dari virus. Pilihan nombor 1 untuk komputer Pelayan (Server) dan pakar teknologi IT (Programmer).</p>
+                        <p className="text-sm text-slate-600 leading-relaxed mb-4">Sistem berasaskan sumber terbuka yang percuma. Masih memerlukan kemas kini keselamatan dan perlindungan daripada perisian hasad. Pilihan nombor 1 untuk komputer Pelayan (Server) dan pakar teknologi IT (Programmer).</p>
                         <span className="text-xs bg-orange-100 text-orange-700 px-3 py-1 rounded-full font-bold">Cth: Ubuntu, Kali Linux</span>
                       </div>
                     </div>
@@ -3347,9 +3340,9 @@ export default function ModuleIKR3013({ onBackToPortal }) {
                     <div className="text-center mb-10 relative z-10">
                       <span className="inline-block py-1 px-3 rounded-full bg-blue-200 text-blue-800 font-bold text-xs mb-3 tracking-widest uppercase">Panduan Praktikal</span>
                       <h4 className="font-bold text-slate-800 text-2xl flex items-center justify-center gap-2">
-                        <Download className="text-blue-600" size={26}/> Langkah "Fresh Install" Windows 10 / 11
+                        <Download className="text-blue-600" size={26}/> Langkah "Fresh Install" Windows 11
                       </h4>
-                      <p className="text-slate-600 text-sm mt-2 max-w-2xl mx-auto">Cara rasmi dan paling bersih untuk memasang semula sistem operasi Windows pada PC atau Laptop anda menggunakan pemacu USB (Pendrive).</p>
+                      <p className="text-slate-600 text-sm mt-2 max-w-2xl mx-auto">Panduan asas memasang Windows 11 melalui USB menggunakan alat rasmi Microsoft. Sandarkan data terlebih dahulu, semak keserasian TPM 2.0/Secure Boot, dan ingat bahawa sokongan biasa Windows 10 telah tamat pada 14 Oktober 2025.</p>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 relative z-10">
@@ -3681,7 +3674,7 @@ export default function ModuleIKR3013({ onBackToPortal }) {
               <div className="w-12 h-12 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mb-4"><MemoryStick size={24}/></div>
               <h3 className="text-xl font-bold text-gray-800 mb-3">RAM & Motherboard</h3>
               <p className="text-gray-600 text-sm leading-relaxed">
-                Pastikan sama ada Motherboard anda menyokong DDR4 atau DDR5. Ia tidak "backwards compatible". Kelajuan (MHz) yang dibeli juga tertakluk kepada had maksimum kelajuan yang disokong oleh Motherboard.
+                Pastikan sama ada Motherboard anda menyokong DDR4 atau DDR5. Ia tidak "backwards compatible". Kelajuan pemindahan memori (MT/s) juga tertakluk kepada had yang disokong oleh papan induk dan CPU.
               </p>
             </div>
 

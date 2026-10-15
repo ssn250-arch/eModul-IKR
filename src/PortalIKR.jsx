@@ -1,11 +1,12 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
-import { Box, Cpu, CircuitBoard, Network, Cable, ChevronRight, Loader2, Code2, Server, Database, GraduationCap } from 'lucide-react';
+import { Box, Cpu, CircuitBoard, Network, Cable, ChevronRight, Loader2, Code2, Server, Database, GraduationCap, ClipboardCheck, Map, ArrowLeft, CheckCircle2 } from 'lucide-react';
 
 import logoADTEC from './logo.png';
 
 // Import modul menggunakan lazy loading untuk penjimatan data internet
 const ModuleIKR3013 = lazy(() => import('./IKR3013')); 
 const ModuleIKR3023 = lazy(() => import('./IKR3023'));
+const CableDiagnostic = lazy(() => import('./CableDiagnostic')); 
 
 // Komponen Skrin Loading (Responsif)
 const LoadingScreen = () => (
@@ -19,10 +20,15 @@ const LoadingScreen = () => (
 
 export default function PortalIKR() {
   const [activeModule, setActiveModule] = useState(null);
+  const [showCurriculum, setShowCurriculum] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [activeModule]);
+
+  if (activeModule === 'SIMULASI') {
+    return <Suspense fallback={<LoadingScreen />}><CableDiagnostic onBack={() => setActiveModule(null)} /></Suspense>;
+  }
 
   if (activeModule === 'IKR3013') {
     return (
@@ -114,7 +120,7 @@ export default function PortalIKR() {
           </h2>
           
           <p className="text-slate-600 text-sm sm:text-base md:text-lg leading-relaxed mb-8 md:mb-10 max-w-2xl mx-auto font-medium">
-            Teroka nota teori interaktif, model AR 3D, perunding infrastruktur AI, dan simulasi perkakasan sebenar. Pilih modul di bawah untuk memulakan sesi.
+            Teroka nota teori interaktif, visualisasi model 3D, pencadang spesifikasi berpandukan peraturan dan panduan amali teknologi komputer dan rangkaian. Pilih modul di bawah untuk memulakan sesi.
           </p>
         </div>
 
@@ -139,7 +145,7 @@ export default function PortalIKR() {
               <h3 className="text-xl md:text-2xl font-black text-slate-800 mb-3 md:mb-4 group-hover:text-blue-700 transition-colors">Computer Hardware & Software</h3>
               
               <p className="text-slate-500 text-xs md:text-sm leading-relaxed mb-6 md:mb-8 font-medium">
-                Pelajari anatomi dalaman komputer, evolusi komponen fizikal, sistem operasi, dan gunakan Perunding AI untuk mereka spesifikasi PC.
+                Pelajari anatomi dalaman komputer, evolusi komponen fizikal, sistem operasi, dan gunakan pencadang spesifikasi untuk merancang konfigurasi PC.
               </p>
             </div>
 
@@ -182,12 +188,55 @@ export default function PortalIKR() {
           </button>
 
         </div>
+
+        <section className="mx-auto w-full max-w-5xl pb-10" aria-label="Aktiviti dan peta kompetensi">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <button type="button" onClick={() => setActiveModule('SIMULASI')} className="rounded-2xl bg-indigo-950 text-white p-6 shadow-lg text-left hover:bg-indigo-900 transition-all focus-visible:outline focus-visible:outline-4 focus-visible:outline-indigo-400">
+              <ClipboardCheck size={30} className="mb-3 text-yellow-300" />
+              <h3 className="text-xl font-bold">Simulasi Diagnostik Kabel</h3>
+              <p className="mt-2 text-sm text-indigo-100">Latihan berasaskan senario: baca petunjuk Cable Tester, kenal pasti punca dan lihat penerangan penyelesaian.</p>
+              <span className="mt-3 inline-block text-xs bg-indigo-700 px-3 py-1 rounded-full">Latihan pengayaan IKR3023 KP(4/4)</span>
+            </button>
+            <button type="button" aria-expanded={showCurriculum} onClick={() => setShowCurriculum(v => !v)} className="rounded-2xl bg-white text-slate-800 p-6 shadow-lg border border-slate-200 text-left hover:border-indigo-300 transition-all focus-visible:outline focus-visible:outline-4 focus-visible:outline-indigo-400">
+              <Map size={30} className="mb-3 text-indigo-700" />
+              <h3 className="text-xl font-bold">Peta Kertas Penerangan JTM</h3>
+              <p className="mt-2 text-sm text-slate-600">Rujuk KP rasmi bagi kedua-dua modul dan hubungannya dengan aktiviti pembelajaran digital.</p>
+              <span className="mt-3 inline-block text-xs bg-indigo-50 text-indigo-800 px-3 py-1 rounded-full">{showCurriculum ? 'Tutup peta KP' : 'Lihat 9 KP'}</span>
+            </button>
+          </div>
+          {showCurriculum && (
+            <div className="mt-5 rounded-2xl bg-white border border-slate-200 shadow-md p-5 md:p-7" aria-label="Senarai KP rasmi">
+              <p className="text-xs font-semibold uppercase tracking-widest text-indigo-700">J619-003-3:2023 • Computer Network Services • Tahap 3</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                {[
+                  { code:'IKR3013', entries:[
+                    ['KP(1/5)','Pengenalan Komponen Komputer'], ['KP(2/5)','Pengenalan kepada Perkakasan Komputer'],
+                    ['KP(3/5)','Pengenalan kepada Sistem Komputer'], ['KP(4/5)','Pengenalan kepada Aplikasi Komputer'],
+                    ['KP(5/5)','Pengenalan kepada Rekod Pemasangan Perkakasan dan Sistem Komputer']
+                  ]},
+                  { code:'IKR3023', entries:[
+                    ['KP(1/4)','Pengenalan kepada Rangkaian'], ['KP(2/4)','Pengenalan kepada Perkakasan Rangkaian'],
+                    ['KP(3/4)','Pengenalan kepada Pelan Rangkaian'], ['KP(4/4)','Pengenalan kepada Pemasangan Kabel']
+                  ]},
+                ].map(group => (
+                  <div key={group.code}>
+                    <h4 className="font-black text-slate-800 mb-3">{group.code}</h4>
+                    <ul className="space-y-2">
+                      {group.entries.map(([code,title])=><li key={code} className="flex gap-2 items-start text-sm text-slate-700"><CheckCircle2 className="w-4 h-4 mt-0.5 shrink-0 text-indigo-600"/><span><strong>{code}</strong> — {title}</span></li>)}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+              <p className="text-xs text-slate-500 mt-5">Peta ini ialah rujukan tajuk KP rasmi, bukan pengesahan bahawa semua kriteria amali telah dinilai. Gunakan Kertas Penerangan JTM dan instrumen pentaksiran rasmi sebagai sumber utama.</p>
+            </div>
+          )}
+        </section>
       </main>
 
       {/* FOOTER */}
       <footer className="w-full py-6 md:py-8 bg-transparent text-center relative z-10 border-t border-slate-200/50">
         <p className="text-slate-500 font-bold text-[10px] md:text-xs tracking-widest uppercase px-4">
-          Copyright &copy; TKR ADTEC Sandakan 2026
+          Copyright &copy; TKR ADTEC JTM Kampus Sandakan 2026 • Rujukan JTM J619-003-3:2023
         </p>
       </footer>
     </div>
