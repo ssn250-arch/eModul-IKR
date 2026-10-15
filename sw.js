@@ -1,8 +1,8 @@
 // eModul-IKR GitHub Pages PWA (same-origin assets only)
-const CACHE = 'emodul-ikr-newic-77adf17b0e';
+const CACHE = 'emodul-ikr-newic-7aa21b9995';
 const SCOPE = "/eModul-IKR/";
 const APP = "/eModul-IKR/";
-const FILES = ["/eModul-IKR/assets/IKR3013-DQ3MLm79.js","/eModul-IKR/assets/IKR3023-D7j_HoaL.js","/eModul-IKR/assets/index-AN_w1S_C.js","/eModul-IKR/assets/index-BPUXZTVf.css","/eModul-IKR/assets/jsx-runtime-CgA9nl7Z.js","/eModul-IKR/assets/logo-IWiIGmkl.png","/eModul-IKR/assets/TopicUnlockQuiz-CBQ0IOat.js","/eModul-IKR/favicon.svg","/eModul-IKR/icons/icon-192.png","/eModul-IKR/icons/icon-512.png","/eModul-IKR/icons.svg","/eModul-IKR/index.html","/eModul-IKR/logo-1.png","/eModul-IKR/logo.png","/eModul-IKR/manifest.json","/eModul-IKR/manifest.webmanifest"];
+const FILES = ["/eModul-IKR/assets/IKR3013-CByQ_bz0.js","/eModul-IKR/assets/IKR3023-D2GDZ5KH.js","/eModul-IKR/assets/index-BPUXZTVf.css","/eModul-IKR/assets/index-Ot9Wy5bP.js","/eModul-IKR/assets/jsx-runtime-CgA9nl7Z.js","/eModul-IKR/assets/logo-IWiIGmkl.png","/eModul-IKR/assets/TopicUnlockQuiz-CBQ0IOat.js","/eModul-IKR/favicon.svg","/eModul-IKR/icons/icon-192.png","/eModul-IKR/icons/icon-512.png","/eModul-IKR/icons.svg","/eModul-IKR/index.html","/eModul-IKR/logo-1.png","/eModul-IKR/logo.png","/eModul-IKR/manifest.json","/eModul-IKR/manifest.webmanifest"];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(FILES)).then(() => self.skipWaiting()));
 });
