@@ -1,3 +1,4 @@
+import StudyChatbot from './StudyChatbot';
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   Cpu, 
@@ -651,7 +652,7 @@ export default function ModuleIKR3013({ onBackToPortal }) {
 
 
   const handleStudentSelected = (number) => {
-    if (!Number.isInteger(number) || number < 1 || number > 29) return;
+    if (!Number.isInteger(number) || number < 1 || number > 30) return;
     setStudentNumber(number);
     try { localStorage.setItem('emodul_ikr_student_number_v1', String(number)); } catch { /* optional */ }
     const nextProgress = loadStudentProgress(number);
@@ -663,11 +664,11 @@ export default function ModuleIKR3013({ onBackToPortal }) {
   };
 
   const changeStudent = () => {
-    const input = window.prompt('Nombor pelajar (1 hingga 29):', String(studentNumber || ''));
+    const input = window.prompt('Nombor pelajar (1 hingga 30):', String(studentNumber || ''));
     if (input === null) return;
     const number = Number(input);
-    if (!Number.isInteger(number) || number < 1 || number > 29) {
-      window.alert('Sila pilih nombor 1 hingga 29.');
+    if (!Number.isInteger(number) || number < 1 || number > 30) {
+      window.alert('Sila pilih nombor 1 hingga 30.');
       return;
     }
     handleStudentSelected(number);
@@ -3740,6 +3741,7 @@ export default function ModuleIKR3013({ onBackToPortal }) {
         {view === 'ar' && renderAR()}
       </div>
       
+      <StudyChatbot moduleCode="IKR3013" topics={topics} activeTopicId={activeTopic?.id || null} />
       {/* --- BAHAGIAN FOOTER HAK CIPTA --- */}
       <footer className="w-full py-6 mt-auto border-t border-gray-200 bg-white text-center shadow-[0_-5px_15px_-10px_rgba(0,0,0,0.1)] z-10">
         <p className="text-gray-500 text-sm font-semibold tracking-wide">

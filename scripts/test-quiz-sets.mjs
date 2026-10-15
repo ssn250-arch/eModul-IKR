@@ -6,7 +6,7 @@ for (const [moduleCode, topics] of Object.entries(TOPIC_UNLOCK_BANKS)) {
   for (const [topicId, bank] of Object.entries(topics)) {
     if (bank.length < 8) throw new Error(`Bank kurang 8: ${moduleCode}/${topicId}`);
     const sets = new Set();
-    for (let studentNo = 1; studentNo <= 29; studentNo += 1) {
+    for (let studentNo = 1; studentNo <= 30; studentNo += 1) {
       const quiz = getQuizQuestions(moduleCode, topicId, studentNo);
       if (quiz.length !== 5) throw new Error(`Bukan 5 soalan: ${moduleCode}/${topicId}`);
       if (quiz.some(item => !Number.isInteger(item.correct) || item.correct < 0 || item.correct >= item.options.length)) throw new Error(`Jawapan tidak sah: ${moduleCode}/${topicId}`);
@@ -15,7 +15,7 @@ for (const [moduleCode, topics] of Object.entries(TOPIC_UNLOCK_BANKS)) {
       sets.add(key);
       tested++;
     }
-    console.log(`LULUS ${moduleCode}/${topicId}: 29 set berbeza, 5 soalan/set`);
+    console.log(`LULUS ${moduleCode}/${topicId}: 30 set berbeza, 5 soalan/set`);
   }
 }
 console.log(`LULUS SEMUA: ${tested} set kuiz diperiksa.`);

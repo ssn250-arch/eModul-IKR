@@ -1,5 +1,5 @@
 import { TOPIC_UNLOCK_BANKS } from './TopicUnlockBanks.js';
-export const MAX_STUDENTS = 29;
+export const MAX_STUDENTS = 30;
 
 const nthCombination = (count, choose, nth) => {
   const result = [];

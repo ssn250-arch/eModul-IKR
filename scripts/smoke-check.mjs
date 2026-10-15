@@ -5,7 +5,7 @@ const root = process.cwd();
 const files = [
   'index.html', 'package.json','package-lock.json','vite.config.js',
   'src/main.jsx','src/App.jsx','src/PortalIKR.jsx', 'src/IKR3013.jsx',
-  'src/IKR3023.jsx','src/TopicUnlockQuiz.jsx','src/TopicUnlockBanks.js','src/TopicQuizEngine.js','src/index.css','src/logo.png',
+  'src/IKR3023.jsx','src/StudyChatbot.jsx','netlify/functions/chat.mjs','src/TopicUnlockQuiz.jsx','src/TopicUnlockBanks.js','src/TopicQuizEngine.js','src/index.css','src/logo.png',
   'public/manifest.webmanifest','public/icons/icon-192.png','public/icons/icon-512.png',
   'scripts/generate-sw.mjs'
 ];
@@ -28,6 +28,8 @@ const checks = [
  ['Peta KP', portal.includes('KP(5/5)') && portal.includes('KP(4/4)')],
  ['Diagnostic telah dibuang', !portal.includes('CableDiagnostic') && !fs.existsSync('src/CableDiagnostic.jsx')],
  ['Link PC Nexus', fs.readFileSync('src/IKR3013.jsx','utf8').includes('https://pcnexus.netlify.app/')],
+ ['Chatbot kedua-dua modul', fs.readFileSync('src/IKR3013.jsx','utf8').includes('<StudyChatbot') && fs.readFileSync('src/IKR3023.jsx','utf8').includes('<StudyChatbot')],
+ ['30 pelajar', fs.readFileSync('src/TopicQuizEngine.js','utf8').includes('MAX_STUDENTS = 30')],
  ['Link CableLabX', fs.readFileSync('src/IKR3023.jsx','utf8').includes('https://cablelabx.netlify.app/')],
 ];
 for (const [label,ok] of checks) { console.log(ok?'PASS':'FAIL',label); if(!ok)error=true; }

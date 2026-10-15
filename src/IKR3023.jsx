@@ -1,3 +1,4 @@
+import StudyChatbot from './StudyChatbot';
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   CheckCircle, 
@@ -638,7 +639,7 @@ export default function ModuleIKR3023({ onBackToPortal }) {
 
 
   const handleStudentSelected = (number) => {
-    if (!Number.isInteger(number) || number < 1 || number > 29) return;
+    if (!Number.isInteger(number) || number < 1 || number > 30) return;
     setStudentNumber(number);
     try { localStorage.setItem('emodul_ikr_student_number_v1', String(number)); } catch { /* optional */ }
     const nextProgress = loadStudentProgress(number);
@@ -650,11 +651,11 @@ export default function ModuleIKR3023({ onBackToPortal }) {
   };
 
   const changeStudent = () => {
-    const input = window.prompt('Nombor pelajar (1 hingga 29):', String(studentNumber || ''));
+    const input = window.prompt('Nombor pelajar (1 hingga 30):', String(studentNumber || ''));
     if (input === null) return;
     const number = Number(input);
-    if (!Number.isInteger(number) || number < 1 || number > 29) {
-      window.alert('Sila pilih nombor 1 hingga 29.');
+    if (!Number.isInteger(number) || number < 1 || number > 30) {
+      window.alert('Sila pilih nombor 1 hingga 30.');
       return;
     }
     handleStudentSelected(number);
@@ -2038,6 +2039,7 @@ export default function ModuleIKR3023({ onBackToPortal }) {
         {view === 'recommender' && renderRecommender()}
         {view === 'ar' && renderAR()}
       </div>
+      <StudyChatbot moduleCode="IKR3023" topics={topics} activeTopicId={activeTopic?.id || null} />
       <footer className="w-full py-6 mt-auto border-t bg-white text-center shadow-inner text-slate-500 font-semibold text-sm">
         Copyright &copy; TKR ADTEC Sandakan 2026
       </footer>

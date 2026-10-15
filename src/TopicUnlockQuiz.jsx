@@ -12,7 +12,7 @@ export const getStudentNumber = () => {
   } catch { return null; }
 };
 
-// Enumerate 5-question combinations in increasing order. The first 29
+// Enumerate 5-question combinations in increasing order. The first 30
 // permutations are guaranteed distinct when the bank has >= 8 questions.
 export default function TopicUnlockQuiz({ moduleCode, topic, onBack, onPassed, onNextTopic, onStudentSelected, isLastTopic = false }) {
   const [studentNumber, setStudentNumber] = useState(getStudentNumber);
@@ -84,7 +84,7 @@ export default function TopicUnlockQuiz({ moduleCode, topic, onBack, onPassed, o
       {enterStudent ? (
         <section className="unlock-enter rounded-2xl border border-blue-100 bg-white p-7 shadow-lg">
           <h3 className="text-xl font-black text-slate-800">Tetapkan nombor pelajar</h3>
-          <p className="mt-2 text-sm text-slate-600">Setiap pelajar mesti menggunakan nombor unik daripada <strong>1 hingga {MAX_STUDENTS}</strong> yang ditetapkan oleh pensyarah. Nombor ini memastikan set 5 soalan bagi setiap topik berbeza untuk semua 29 pelajar.</p>
+          <p className="mt-2 text-sm text-slate-600">Setiap pelajar mesti menggunakan nombor unik daripada <strong>1 hingga {MAX_STUDENTS}</strong> yang ditetapkan oleh pensyarah. Nombor ini memastikan set 5 soalan bagi setiap topik berbeza untuk semua 30 pelajar.</p>
           <div className="mt-5 flex flex-wrap gap-3">
             <select aria-label="Nombor pelajar" value={pendingStudent} onChange={(event) => setPendingStudent(event.target.value)} className="min-w-[190px] flex-1 rounded-xl border-2 border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-800 focus:border-blue-500 focus:outline-none">
               <option value="">Pilih nombor pelajar</option>
