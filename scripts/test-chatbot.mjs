@@ -1,50 +1,37 @@
 import assert from 'node:assert/strict';
-import handler from '../netlify/functions/chat.mjs';
+import { answerFromModuleNotes, getSuggestedQuestions, smartTutorInfo } from '../src/SmartKnowledgeEngine.js';
 
-const post = (question, extra = {}, origin = 'https://ssn250-arch.github.io') => new Request('https://test.netlify.app/.netlify/functions/chat', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json', Origin: origin },
-  body: JSON.stringify({ moduleCode: 'IKR3013', question, context: 'CPU memproses arahan komputer.', history: [], ...extra })
-});
-
-let ran = 0;
-const key = process.env.OPENAI_API_KEY;
-const originalFetch = globalThis.fetch;
-try {
-  delete process.env.OPENAI_API_KEY;
-  let res = await handler(post('Apakah CPU?'));
-  assert.equal(res.status, 503, 'Should make missing configuration explicit'); ran++;
-
-  res = await handler(post('Apakah CPU?', {}, 'https://example-spam.site'));
-  assert.equal(res.status, 403, 'Should reject unexpected CORS origins'); ran++;
-
-  process.env.OPENAI_API_KEY = 'fake-secret-only-test';
-  let requested;
-  globalThis.fetch = async (url, opts) => {
-    assert.equal(url, 'https://api.openai.com/v1/responses');
-    requested = JSON.parse(opts.body);
-    return new Response(JSON.stringify({ output: [{ type: 'message', content: [{ type: 'output_text', text: 'CPU memproses arahan.', annotations: [] }] }] }), {status: 200, headers: {'Content-Type': 'application/json'}});
-  };
-  res = await handler(post('Apakah fungsi CPU?'));
-  assert.equal(res.status, 200);
-  assert.equal((await res.json()).answer, 'CPU memproses arahan.');
-  assert.equal(requested.tools, undefined, 'General answer should not force paid web search'); ran++;
-
-  globalThis.fetch = async (_url, opts) => {
-    requested = JSON.parse(opts.body);
-    return new Response(JSON.stringify({ output: [{ type: 'message', content: [{ type: 'output_text', text: 'Piawaian ini dikemas kini.', annotations: [{ type: 'url_citation', url: 'https://example.org/piawaian', title: 'Piawaian rasmi' }] }] }] }), {status: 200, headers: {'Content-Type': 'application/json'}});
-  };
-  res = await handler(post('Apakah piawaian PCIe terkini 2026?'));
-  const data = await res.json();
-  assert.equal(data.webChecked, true);
-  assert.equal(requested.tools[0].type, 'web_search_preview');
-  assert.equal(data.sources[0].title, 'Piawaian rasmi'); ran++;
-
-  res = await handler(post('Hi', {moduleCode:'BAD'}));
-  assert.equal(res.status, 400); ran++;
-  console.log(`LULUS: ${ran} ujian backend chatbot (konfigurasi, CORS, AI, web citation, validation).`);
-} finally {
-  globalThis.fetch = originalFetch;
-  if (key) process.env.OPENAI_API_KEY = key;
-  else delete process.env.OPENAI_API_KEY;
-}
+const hw = [
+  { id:'cpu', title:'Unit Pemprosesan Pusat (CPU)', description:'CPU memproses arahan komputer dan bekerjasama dengan RAM.', content:{ basics:[{title:'Asas', points:['CPU ialah otak komputer dan memproses data.']}], advanced:[{title:'P-core',desc:'P-core ialah teras prestasi, E-core menumpukan kecekapan tenaga.'}]}},
+  { id:'ram', title:'Memori (RAM)', description:'RAM menyediakan storan sementara', content:{ basics:[{title:'Asas',points:['RAM menyimpan data sementara untuk CPU.']}], advanced:[{title:'DDR5',desc:'DDR5 ialah generasi RAM terkini dengan MT/s lebih tinggi; keserasian motherboard penting.'}]}},
+  { id:'storage', title:'Storan HDD dan SSD', description:'Menyimpan data tidak meruap', content:{ basics:[{title:'Jenis storan', points:['HDD menggunakan cakera magnetik; SSD menggunakan NAND flash.']}],advanced:[]}}
+];
+const cabling = [
+  { id:'topologi', title:'Topologi Rangkaian', description:'Topologi star dan mesh', content:{basics:[{title:'Topologi',points:['Topologi star bersambung ke switch pusat.']}],advanced:[{title:'Mesh',desc:'Mesh menyediakan laluan redundan.'}]}},
+  { id:'kelajuan', title:'Kelajuan Ethernet', description:'Piawaian 10GBASE-T dan 40GBASE-T', content:{basics:[{title:'Kelajuan',points:['Ethernet menggunakan pelbagai kategori kabel.']}], advanced:[{title:'Cat6A',desc:'Cat6A menyokong 10GBASE-T sehingga 100 meter. Cat8 menyokong 40GBASE-T sehingga sekitar 30 meter.'}]}},
+  { id:'peralatan', title:'Peralatan & Pengujian', description:'Cable tester, patch panel dan rak server', content:{basics:[{title:'Pengujian',points:['Cable tester menguji wiremap. Patch panel mengurus penamatan kabel.']}],advanced:[]}},
+  { id:'prosedur', title:'Prosedur Penamatan', description:'T568A dan T568B serta kabel crossover', content:{basics:[{title:'Penamatan',points:['Susunan pin perlu mematuhi T568A atau T568B.']}],advanced:[]}}
+];
+let ran=0;
+const answer=(moduleCode, topics,question,activeTopicId=null)=>answerFromModuleNotes({moduleCode, topics,question,activeTopicId});
+const cpu=answer('IKR3013',hw,'Apakah fungsi CPU?');
+assert.match(cpu.text,/CPU|pemproses/i); assert.equal(cpu.sources[0].topicId,'cpu'); ran++;
+const ddr=answer('IKR3013',hw,'Bezakan DDR4 dan DDR5');
+assert.match(ddr.text,/DDR4.*DDR5/i); assert.equal(ddr.sources[0].topicId,'ram'); ran++;
+const hdd=answer('IKR3013',hw,'Apa beza HDD dan SSD?');
+assert.match(hdd.text,/HDD.*SSD/i); ran++;
+const cat=answer('IKR3023',cabling,'Cat6A dan Cat8 sesuai untuk apa?');
+assert.match(cat.text,/Cat6A.*Cat8/); assert.equal(cat.sources[0].topicId,'kelajuan'); ran++;
+const top=answer('IKR3023',cabling,'Bezakan star dan mesh');
+assert.match(top.text,/bintang|star/i); assert.equal(top.sources[0].topicId,'topologi'); ran++;
+const cable=answer('IKR3023',cabling,'Apa fungsi patch panel?');
+assert.equal(cable.sources[0].topicId,'peralatan'); ran++;
+const mystery=answer('IKR3013',hw,'Bagaimana cara menanam sayur kangkung?');
+assert.equal(mystery.sources.length,0); ran++;
+const latest=answer('IKR3023',cabling,'Apakah Cat6A terkini 2026?');
+assert.match(latest.text,/tidak menyemak internet secara langsung/); ran++;
+const revision=answer('IKR3013',hw,'Beri soalan ulang kaji tentang RAM');
+assert.match(revision.text,/soalan ulang kaji/); ran++;
+assert.equal(getSuggestedQuestions('IKR3013','cpu').length,3); ran++;
+assert.equal(smartTutorInfo.requiresApiKey,false); assert.equal(smartTutorInfo.usesNetwork,false); ran++;
+console.log(`LULUS: ${ran} ujian enjin Smart Knowledge Tutor tanpa API (padanan, had fakta, rujukan, cadangan).`);

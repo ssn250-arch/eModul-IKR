@@ -1,132 +1,52 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { ArrowUp, BookOpenCheck, Bot, ChevronDown, ExternalLink, GraduationCap, LoaderCircle, MessageCircleMore, RotateCcw, ShieldCheck, Sparkles, Wifi, WifiOff, X } from 'lucide-react';
+import { ArrowUp, BookOpenCheck, Bot, GraduationCap, MessageCircleMore, RotateCcw, Sparkles, WifiOff, X } from 'lucide-react';
+import { answerFromModuleNotes, getSuggestedQuestions } from './SmartKnowledgeEngine';
 
 const MODULE_META = {
   IKR3013: {
     heading: 'Pembantu Perkakasan & Perisian',
-    intro: 'Hai! Saya Pembantu eModul-IKR. Tanya saya tentang CPU, motherboard, RAM, storan, sistem operasi dan perkakasan lain.',
+    intro: 'Hai! Saya Smart Knowledge Tutor IKR3013. Saya boleh bantu menerangkan CPU, motherboard, RAM, storan, sistem operasi dan perkakasan berdasarkan nota eModul-IKR, tanpa API key.',
     examplePrompts: ['Apakah fungsi CPU?', 'Jelaskan beza HDD dengan SSD', 'Mengapa RAM perlu serasi dengan motherboard?', 'Apakah UEFI?']
   },
   IKR3023: {
     heading: 'Pembantu Pengkabelan Rangkaian',
-    intro: 'Hai! Saya Pembantu eModul-IKR. Saya boleh bantu menerangkan topologi, kabel rangkaian, alatan, standard dan kerja penamatan kabel.',
+    intro: 'Hai! Saya Smart Knowledge Tutor IKR3023. Saya boleh bantu menerangkan topologi, kabel, alatan, standard dan penamatan berdasarkan nota eModul-IKR, tanpa API key.',
     examplePrompts: ['Bezakan topologi star dan mesh', 'Mengapa kabel Cat6A digunakan?', 'Apakah fungsi patch panel?', 'Terangkan langkah penamatan RJ45']
   }
 };
 
-const STOPWORDS = new Set(['yang','apakah','adakah','dan','atau','untuk','seperti','dalam','dengan','ini','itu','saya','satu','dua','tiga','secara','daripada','pada','kepada','macam','mana','bagaimana','boleh','juga','apa','kenapa','mengapa','tolong','jelaskan','terangkan','fungsi','contoh','beza','antara','tentang','berikan','buat','bagi','ada','adalah','the','why','how','what','its','and','are','dari','ialah','ialah','ke','di','yg','nk']);
-
-const words = (text) => String(text || '').toLowerCase().normalize('NFKC').match(/[\p{L}\p{N}]+/gu)?.filter((w) => w.length >= 3 && !STOPWORDS.has(w)) || [];
-
-const shorten = (text, limit = 390) => String(text || '').slice(0, limit);
-
-// Context is derived solely from the notes already shown on the site, not external invented material.
-const getLearningNotes = (topics, question = '', currentTopicId = '') => {
-  const queryWords = words(question);
-  const mapped = topics.map((topic) => {
-    const cards = [...(topic.content?.basics || []).map((b) => ({ title: b.title, text: (b.points || []).join(' ') })),
-      ...(topic.content?.advanced || []).map((a) => ({ title: a.title, text: a.desc }))];
-    const header = `${topic.title} ${topic.description} ${cards.map((x) => x.title).join(' ')}`.toLowerCase();
-    const whole = `${header} ${cards.map((x) => x.text).join(' ')}`.toLowerCase();
-    const score = queryWords.reduce((sum, w) => sum + (header.includes(w) ? 5 : whole.includes(w) ? 2 : 0), 0) + (topic.id === currentTopicId ? 2 : 0);
-    return { topic, cards, score };
-  }).sort((a, b) => b.score - a.score);
-  return mapped.slice(0, 3);
-};
-
-const buildContext = (topics, question, currentTopicId) => getLearningNotes(topics, question, currentTopicId)
-  .map(({ topic, cards }) => `TOPIK: ${topic.title}\nRINGKASAN: ${topic.description}\n${cards.slice(0, 8).map((c) => `${c.title}: ${c.text}`).join('\n')}`)
-  .join('\n\n').slice(0, 8500);
-
-const offlineAnswer = (topics, question, currentTopicId) => {
-  const matches = getLearningNotes(topics, question, currentTopicId);
-  const best = matches[0];
-  if (!best || (!best.score && words(question).length > 1)) {
-    return { text: 'Saya belum menemui penerangan yang tepat dalam nota modul ini. Cuba nyatakan nama topik (contohnya CPU, RAM, Cat6A atau Patch Panel) atau buka kad berkaitan. Untuk penjelasan mendalam dan semakan standard terkini, aktifkan sambungan AI dalam talian.', sources: [] };
-  }
-  const terms = words(question);
-  const snippets = best.cards.map((card) => {
-    const text = `${card.title} ${card.text}`.toLowerCase();
-    return { card, value: terms.reduce((sum, term) => sum + (text.includes(term) ? 1 : 0), 0) };
-  }).sort((a, b) => b.value - a.value).slice(0, 2).map(({ card }) => `• ${card.title}: ${shorten(card.text, 360)}`);
-  return { text: `Berdasarkan nota ${best.topic.title}:\n\n${[best.topic.description, ...snippets].join('\n\n')}\n\nRujuk kad “${best.topic.title}” untuk maklumat lanjut. Ini jawapan berdasarkan kandungan modul yang tersedia pada peranti; ia bukan semakan berita atau standard secara langsung.`, sources: [] };
-};
-
-const safeUrl = (url) => {
-  try { return new URL(url).protocol === 'https:' ? url : null; } catch { return null; }
-};
-
 const initialAssistant = (moduleCode) => [{ role: 'assistant', text: MODULE_META[moduleCode]?.intro || 'Hai! Tanya saya tentang modul anda.', sources: [], mode: 'welcome' }];
-const AI_ENDPOINT = (import.meta.env.VITE_AI_CHAT_ENDPOINT || '').trim();
 
 export default function StudyChatbot({ moduleCode, topics = [], activeTopicId = null }) {
   const meta = MODULE_META[moduleCode];
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState(() => initialAssistant(moduleCode));
   const [draft, setDraft] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
   const bottom = useRef(null);
   const inputRef = useRef(null);
-  const controller = useRef(null);
 
   const currentTopic = useMemo(() => topics.find((t) => t.id === activeTopicId), [topics, activeTopicId]);
-  const suggestions = useMemo(() => currentTopic
-    ? [`Terangkan ${currentTopic.title}`, `Apakah aplikasi ${currentTopic.title} dalam kerja sebenar?`, 'Beri contoh soalan untuk ulang kaji']
-    : (meta?.examplePrompts || []), [currentTopic, meta]);
+  const suggestions = useMemo(() => getSuggestedQuestions(moduleCode, currentTopic?.id || null), [moduleCode, currentTopic]);
 
   useEffect(() => {
     if (open) bottom.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
-  }, [open, messages, loading]);
+  }, [open, messages]);
   useEffect(() => {
     if (open) inputRef.current?.focus();
   }, [open]);
-  useEffect(() => () => controller.current?.abort(), []);
 
-  const sendMessage = async (message) => {
+  const sendMessage = (message) => {
     const question = String(message || '').trim();
-    if (!question || loading || question.length > 1200) return;
-    const prior = messages;
-    setMessages((prev) => [...prev, { role: 'user', text: question, sources: [] }]);
+    if (!question || question.length > 1200) return;
+
+    // Follow-up ringkas gunakan topik terakhir yang dirujuk, jika tiada kad aktif.
+    const lastTopicId = [...messages].reverse().find((item) => item.role === 'assistant' && item.sources?.[0]?.topicId)?.sources?.[0]?.topicId;
+    const reply = answerFromModuleNotes({ moduleCode, topics, question, activeTopicId: activeTopicId || lastTopicId || null });
+    setMessages((prev) => [...prev, { role: 'user', text: question, sources: [] }, { role: 'assistant', ...reply }]);
     setDraft('');
-    setError('');
-    setLoading(true);
-    try {
-      if (!AI_ENDPOINT) {
-        const reply = offlineAnswer(topics, question, activeTopicId);
-        setMessages((prev) => [...prev, { role: 'assistant', ...reply, mode: 'notes' }]);
-      } else {
-        const timeout = new AbortController();
-        controller.current = timeout;
-        const response = await fetch(AI_ENDPOINT, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            moduleCode,
-            question,
-            context: buildContext(topics, question, activeTopicId),
-            history: prior.filter((m) => m.mode !== 'welcome').slice(-8).map(({ role, text }) => ({ role, text: text.slice(0, 1200) }))
-          }),
-          signal: timeout.signal
-        });
-        const data = await response.json().catch(() => ({}));
-        if (!response.ok || !data.answer) throw new Error(data.error || 'Sambungan AI tidak berjaya.');
-        const sources = (Array.isArray(data.sources) ? data.sources : []).filter((s) => safeUrl(s.url)).slice(0, 5);
-        setMessages((prev) => [...prev, { role: 'assistant', text: data.answer, sources, mode: data.webChecked ? 'web' : 'ai' }]);
-      }
-    } catch (e) {
-      if (e.name !== 'AbortError') {
-        setError('AI dalam talian tidak dapat dihubungi. Saya telah tunjukkan jawapan daripada nota yang tersedia.');
-        const reply = offlineAnswer(topics, question, activeTopicId);
-        setMessages((prev) => [...prev, { role: 'assistant', ...reply, mode: 'notes' }]);
-      }
-    } finally {
-      setLoading(false);
-      controller.current = null;
-    }
   };
 
-  const clearChat = () => { controller.current?.abort(); setLoading(false); setMessages(initialAssistant(moduleCode)); setError(''); };
+  const clearChat = () => { setMessages(initialAssistant(moduleCode)); setDraft(''); };
 
   return (
     <div className="fixed bottom-4 right-4 z-[120] sm:bottom-6 sm:right-6" aria-label={`Pembantu Pembelajaran ${moduleCode}`}>
@@ -155,7 +75,7 @@ export default function StudyChatbot({ moduleCode, topics = [], activeTopicId = 
                   <h2 className="text-base font-black leading-snug">{meta?.heading}</h2>
                   <div className="mt-1 flex flex-wrap gap-1.5 text-[10px] font-semibold">
                     <span className="rounded-full bg-white/15 px-2 py-1">{moduleCode}</span>
-                    <span className="inline-flex items-center gap-1 rounded-full bg-white/15 px-2 py-1">{AI_ENDPOINT ? <><Wifi size={11}/> AI Dalam Talian</> : <><WifiOff size={11}/> Mod Nota</>}</span>
+                    <span className="inline-flex items-center gap-1 rounded-full bg-white/15 px-2 py-1"><><WifiOff size={11}/> Tanpa API • Nota Tempatan</></span>
                   </div>
                 </div>
               </div>
@@ -170,24 +90,24 @@ export default function StudyChatbot({ moduleCode, topics = [], activeTopicId = 
             {messages.map((m, i) => (
               <div key={`${i}-${m.role}`} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`max-w-[92%] rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm ${m.role === 'user' ? 'rounded-br-md bg-gradient-to-br from-indigo-600 to-blue-700 text-white' : 'rounded-bl-md border border-slate-100 bg-white text-slate-700'}`}>
-                  {m.role === 'assistant' && <div className="mb-1.5 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-indigo-600"><BookOpenCheck size={13}/>{m.mode === 'web' ? 'Jawapan AI • Semakan Web' : m.mode === 'ai' ? 'Jawapan AI' : 'Pembantu Nota Modul'}</div>}
+                  {m.role === 'assistant' && <div className="mb-1.5 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-indigo-600"><BookOpenCheck size={13}/>Pembantu Nota Modul</div>}
                   <div className="whitespace-pre-wrap break-words">{m.text}</div>
-                  {m.sources?.length > 0 && <div className="mt-3 space-y-1.5 border-t border-slate-100 pt-2"><div className="text-xs font-bold text-slate-500">Sumber web:</div>{m.sources.map((s, idx) => <a className="flex items-center gap-1.5 break-all text-xs font-semibold text-indigo-700 hover:underline" href={s.url} key={s.url + idx} rel="noopener noreferrer" target="_blank"><ExternalLink size={12}/> {s.title || s.url}</a>)}</div>}
+                  {m.sources?.length > 0 && <div className="mt-3 space-y-1.5 border-t border-slate-100 pt-2"><div className="text-xs font-bold text-slate-500">Rujukan dalam eModul:</div>{m.sources.map((source, idx) => <div key={`${source.topicId}-${idx}`} className="rounded-lg bg-indigo-50 px-2 py-1.5 text-xs font-semibold text-indigo-700"><BookOpenCheck size={12} className="mr-1 inline"/>{source.title}</div>)}</div>}
                 </div>
               </div>
             ))}
             {messages.length <= 2 && <div className="flex flex-wrap gap-2">{suggestions.map((tip) => <button key={tip} type="button" onClick={() => sendMessage(tip)} className="rounded-full border border-indigo-200 bg-white px-3 py-2 text-left text-xs font-semibold text-indigo-700 transition hover:border-indigo-400 hover:bg-indigo-50">{tip}</button>)}</div>}
-            {loading && <div className="flex items-center gap-2 rounded-2xl border border-slate-100 bg-white px-4 py-3 text-sm text-slate-500 shadow-sm"><LoaderCircle size={18} className="animate-spin text-indigo-600"/> Sedang menyediakan jawapan...</div>}
-            {error && <p role="status" className="rounded-xl bg-amber-50 p-3 text-xs text-amber-700">{error}</p>}
+            
+            
             <div ref={bottom}/>
           </div>
           <form onSubmit={(e) => { e.preventDefault(); sendMessage(draft); }} className="shrink-0 border-t border-slate-100 bg-white p-3">
             {currentTopic && <p className="mb-2 truncate rounded-lg bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-700">Topik aktif: {currentTopic.title}</p>}
             <div className="flex items-end gap-2 rounded-2xl border border-indigo-100 bg-slate-50 p-2 focus-within:border-indigo-400">
               <textarea ref={inputRef} value={draft} onChange={(e) => setDraft(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(draft); } }} maxLength={1200} rows={2} placeholder="Tanya tentang modul ini..." aria-label="Soalan kepada pembantu modul" className="max-h-28 min-h-10 flex-1 resize-none bg-transparent px-2 py-1 text-sm text-slate-800 outline-none placeholder:text-slate-400" />
-              <button type="submit" aria-label="Hantar soalan" disabled={!draft.trim() || loading} className="mb-0.5 rounded-xl bg-gradient-to-br from-indigo-600 to-violet-600 p-3 text-white shadow transition hover:scale-105 disabled:cursor-not-allowed disabled:opacity-40"><ArrowUp size={19}/></button>
+              <button type="submit" aria-label="Hantar soalan" disabled={!draft.trim()} className="mb-0.5 rounded-xl bg-gradient-to-br from-indigo-600 to-violet-600 p-3 text-white shadow transition hover:scale-105 disabled:cursor-not-allowed disabled:opacity-40"><ArrowUp size={19}/></button>
             </div>
-            <p className="mt-2 text-center text-[10px] leading-relaxed text-slate-500">{AI_ENDPOINT ? 'Semak fakta penting dengan pensyarah dan sumber rasmi.' : 'Jawapan berdasarkan nota modul sahaja • Untuk AI terkini, sambungkan backend.'} Jangan masukkan data peribadi.</p>
+            <p className="mt-2 text-center text-[10px] leading-relaxed text-slate-500">Tanpa API key dan tanpa caj API • Jawapan daripada nota modul, bukan carian web masa nyata. Semak fakta kritikal bersama pensyarah. Jangan masukkan data peribadi.</p>
           </form>
         </section>
       )}
