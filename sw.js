@@ -1,8 +1,8 @@
 // eModul-IKR GitHub Pages PWA (same-origin assets only)
-const CACHE = 'emodul-ikr-newic-e08669b76f';
+const CACHE = 'emodul-ikr-newic-ae2fe65c4e';
 const SCOPE = "/eModul-IKR/";
 const APP = "/eModul-IKR/";
-const FILES = ["/eModul-IKR/apple-touch-icon.png","/eModul-IKR/assets/IKR3013-BHuNf004.js","/eModul-IKR/assets/IKR3023-BGudnYXG.js","/eModul-IKR/assets/index-BOw35wIE.js","/eModul-IKR/assets/index-CtPkEdIs.css","/eModul-IKR/assets/LanguageContext-Cz8Pd_r8.js","/eModul-IKR/assets/logo-emodul-mark-D-nq9BFg.png","/eModul-IKR/assets/TopicUnlockQuiz-C4dIa3NP.js","/eModul-IKR/favicon.svg","/eModul-IKR/icons/icon-192.png","/eModul-IKR/icons/icon-512.png","/eModul-IKR/icons/maskable-192.png","/eModul-IKR/icons/maskable-512.png","/eModul-IKR/icons.svg","/eModul-IKR/index.html","/eModul-IKR/logo-1.png","/eModul-IKR/logo.png","/eModul-IKR/manifest.json","/eModul-IKR/manifest.webmanifest","/eModul-IKR/og-preview.png"];
+const FILES = ["/eModul-IKR/apple-touch-icon.png","/eModul-IKR/assets/IKR3013-7cCPPnuu.js","/eModul-IKR/assets/IKR3023-BxSQgrQI.js","/eModul-IKR/assets/index-aE5WfM2R.js","/eModul-IKR/assets/index-CtPkEdIs.css","/eModul-IKR/assets/LanguageContext-Bzcs6nEA.js","/eModul-IKR/assets/logo-emodul-mark-D-nq9BFg.png","/eModul-IKR/assets/TopicUnlockQuiz-L2FOduSH.js","/eModul-IKR/favicon.svg","/eModul-IKR/icons/icon-192.png","/eModul-IKR/icons/icon-512.png","/eModul-IKR/icons/maskable-192.png","/eModul-IKR/icons/maskable-512.png","/eModul-IKR/icons.svg","/eModul-IKR/index.html","/eModul-IKR/logo-1.png","/eModul-IKR/logo.png","/eModul-IKR/manifest.json","/eModul-IKR/manifest.webmanifest","/eModul-IKR/og-preview.png"];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(FILES)).then(() => self.skipWaiting()));
 });
