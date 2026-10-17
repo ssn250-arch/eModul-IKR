@@ -6,7 +6,8 @@ const LANGUAGE_STORAGE_KEY = 'emodul_ikr_language_v1';
 const LanguageContext = createContext({language:'ms', setLanguage:()=>{}, t:(ms,en)=>ms});
 
 function storedLanguage() {
-  return 'ms'; // BM sentiasa menjadi bahasa asal
+  try { return window.localStorage.getItem(LANGUAGE_STORAGE_KEY) === 'en' ? 'en' : 'ms'; }
+  catch { return 'ms'; }
 }
 export function useLanguage() { return useContext(LanguageContext); }
 

@@ -1,3 +1,5 @@
+import OfflineEmbed from './OfflineEmbed';
+import { openOnlineResource } from './offlineSupport';
 import { EnglishStudyGuide } from './EnglishGuides';
 import { useLanguage } from './LanguageContext';
 import { translateVisibleText } from './translations.js';
@@ -892,7 +894,7 @@ export default function ModuleIKR3023({ onBackToPortal }) {
             <button
               type="button"
               disabled={unlockedTopicIndex < topics.length}
-              onClick={() => window.open('https://cablelabx.netlify.app/', '_blank', 'noopener,noreferrer')}
+              onClick={() => openOnlineResource('https://cablelabx.netlify.app/', language)}
               className={`relative flex flex-col items-center justify-center p-6 bg-white rounded-xl shadow-md transition-all duration-300 border-t-4 text-center h-full ${unlockedTopicIndex < topics.length ? 'opacity-60 cursor-not-allowed border-t-gray-400' : 'hover:shadow-xl hover:scale-[1.02] border-t-green-500 ring-2 ring-green-400/50 ring-offset-2'}`}
             >
               <div className={`p-3 rounded-full mb-3 ${unlockedTopicIndex < topics.length ? 'bg-gray-100 text-gray-500' : 'bg-green-100 text-green-600'}`}>
@@ -1999,14 +2001,14 @@ export default function ModuleIKR3023({ onBackToPortal }) {
           )}
           
           <div className={`flex-1 w-full h-full bg-black relative ${isFullscreen ? 'rounded-none sm:rounded-xl' : 'rounded-xl overflow-hidden border border-slate-700'}`}>
-            <iframe 
+            <OfflineEmbed 
               title="Server Rack 3D" 
               style={{ border: 0 }}
               allowFullScreen={true}
               allow="autoplay; fullscreen; xr-spatial-tracking" 
               src="https://sketchfab.com/models/f24594ece9634cec9c1210c041838371/embed?autostart=1&ui_controls=1&ui_infos=1&ui_inspector=1&ui_stop=0&ui_watermark=1&ui_watermark_link=1"
               className="w-full h-full outline-none"
-            ></iframe>
+            ></OfflineEmbed>
             
             <div className="absolute bottom-4 left-4 bg-black/70 text-white px-4 py-3 rounded-xl backdrop-blur-md border border-slate-700/50 flex items-center gap-4 pointer-events-none">
               <div className="flex gap-2">

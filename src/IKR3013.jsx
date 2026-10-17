@@ -1,3 +1,5 @@
+import OfflineEmbed from './OfflineEmbed';
+import { openOnlineResource } from './offlineSupport';
 import { EnglishStudyGuide } from './EnglishGuides';
 import { useLanguage } from './LanguageContext';
 import { translateVisibleText } from './translations.js';
@@ -1255,7 +1257,7 @@ export default function ModuleIKR3013({ onBackToPortal }) {
             <button
               type="button"
               disabled={unlockedTopicIndex < topics.length}
-              onClick={() => window.open('https://pcnexus.netlify.app/', '_blank', 'noopener,noreferrer')}
+              onClick={() => openOnlineResource('https://pcnexus.netlify.app/', language)}
               className={`relative flex flex-col items-center justify-center p-6 bg-white rounded-xl shadow-md transition-all duration-300 border-t-4 text-center h-full ${unlockedTopicIndex < topics.length ? 'opacity-60 cursor-not-allowed border-t-gray-400' : 'hover:shadow-xl hover:scale-[1.02] border-t-green-500 ring-2 ring-green-400/50 ring-offset-2'}`}
             >
               <div className={`p-3 rounded-full mb-3 ${unlockedTopicIndex < topics.length ? 'bg-gray-100 text-gray-500' : 'bg-green-100 text-green-600'}`}>
@@ -1988,14 +1990,14 @@ export default function ModuleIKR3013({ onBackToPortal }) {
                           </div>
                         </div>
                         <div className="relative w-full aspect-square md:aspect-video rounded-lg overflow-hidden border border-slate-700 bg-black">
-                          <iframe 
+                          <OfflineEmbed 
                             title="ARDOR GAMING B550M-HDVAR" 
                             frameBorder="0" 
                             allowFullScreen 
                             allow="autoplay; fullscreen; xr-spatial-tracking" 
                             src="https://sketchfab.com/models/4c0a2a3008d9402ab9bfd05b2f0cd093/embed"
                             className="w-full h-full outline-none"
-                          ></iframe>
+                          ></OfflineEmbed>
                         </div>
                       </div>
 
@@ -2011,14 +2013,14 @@ export default function ModuleIKR3013({ onBackToPortal }) {
                           </div>
                         </div>
                         <div className="relative w-full aspect-square md:aspect-video rounded-lg overflow-hidden border border-slate-700 bg-black">
-                          <iframe 
+                          <OfflineEmbed 
                             title="Asus Z690 ProArt" 
                             frameBorder="0" 
                             allowFullScreen 
                             allow="autoplay; fullscreen; xr-spatial-tracking" 
                             src="https://sketchfab.com/models/d5293652cd3e44ae829bb4fa0360fc05/embed"
                             className="w-full h-full outline-none"
-                          ></iframe>
+                          ></OfflineEmbed>
                         </div>
                       </div>
                     </div>
@@ -2509,14 +2511,14 @@ export default function ModuleIKR3013({ onBackToPortal }) {
                           </div>
                         </div>
                         <div className="relative w-full aspect-square md:aspect-[4/3] rounded-lg overflow-hidden border border-slate-700 bg-black">
-                          <iframe 
+                          <OfflineEmbed 
                             title="WD Green 1TB Hard Disk HDD" 
                             frameBorder="0" 
                             allowFullScreen 
                             allow="autoplay; fullscreen; xr-spatial-tracking" 
                             src="https://sketchfab.com/models/e9244f56e0724dd097570e29bae4b7c6/embed"
                             className="w-full h-full outline-none"
-                          ></iframe>
+                          ></OfflineEmbed>
                         </div>
                       </div>
 
@@ -2532,14 +2534,14 @@ export default function ModuleIKR3013({ onBackToPortal }) {
                           </div>
                         </div>
                         <div className="relative w-full aspect-square md:aspect-[4/3] rounded-lg overflow-hidden border border-slate-700 bg-black">
-                          <iframe 
+                          <OfflineEmbed 
                             title="SSD SATA 2 5 7mm" 
                             frameBorder="0" 
                             allowFullScreen 
                             allow="autoplay; fullscreen; xr-spatial-tracking" 
                             src="https://sketchfab.com/models/1e35cdc38fe34089813551a08767b104/embed"
                             className="w-full h-full outline-none"
-                          ></iframe>
+                          ></OfflineEmbed>
                         </div>
                       </div>
 
@@ -2555,14 +2557,14 @@ export default function ModuleIKR3013({ onBackToPortal }) {
                           </div>
                         </div>
                         <div className="relative w-full aspect-square md:aspect-[4/3] rounded-lg overflow-hidden border border-slate-700 bg-black">
-                          <iframe 
+                          <OfflineEmbed 
                             title="M.2 NVME SSD Samsung 990 Pro 1TB 3D model" 
                             frameBorder="0" 
                             allowFullScreen 
                             allow="autoplay; fullscreen; xr-spatial-tracking" 
                             src="https://sketchfab.com/models/41b7bfda7eab40f8b13330913fd66fc2/embed"
                             className="w-full h-full outline-none"
-                          ></iframe>
+                          ></OfflineEmbed>
                         </div>
                       </div>
                     </div>
@@ -3259,7 +3261,7 @@ export default function ModuleIKR3013({ onBackToPortal }) {
                         </div>
                       </div>
                       <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-slate-700 bg-black shadow-inner">
-                        <iframe 
+                        <OfflineEmbed 
                           className="absolute top-0 left-0 w-full h-full"
                           src="https://www.youtube.com/embed/CZ_dKpVsl6A?si=JP7PMe1Tc16n3Hhc" 
                           title="YouTube video player" 
@@ -3267,7 +3269,7 @@ export default function ModuleIKR3013({ onBackToPortal }) {
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                           referrerPolicy="strict-origin-when-cross-origin"
                           allowFullScreen
-                        ></iframe>
+                        ></OfflineEmbed>
                       </div>
                     </div>
                   </div>
@@ -3453,7 +3455,7 @@ export default function ModuleIKR3013({ onBackToPortal }) {
                         </div>
                       </div>
                       <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-slate-700 bg-black shadow-inner">
-                        <iframe 
+                        <OfflineEmbed 
                           className="absolute top-0 left-0 w-full h-full"
                           src="https://www.youtube.com/embed/v4hHQrivf-k?si=A6q9GB-NtmsDuQAu" 
                           title="Tutorial Format PC & Install Windows" 
@@ -3461,7 +3463,7 @@ export default function ModuleIKR3013({ onBackToPortal }) {
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                           referrerPolicy="strict-origin-when-cross-origin"
                           allowFullScreen
-                        ></iframe>
+                        ></OfflineEmbed>
                       </div>
                     </div>
 
@@ -3696,14 +3698,14 @@ export default function ModuleIKR3013({ onBackToPortal }) {
           
           <div className={`flex-1 w-full h-full bg-black relative ${isFullscreen ? 'rounded-none sm:rounded-xl' : 'rounded-xl overflow-hidden border border-gray-700'}`}>
             {/* Embed 3D Model from Sketchfab */}
-            <iframe 
+            <OfflineEmbed 
               title="Asus Z170-P Motherboard" 
               style={{ border: 0 }}
               allowFullScreen={true}
               allow="autoplay; fullscreen; xr-spatial-tracking" 
               src="https://sketchfab.com/models/b998596cfc4945a0bc7b016005c39321/embed?autostart=1&ui_controls=1&ui_infos=1&ui_inspector=1&ui_stop=0&ui_watermark=1&ui_watermark_link=1"
               className="w-full h-full outline-none"
-            ></iframe>
+            ></OfflineEmbed>
             
             <div className="absolute bottom-4 left-4 bg-black/70 text-white px-4 py-2 rounded-lg backdrop-blur-md border border-gray-700/50 flex items-center gap-3 pointer-events-none">
               <div className="flex gap-2">
