@@ -7,7 +7,11 @@ const app=fs.readFileSync(path.join(base,'src','IKR3013.jsx'),'utf8');
 const component=fs.readFileSync(path.join(base,'src','MotherboardExplorer.jsx'),'utf8');
 const css=fs.readFileSync(path.join(base,'src','MotherboardExplorer.css'),'utf8');
 assert.match(app,/import MotherboardExplorer from '\.\/MotherboardExplorer';/);
-assert.match(app,/activeTopic\.id === 'motherboard' && \([\s\S]{0,280}<MotherboardExplorer \/>/);
+assert.match(app,/activeTopic\.id === 'motherboard' && \(/);
+const directoryHeading = app.indexOf('Direktori Port & Slot Utama');
+const explorerPlacement = app.indexOf('<MotherboardExplorer />');
+const directoryList = app.indexOf('grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5',directoryHeading);
+assert.ok(directoryHeading > 0 && explorerPlacement > directoryHeading && directoryList > explorerPlacement,'Explorer should appear after directory heading/description, before existing directory cards');
 assert.equal((app.match(/<MotherboardExplorer\s*\/>/g)||[]).length,1,'Explorer must appear exactly once in the motherboard card');
 for(const file of ['IKR3013.jsx','MotherboardExplorer.jsx']){
   const source=fs.readFileSync(path.join(base,'src',file),'utf8');

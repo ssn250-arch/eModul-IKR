@@ -1726,8 +1726,6 @@ export default function ModuleIKR3013({ onBackToPortal }) {
               {/* MOTHERBOARD CUSTOM INFOGRAPHICS */}
               {activeTopic.id === 'motherboard' && (
                 <div className="space-y-8 mt-8">
-                  {/* PREMIUM INTERACTIVE MOTHERBOARD EXPLORER: user-supplied image, offline assets, visual quiz */}
-                  <MotherboardExplorer />
                   {/* INFOGRAFIK FUNGSI PAPAN INDUK */}
                   <div className="p-6 lg:p-8 bg-white rounded-2xl border border-slate-200 shadow-sm">
                     <div className="text-center mb-8">
@@ -1833,13 +1831,19 @@ export default function ModuleIKR3013({ onBackToPortal }) {
                   </div>
 
                   {/* INFOGRAFIK ANATOMI & PORT MOTHERBOARD */}
-                  <div className="p-6 lg:p-8 bg-white rounded-2xl border border-slate-200 shadow-sm mt-8">
+                  <div className="p-3 sm:p-6 lg:p-8 bg-white rounded-2xl border border-slate-200 shadow-sm mt-8">
                     <div className="text-center mb-10">
                       <span className="inline-block py-1 px-3 rounded-full bg-indigo-100 text-indigo-700 font-bold text-xs mb-2 tracking-widest uppercase">Anatomi & Penyambung</span>
                       <h4 className="font-bold text-slate-800 text-2xl flex items-center justify-center gap-2">
                         <Plug className="text-indigo-500" size={24}/> Direktori Port & Slot Utama
                       </h4>
                       <p className="text-slate-500 text-sm mt-2 max-w-2xl mx-auto">Kenali fungsi dan peranan setiap komponen port, slot dan penyambung (connector) yang terdapat pada papan induk moden.</p>
+                    </div>
+
+                    {/* EXPLORER 2.0 — Diletakkan selepas tajuk Direktori Port & Slot Utama seperti diminta. */}
+                    {/* Nota direktori asal kekal di bawah supaya susunan pengajaran lebih tersusun. */}
+                    <div className="mb-10" id="interactive-motherboard-explorer">
+                      <MotherboardExplorer />
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
