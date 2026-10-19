@@ -91,7 +91,7 @@ export function LanguageProvider({children}) {
 
 export function LanguageSwitcher({floating = false}) {
   const {language,setLanguage} = useLanguage();
-  return <div data-no-translate className={`${floating ? 'hidden sm:inline-flex sm:fixed sm:bottom-6 sm:left-6 sm:z-[140] sm:shadow-xl' : 'relative z-10'} inline-flex shrink-0 items-center gap-1 rounded-full border border-indigo-100 bg-white/95 p-1 text-xs font-black text-indigo-800 shadow-sm backdrop-blur-md`} role="group" aria-label="Choose language / Pilih bahasa">
+  return <div data-no-translate className={`${floating ? 'hidden sm:fixed sm:inline-flex sm:bottom-6 sm:left-6 sm:z-[140] sm:shadow-xl' : 'relative z-10 inline-flex'} shrink-0 items-center gap-1 rounded-full border border-indigo-100 bg-white/95 p-1 text-xs font-black text-indigo-800 shadow-sm backdrop-blur-md`} role="group" aria-label="Choose language / Pilih bahasa">
     <Languages size={16} className="ml-1.5 text-indigo-500" aria-hidden="true" />
     {[['ms','BM'],['en','EN']].map(([code,label]) => <button key={code} type="button" lang={code === 'ms' ? 'ms-MY' : 'en'} onClick={()=>setLanguage(code)} aria-pressed={language===code} title={code==='ms'?'Bahasa Melayu Malaysia':'Simple English'} className={`min-w-9 rounded-full px-2.5 py-1.5 transition focus-visible:outline-2 focus-visible:outline-indigo-600 ${language===code ? 'bg-indigo-700 text-white shadow' : 'text-slate-600 hover:bg-indigo-50'}`}>{label}</button>)}
   </div>;

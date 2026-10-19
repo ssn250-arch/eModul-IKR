@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { ArrowLeft, ArrowRight, BookOpen, CheckCircle2, ChevronLeft, ChevronRight, CircleHelp, Cpu, Expand, Eye, Lightbulb, Maximize2, RotateCcw, Search, ShieldCheck, Sparkles, X, Zap } from 'lucide-react';
+import { ArrowLeft, ArrowRight, BookOpen, CheckCircle2, ChevronLeft, ChevronRight, CircleHelp, Cpu, Expand, Eye, Lightbulb, Box, Maximize2, RotateCcw, Search, ShieldCheck, Sparkles, X, Zap } from 'lucide-react';
 import { useLanguage } from './LanguageContext';
 import './MotherboardExplorer.css';
 
@@ -52,15 +52,24 @@ const QUESTIONS = [
 ];
 
 function normalizeStatus(count,total) { return `${count} / ${total}`; }
+// Separate progress for each student on this device (offline localStorage only).
+function progressKey(studentNumber) { return `emodul_motherboard_explorer_v22_${Number(studentNumber) || 'guest'}`; }
+function readProgress(studentNumber) {
+  try {
+    const entries = JSON.parse(window.localStorage.getItem(progressKey(studentNumber)) || '[]');
+    const valid = Array.isArray(entries) ? entries.filter(key => /^(board:(?:[1-9]|1[0-7])|io:[1-6])$/.test(key)) : [];
+    return new Set(valid);
+  } catch { return new Set(); }
+}
 
-export default function MotherboardExplorer() {
+export default function MotherboardExplorer({ studentNumber = null }) {
   const {language} = useLanguage();
   const en = language === 'en';
   const [tab,setTab] = useState('board');
   const [category,setCategory] = useState('cpu');
   const [active,setActive] = useState(1);
   const [query,setQuery] = useState('');
-  const [viewed,setViewed] = useState(() => new Set());
+  const [viewed,setViewed] = useState(() => readProgress(studentNumber));
   const [quiz,setQuiz] = useState(false);
   const [quizIndex,setQuizIndex] = useState(0);
   const [selected,setSelected] = useState(null);
@@ -89,6 +98,14 @@ export default function MotherboardExplorer() {
   const resetQuiz = ()=>{setQuiz(true);setQuizIndex(0);setSelected(null);setScore(0);setFullscreen(false);};
   const answer = (id)=>{ if(selected !== null) return; setSelected(id); if(id===question.point)setScore(x=>x+1);};
   const next = ()=>{setSelected(null);setQuizIndex(i=>i+1);};
+  useEffect(() => {
+    try { window.localStorage.setItem(progressKey(studentNumber), JSON.stringify([...viewed])); }
+    catch { /* optional private browsing storage */ }
+  }, [viewed, studentNumber]);
+  const viewExisting3D = () => {
+    const target = document.getElementById('motherboard-3d-models');
+    target?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+  };
   useEffect(()=>{ const esc=(e)=>{if(e.key==='Escape')setFullscreen(false);};window.addEventListener('keydown',esc);return ()=>window.removeEventListener('keydown',esc);},[]);
   useEffect(()=>{if(!fullscreen)return;const saved=document.body.style.overflow;document.body.style.overflow='hidden';return ()=>{document.body.style.overflow=saved;};},[fullscreen]);
   return <section className="mbx" data-no-translate aria-label="Interactive Motherboard Explorer">
@@ -105,7 +122,7 @@ export default function MotherboardExplorer() {
           <button type="button" className={tab==='io'&&!quiz?'is-current':''} onClick={()=>{setQuiz(false);chooseTab('io')}} role="tab" aria-selected={tab==='io'&&!quiz}><Zap size={17}/> Rear I/O <small>6</small></button>
           <button type="button" className={quiz?'is-current':''} onClick={resetQuiz} role="tab" aria-selected={quiz}><CircleHelp size={17}/>{en?'Visual quiz':'Kuiz Visual'}</button>
         </div>
-        <a className="mbx-reference" href={`${assetRoot}infografik-motherboard-asal.webp`} target="_blank" rel="noopener noreferrer" title={en?'Open original infographic':'Buka infografik asal'}><BookOpen size={17}/><span>{en?'Original infographic':'Infografik Asal'}</span></a>
+        <div className="mbx-toolbar-actions"><button type="button" className="mbx-3d" onClick={viewExisting3D} title={en?'Jump to existing AMD and Intel 3D models (online)':'Pergi ke model 3D AMD dan Intel sedia ada (online)'}><Box size={17}/><span>{en?'View 3D Models':'Lihat Model 3D'}</span></button><a className="mbx-reference" href={`${assetRoot}infografik-motherboard-asal.webp`} target="_blank" rel="noopener noreferrer" title={en?'Open original infographic':'Buka infografik asal'}><BookOpen size={17}/><span>{en?'Original infographic':'Infografik Asal'}</span></a></div>
       </div>
 
       {!quiz && tab==='board' && <div className="mbx-category-wrap" aria-label={en?'Component categories':'Kategori komponen'}>

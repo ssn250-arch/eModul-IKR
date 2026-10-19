@@ -1177,7 +1177,10 @@ export default function ModuleIKR3013({ onBackToPortal }) {
                       setQuizCompleted(false);
                       setQuizScore(0);
                       setQuizAnswers({});
-                      if (studentNumber) localStorage.removeItem(`ikr3013_quiz_unlock_v4_${studentNumber}`);
+                      if (studentNumber) {
+                        localStorage.removeItem(`ikr3013_quiz_unlock_v4_${studentNumber}`);
+                        localStorage.removeItem(`emodul_motherboard_explorer_v22_${studentNumber}`);
+                      }
                     }
                   }}
                   className="text-[10px] sm:text-xs text-slate-400 hover:text-red-500 underline transition-colors"
@@ -1843,7 +1846,7 @@ export default function ModuleIKR3013({ onBackToPortal }) {
                     {/* EXPLORER 2.0 — Diletakkan selepas tajuk Direktori Port & Slot Utama seperti diminta. */}
                     {/* Nota direktori asal kekal di bawah supaya susunan pengajaran lebih tersusun. */}
                     <div className="mb-10" id="interactive-motherboard-explorer">
-                      <MotherboardExplorer />
+                      <MotherboardExplorer key={studentNumber || 'guest'} studentNumber={studentNumber} />
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -1974,8 +1977,8 @@ export default function ModuleIKR3013({ onBackToPortal }) {
                     </div>
                   </div>
 
-                  {/* INFOGRAFIK EKSPLORASI MODEL 3D AR MOTHERBOARD */}
-                  <div className="p-6 lg:p-8 bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl border border-slate-700 shadow-xl mt-8">
+                  {/* Model 3D sedia ada: pautan dari Motherboard Explorer menggunakan ID ini. */}
+                  <div id="motherboard-3d-models" className="scroll-mt-8 p-6 lg:p-8 bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl border border-slate-700 shadow-xl mt-8">
                     <div className="text-center mb-10">
                       <span className="inline-block py-1 px-3 rounded-full bg-blue-500/20 text-blue-300 font-bold text-xs mb-2 tracking-widest uppercase">Eksplorasi Interaktif</span>
                       <h4 className="font-bold text-white text-2xl flex items-center justify-center gap-2">

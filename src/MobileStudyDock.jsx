@@ -9,7 +9,7 @@ export default function MobileStudyDock({ moduleCode = null }) {
   const [visible, setVisible] = useState(true);
   const [online, setOnline] = useState(() => typeof navigator === 'undefined' || navigator.onLine !== false);
   const lastY = useRef(0);
-  const label = language === 'en' ? 'Study tools' : 'Alat Pembelajaran';
+  const label = language === 'en' ? 'Study Tools' : 'Alat Belajar';
 
   useEffect(() => {
     lastY.current = window.scrollY;
@@ -62,7 +62,7 @@ export default function MobileStudyDock({ moduleCode = null }) {
               <span className="rounded-xl border border-white/20 bg-white/15 p-2"><Sparkles size={18}/></span>
               <div><h2 className="text-sm font-extrabold">{label}</h2><p className="text-[10px] text-blue-100">eModul-IKR · {moduleCode || 'Portal'}</p></div>
             </div>
-            <button type="button" onClick={() => setOpen(false)} aria-label="Tutup" className="rounded-lg p-2 hover:bg-white/15"><X size={17}/></button>
+            <button type="button" onClick={() => setOpen(false)} aria-label={language === 'en' ? 'Close' : 'Tutup'} className="rounded-lg p-2 hover:bg-white/15"><X size={17}/></button>
           </header>
           <div className="space-y-2 p-3">
             <button type="button" onClick={() => trigger('emodul:offline-open')} className="flex min-h-14 w-full items-center gap-3 rounded-2xl border border-slate-100 bg-slate-50 p-3 text-left transition-colors hover:bg-indigo-50 focus-visible:outline-2 focus-visible:outline-indigo-600">
@@ -81,8 +81,8 @@ export default function MobileStudyDock({ moduleCode = null }) {
             </button>}
           </div>
         </section>}
-        <button type="button" aria-expanded={open} aria-label={open ? (language === 'en' ? 'Close study tools' : 'Tutup alat pembelajaran') : label} onClick={() => {setOpen(v => !v); setVisible(true);}} className="ml-auto flex min-h-12 items-center gap-2 rounded-2xl border border-white/25 bg-gradient-to-br from-[#132453] via-[#2b39b8] to-[#5344e4] px-3.5 py-2.5 text-xs font-extrabold text-white shadow-[0_10px_28px_rgba(39,56,142,.36)] ring-1 ring-indigo-200/50 backdrop-blur-xl transition-transform active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-          {open ? <X size={18}/> : <SlidersHorizontal size={18}/>}<span>{language === 'en' ? 'Tools' : 'Alat'}</span>
+        <button type="button" aria-expanded={open} aria-label={open ? (language === 'en' ? 'Close study tools' : 'Tutup alat pembelajaran') : label} onClick={() => {setOpen(v => !v); setVisible(true);}} className="ml-auto flex min-h-11 items-center gap-2 rounded-full border border-white/50 bg-gradient-to-r from-[#0b234d] via-[#163e85] to-[#2059b5] px-3.5 py-2.5 text-[11px] font-extrabold text-white shadow-[0_8px_20px_rgba(23,56,121,.26)] ring-1 ring-indigo-100/60 backdrop-blur-xl transition-transform active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+          {open ? <X size={18}/> : <SlidersHorizontal size={18}/>}<span>{language === 'en' ? 'Study Tools' : 'Alat Belajar'}</span><span className="rounded-full border border-white/20 bg-white/15 px-1.5 py-0.5 text-[9px] font-black leading-none" aria-hidden="true">{language === 'en' ? 'EN' : 'BM'}</span>
         </button>
       </div>
     </div>

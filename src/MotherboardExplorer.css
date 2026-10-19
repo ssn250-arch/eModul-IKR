@@ -51,3 +51,15 @@
   .mbx-modal-scroll img{min-width:600px;max-width:none;width:600px}
   .mbx-modal-scroll{overflow:auto}
 }
+
+/* Explorer 2.2: larger invisible touch hit area, clear 3D link and tidy mobile actions. */
+.mbx-pin{touch-action:manipulation}
+.mbx-pin::after{content:'';position:absolute;inset:-8px;border-radius:50%}
+.mbx-toolbar-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.mbx-3d{display:inline-flex;align-items:center;gap:7px;white-space:nowrap;border:1px solid #c2d9fa;background:#eaf3ff;color:#1551a5;border-radius:10px;padding:9px 11px;font-weight:900;font-size:11px;min-height:42px}
+.mbx-3d:hover{background:#dcecff}
+#motherboard-3d-models{scroll-margin-top:22px}
+@media(max-width:640px){
+  .mbx-toolbar-actions{display:grid;grid-template-columns:1fr 1fr;margin-top:9px;width:100%;gap:7px}
+  .mbx-toolbar-actions .mbx-reference,.mbx-toolbar-actions .mbx-3d{margin:0;justify-content:center;min-width:0;white-space:normal;min-height:44px;padding:9px 7px;font-size:10px;line-height:1.2;text-align:center}
+}

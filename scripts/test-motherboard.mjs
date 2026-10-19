@@ -9,10 +9,10 @@ const css=fs.readFileSync(path.join(base,'src','MotherboardExplorer.css'),'utf8'
 assert.match(app,/import MotherboardExplorer from '\.\/MotherboardExplorer';/);
 assert.match(app,/activeTopic\.id === 'motherboard' && \(/);
 const directoryHeading = app.indexOf('Direktori Port & Slot Utama');
-const explorerPlacement = app.indexOf('<MotherboardExplorer />');
+const explorerPlacement = app.search(/<MotherboardExplorer\b[^>]*\/>/);
 const directoryList = app.indexOf('grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5',directoryHeading);
 assert.ok(directoryHeading > 0 && explorerPlacement > directoryHeading && directoryList > explorerPlacement,'Explorer should appear after directory heading/description, before existing directory cards');
-assert.equal((app.match(/<MotherboardExplorer\s*\/>/g)||[]).length,1,'Explorer must appear exactly once in the motherboard card');
+assert.equal((app.match(/<MotherboardExplorer\b[^>]*\/>/g)||[]).length,1,'Explorer must appear exactly once in the motherboard card');
 for(const file of ['IKR3013.jsx','MotherboardExplorer.jsx']){
   const source=fs.readFileSync(path.join(base,'src',file),'utf8');
   const parsed=ts.createSourceFile(file,source,ts.ScriptTarget.Latest,true,ts.ScriptKind.JSX);
@@ -41,3 +41,19 @@ for(const file of ['motherboard-board.webp','motherboard-rear-io.webp','infograf
  assert.ok(fs.existsSync(p)&&fs.statSync(p).size>10000,`${file} missing`);
 }
 console.log('PASS: Motherboard Explorer in IKR3013 — 17 hotspots, 6 I/O ports, 6 visual questions, JSX valid, offline images and mobile CSS.');
+
+assert.match(component, /readProgress\(studentNumber\)/, 'Per-student offline explorer progress');
+assert.match(component, /motherboard-3d-models/, 'Bridge to existing 3D models');
+assert.match(app, /id="motherboard-3d-models"/, '3D model section target');
+assert.match(app, /studentNumber=\{studentNumber\}/, 'Explorer student number prop');
+const portal=fs.readFileSync(path.join(base,'src','PortalIKR.jsx'),'utf8');
+const dock=fs.readFileSync(path.join(base,'src','MobileStudyDock.jsx'),'utf8');
+const lang=fs.readFileSync(path.join(base,'src','LanguageContext.jsx'),'utf8');
+assert.equal((portal.match(/className="hidden sm:block"><LanguageSwitcher floating \/>/g)||[]).length,2,'Language switcher must be hidden in two modules on mobile');
+assert.match(dock, /Alat Belajar/, 'Compact learning tools label');
+assert.match(lang, /relative z-10 inline-flex/, 'Do not show desktop floating controls at mobile size');
+for(const file of ['PortalIKR.jsx','MobileStudyDock.jsx','LanguageContext.jsx']) {
+  const parsed=ts.createSourceFile(file,fs.readFileSync(path.join(base,'src',file),'utf8'),ts.ScriptTarget.Latest,true,ts.ScriptKind.JSX);
+  assert.equal(parsed.parseDiagnostics.length,0, `JSX syntax invalid in ${file}`);
+}
+console.log('PASS v2.2: Mobile language duplication removed, Study Tools label, per-student progress, existing 3D link.');

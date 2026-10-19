@@ -51,7 +51,7 @@ export default function PortalIKR() {
   if (activeModule === 'IKR3013') {
     return (
       <>
-        <LanguageSwitcher floating />
+        <div className="hidden sm:block"><LanguageSwitcher floating /></div>
         <MobileStudyDock moduleCode="IKR3013" />
         <Suspense fallback={<LoadingScreen />}>
           <ModuleIKR3013 onBackToPortal={() => setActiveModule(null)} />
@@ -63,7 +63,7 @@ export default function PortalIKR() {
   if (activeModule === 'IKR3023') {
     return (
       <>
-        <LanguageSwitcher floating />
+        <div className="hidden sm:block"><LanguageSwitcher floating /></div>
         <MobileStudyDock moduleCode="IKR3023" />
         <Suspense fallback={<LoadingScreen />}>
           <ModuleIKR3023 onBackToPortal={() => setActiveModule(null)} />
