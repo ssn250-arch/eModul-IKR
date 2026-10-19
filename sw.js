@@ -1,10 +1,10 @@
 /* eModul-IKR: Offline Learning Mode (generated; do not edit dist/sw.js). */
 const CACHE_PREFIX = 'emodul-ikr-offline-v2-';
-const CACHE_NAME = CACHE_PREFIX + "c7a6f89945a0";
+const CACHE_NAME = CACHE_PREFIX + "a22c1c4ac785";
 const LEGACY_PREFIX = 'emodul-ikr-newic-';
 const BASE = "/eModul-IKR/";
 const SHELL = BASE + 'index.html';
-const FILES = ["/eModul-IKR/apple-touch-icon.png","/eModul-IKR/assets/IKR3013-BWc1-eO_.css","/eModul-IKR/assets/IKR3013-CiKIsugX.js","/eModul-IKR/assets/IKR3023-XSGq7o7j.js","/eModul-IKR/assets/TopicUnlockQuiz-CrXA839q.js","/eModul-IKR/assets/index-BEQioSh3.css","/eModul-IKR/assets/index-CRjMFMJ3.js","/eModul-IKR/assets/logo-emodul-mark-D-nq9BFg.png","/eModul-IKR/assets/offlineSupport-BsZzqFgk.js","/eModul-IKR/favicon.svg","/eModul-IKR/icons.svg","/eModul-IKR/icons/icon-192.png","/eModul-IKR/icons/icon-512.png","/eModul-IKR/icons/maskable-192.png","/eModul-IKR/icons/maskable-512.png","/eModul-IKR/index.html","/eModul-IKR/logo-1.png","/eModul-IKR/logo.png","/eModul-IKR/manifest.json","/eModul-IKR/manifest.webmanifest","/eModul-IKR/motherboard-explorer/infografik-motherboard-asal.webp","/eModul-IKR/motherboard-explorer/motherboard-board.webp","/eModul-IKR/motherboard-explorer/motherboard-rear-io.webp","/eModul-IKR/og-preview.png"];
+const FILES = ["/eModul-IKR/apple-touch-icon.png","/eModul-IKR/assets/IKR3013-Cm-nIYrt.css","/eModul-IKR/assets/IKR3013-qQ13olGW.js","/eModul-IKR/assets/IKR3023-BFdszYCp.js","/eModul-IKR/assets/TopicUnlockQuiz-DqlEj3QI.js","/eModul-IKR/assets/index-BvoCeX3r.js","/eModul-IKR/assets/index-M1bnul4G.css","/eModul-IKR/assets/logo-emodul-mark-D-nq9BFg.png","/eModul-IKR/assets/offlineSupport-CYV5bGK_.js","/eModul-IKR/favicon.svg","/eModul-IKR/icons.svg","/eModul-IKR/icons/icon-192.png","/eModul-IKR/icons/icon-512.png","/eModul-IKR/icons/maskable-192.png","/eModul-IKR/icons/maskable-512.png","/eModul-IKR/index.html","/eModul-IKR/logo-1.png","/eModul-IKR/logo.png","/eModul-IKR/manifest.json","/eModul-IKR/manifest.webmanifest","/eModul-IKR/motherboard-explorer/infografik-motherboard-asal.webp","/eModul-IKR/motherboard-explorer/motherboard-board.webp","/eModul-IKR/motherboard-explorer/motherboard-rear-io.webp","/eModul-IKR/og-preview.png"];
 
 function isLocalGet(req) {
   const url = new URL(req.url);
@@ -16,14 +16,14 @@ async function cacheFiles() {
   // Install all static chunks, including lazy IKR3013/IKR3023, before reporting ready.
   // addAll rejects on failed / non-2xx responses, so incomplete caching isn't marked ready.
   await cache.addAll(FILES);
-  return { ready: true, cached: FILES.length, total: FILES.length, version: "c7a6f89945a0" };
+  return { ready: true, cached: FILES.length, total: FILES.length, version: "a22c1c4ac785" };
 }
 
 async function cacheInfo() {
   const cache = await caches.open(CACHE_NAME);
   const keys = new Set((await cache.keys()).map(req => new URL(req.url).pathname));
   const cached = FILES.filter(url => keys.has(url)).length;
-  return { ready: cached === FILES.length, cached, total: FILES.length, version: "c7a6f89945a0" };
+  return { ready: cached === FILES.length, cached, total: FILES.length, version: "a22c1c4ac785" };
 }
 
 self.addEventListener('install', event => {
