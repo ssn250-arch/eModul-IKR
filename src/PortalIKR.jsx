@@ -3,6 +3,7 @@ import { Box, Cpu, CircuitBoard, Network, Cable, ChevronRight, Loader2, Code2, S
 
 import logoEmodul from './logo-emodul-mark.png';
 import { LanguageSwitcher } from './LanguageContext';
+import MobileStudyDock from './MobileStudyDock';
 
 // Import modul menggunakan lazy loading untuk penjimatan data internet
 const ModuleIKR3013 = lazy(() => import('./IKR3013')); 
@@ -51,6 +52,7 @@ export default function PortalIKR() {
     return (
       <>
         <LanguageSwitcher floating />
+        <MobileStudyDock moduleCode="IKR3013" />
         <Suspense fallback={<LoadingScreen />}>
           <ModuleIKR3013 onBackToPortal={() => setActiveModule(null)} />
         </Suspense>
@@ -62,6 +64,7 @@ export default function PortalIKR() {
     return (
       <>
         <LanguageSwitcher floating />
+        <MobileStudyDock moduleCode="IKR3023" />
         <Suspense fallback={<LoadingScreen />}>
           <ModuleIKR3023 onBackToPortal={() => setActiveModule(null)} />
         </Suspense>
@@ -84,6 +87,8 @@ export default function PortalIKR() {
         .animation-delay-2000 { animation-delay: 2s; }
         .animation-delay-4000 { animation-delay: 4s; }
       `}</style>
+
+<MobileStudyDock />
 
       {/* LATAR BELAKANG TEMA IT */}
       <div className="fixed inset-0 z-0 pointer-events-none">
@@ -117,7 +122,7 @@ export default function PortalIKR() {
             </div>
           </div>
           <nav className="flex items-center gap-2 sm:gap-3" aria-label="Navigasi portal">
-            <LanguageSwitcher />
+            <div className="hidden sm:block"><LanguageSwitcher /></div>
             <button
               type="button"
               aria-expanded={showCurriculum}

@@ -39,6 +39,26 @@ export default function StudyChatbot({ moduleCode, topics = [], activeTopicId = 
     if (open) inputRef.current?.focus();
   }, [open]);
 
+  useEffect(() => {
+    const openFromDock = () => setOpen(true);
+    window.addEventListener('emodul:chat-open', openFromDock);
+    return () => window.removeEventListener('emodul:chat-open', openFromDock);
+  }, []);
+
+  useEffect(() => {
+    if (!open) return undefined;
+    const onEscape = e => { if (e.key === 'Escape') setOpen(false); };
+    window.addEventListener('keydown', onEscape);
+    // Only mobile uses full-screen modal. Lock background scroll while the tutor is open.
+    const mobile = window.matchMedia('(max-width: 639px)').matches;
+    const oldOverflow = document.body.style.overflow;
+    if (mobile) document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', onEscape);
+      if (mobile) document.body.style.overflow = oldOverflow;
+    };
+  }, [open]);
+
   const sendMessage = (message) => {
     const question = String(message || '').trim();
     if (!question || question.length > 1200) return;
@@ -53,7 +73,7 @@ export default function StudyChatbot({ moduleCode, topics = [], activeTopicId = 
   const clearChat = () => { setMessages(initialAssistant(moduleCode, language)); setDraft(''); };
 
   return (
-    <div className="fixed bottom-4 right-4 z-[120] sm:bottom-6 sm:right-6" aria-label={`Pembantu Pembelajaran ${moduleCode}`}>
+    <div onClick={(event) => { if (open && event.target === event.currentTarget) setOpen(false); }} className={open ? "fixed inset-0 z-[200] flex items-end justify-center bg-slate-950/45 backdrop-blur-[2px] sm:inset-auto sm:bottom-6 sm:right-6 sm:block sm:bg-transparent sm:backdrop-blur-none" : "hidden sm:fixed sm:bottom-6 sm:right-6 sm:z-[120] sm:block"} aria-label={`Pembantu Pembelajaran ${moduleCode}`}>
       <style>{`
         @keyframes emodulChatEnter { from { opacity:0; transform: translateY(14px) scale(.97) } to { opacity:1; transform: translateY(0) scale(1) } }
         @keyframes emodulChatPulse { 0%,100% {box-shadow:0 0 0 0 rgba(79,70,229,.25)} 50% {box-shadow:0 0 0 8px rgba(79,70,229,0)} }
@@ -68,7 +88,7 @@ export default function StudyChatbot({ moduleCode, topics = [], activeTopicId = 
           <MessageCircleMore size={17} className="hidden text-indigo-100 sm:block"/>
         </button>
       ) : (
-        <section role="dialog" aria-label={`Chatbot pembelajaran ${moduleCode}`} className="emodul-chat-enter flex h-[min(680px,calc(100dvh-28px))] w-[min(410px,calc(100vw-28px))] flex-col overflow-hidden rounded-[26px] border border-indigo-100 bg-white text-slate-900 shadow-[0_24px_80px_rgba(15,23,42,.22)]">
+        <section role="dialog" aria-label={`Chatbot pembelajaran ${moduleCode}`} className="emodul-chat-enter flex h-[min(88dvh,760px)] w-full flex-col overflow-hidden rounded-t-[28px] border border-indigo-100 bg-white text-slate-900 shadow-[0_24px_80px_rgba(15,23,42,.22)] sm:h-[min(680px,calc(100dvh-28px))] sm:w-[min(410px,calc(100vw-28px))] sm:rounded-[26px]">
           <header className="relative shrink-0 overflow-hidden bg-gradient-to-br from-slate-950 via-indigo-900 to-violet-700 p-4 text-white">
             <div className="absolute -right-10 -top-10 h-36 w-36 rounded-full bg-white/10 blur-2xl" />
             <div className="relative flex items-start justify-between gap-2">
@@ -105,7 +125,7 @@ export default function StudyChatbot({ moduleCode, topics = [], activeTopicId = 
             
             <div ref={bottom}/>
           </div>
-          <form onSubmit={(e) => { e.preventDefault(); sendMessage(draft); }} className="shrink-0 border-t border-slate-100 bg-white p-3">
+          <form onSubmit={(e) => { e.preventDefault(); sendMessage(draft); }} className="shrink-0 border-t border-slate-100 bg-white p-3 pb-[max(12px,env(safe-area-inset-bottom))]">
             {currentTopic && <p className="mb-2 truncate rounded-lg bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-700">Topik aktif: {currentTopic.title}</p>}
             <div className="flex items-end gap-2 rounded-2xl border border-indigo-100 bg-slate-50 p-2 focus-within:border-indigo-400">
               <textarea ref={inputRef} value={draft} onChange={(e) => setDraft(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(draft); } }} maxLength={1200} rows={2} placeholder="Tanya tentang modul ini..." aria-label="Soalan kepada pembantu modul" className="max-h-28 min-h-10 flex-1 resize-none bg-transparent px-2 py-1 text-sm text-slate-800 outline-none placeholder:text-slate-400" />

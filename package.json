@@ -16,7 +16,8 @@
     "test:chat": "node scripts/test-chatbot.mjs",
     "test:i18n": "node scripts/test-bilingual.mjs",
     "test:cards": "node scripts/test-card-english.mjs",
-    "test:offline": "node scripts/test-offline.mjs"
+    "test:offline": "node scripts/test-offline.mjs",
+    "test:motherboard": "node scripts/test-motherboard.mjs"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.2.4",

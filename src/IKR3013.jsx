@@ -1,3 +1,4 @@
+import MotherboardExplorer from './MotherboardExplorer';
 import OfflineEmbed from './OfflineEmbed';
 import { openOnlineResource } from './offlineSupport';
 import { EnglishStudyGuide } from './EnglishGuides';
@@ -1694,7 +1695,7 @@ export default function ModuleIKR3013({ onBackToPortal }) {
                         </div>
                     ))}
                  </div>
-              ) : activeTopic.image && (
+              ) : activeTopic.id !== 'motherboard' && activeTopic.image && (
                 <div className="mb-6 rounded-xl overflow-hidden shadow-md border border-gray-100 group">
                   <img 
                     src={activeTopic.image} 
@@ -1725,6 +1726,8 @@ export default function ModuleIKR3013({ onBackToPortal }) {
               {/* MOTHERBOARD CUSTOM INFOGRAPHICS */}
               {activeTopic.id === 'motherboard' && (
                 <div className="space-y-8 mt-8">
+                  {/* PREMIUM INTERACTIVE MOTHERBOARD EXPLORER: user-supplied image, offline assets, visual quiz */}
+                  <MotherboardExplorer />
                   {/* INFOGRAFIK FUNGSI PAPAN INDUK */}
                   <div className="p-6 lg:p-8 bg-white rounded-2xl border border-slate-200 shadow-sm">
                     <div className="text-center mb-8">
