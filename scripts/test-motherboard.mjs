@@ -27,7 +27,7 @@ assert.equal((quiz.match(/\{tab:/g)||[]).length,6);
 for(const [label,section,n] of [['Motherboard',board,17],['Rear I/O',io,6]]){
  const ids=[...section.matchAll(/\{id:(\d+),/g)].map(m=>+m[1]);
  assert.deepEqual(ids,Array.from({length:n},(_,i)=>i+1),`${label} hotspot IDs`);
- const coords=[...section.matchAll(/x:(\d+),\s*y:(\d+),/g)].map(m=>[+m[1],+m[2]]);
+ const coords=[...section.matchAll(/x:([\d.]+),\s*y:([\d.]+),/g)].map(m=>[+m[1],+m[2]]);
  assert.equal(coords.length,n);
  assert.ok(coords.every(([x,y])=>x>=0&&x<=100&&y>=0&&y<=100),`${label} invalid hotspot positions`);
 }

@@ -67,3 +67,13 @@ npm run build
 - Ujian Explorer khas ✅
 - `npm ci` + binaan Vite penuh **belum lulus di persekitaran penyediaan**, kerana registry npm tidak tersedia ⚠️
 - Belum dimuat naik secara automatik ke GitHub / belum live ⚠️
+
+
+## Versi 2.1 — Pembetulan visual (20 Oktober 2026)
+
+- Gambar papan induk interaktif kini **ilustrasi pembelajaran bersih tanpa anotasi**, bukannya foto OEM yang disahkan; fungsi umum diilustrasikan dan kedudukan komponen mungkin berlainan daripada model sebenar.
+- Infografik pengguna yang beranotasi tetap tersedia melalui pautan **Infografik Asal** untuk pemeriksaan komponen foto sebenar.
+- Hanya titik komponen dalam kategori dipilih yang ditunjukkan.
+- Tiada pemotongan `object-fit: cover`, dan peta biasa tidak mengunci scroll menegak pada iPhone.
+- Zoom melalui paparan penuh; posisi titik berdasarkan koordinat ilustrasi yang dikemas kini.
+- Penyelarasan akhir pada peranti mudah alih perlu diuji sebelum gunakan dalam penilaian sebenar.
