@@ -21,7 +21,8 @@
     "test:quiz-marker": "node scripts/test-quiz-marker.mjs",
     "test:v3": "node scripts/test-v3-premium.mjs",
     "test:workshop": "node scripts/test-workshop-guides.mjs",
-    "test:skm3": "node scripts/test-skm3.mjs"
+    "test:skm3": "node scripts/test-skm3.mjs",
+    "test:termination": "node scripts/test-termination-v36.mjs"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.2.4",

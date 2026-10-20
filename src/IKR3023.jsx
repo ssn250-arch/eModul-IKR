@@ -70,6 +70,7 @@ import {
 } from 'lucide-react';
 import TopicUnlockQuiz, { UNLOCK_PASS_MARK, getStudentNumber } from './TopicUnlockQuiz';
 import IKR3023CableLab, { TwistedPairCableDiagram } from './IKR3023CableLab';
+import RJ45TerminationWorkshop from './RJ45TerminationWorkshop';
 import photoFaceplate from './assets/safety-photos/faceplate.webp';
 import photoModularJack from './assets/safety-photos/keystone-jack.webp';
 import photoFloorCover from './assets/safety-photos/floor-cable-cover.webp';
@@ -577,11 +578,11 @@ const componentsData = [
 const terminationSteps = {
   rj45: [
     { step: 1, title: "Kupas Jaket Kabel", desc: "Kupas jaket luaran secukupnya mengikut jenis penyambung dan alat (contohnya sekitar 2–3 cm), tanpa merosakkan konduktor. Kekalkan pintalan pasangan sehampir mungkin dengan titik penamatan." },
-    { step: 2, title: "Asing & Luruskan", desc: "Buka pintalan 4 pasang wayar. Luruskan setiap helaian menggunakan jari atau batang pen." },
+    { step: 2, title: "Asing & Luruskan", desc: "Kenal pasti 4 pasang konduktor dan buka pintalan hanya sepanjang yang diperlukan untuk penamatan; elakkan meluruskan terlalu jauh." },
     { step: 3, title: "Susun Kod Warna", desc: "Susun rapat rapat mengikut standard T568B dari kiri ke kanan (P-Oren, Oren, P-Hijau, Biru, P-Biru, Hijau, P-Coklat, Coklat)." },
-    { step: 4, title: "Potong Rata (Trim)", desc: "Gunakan Wire Cutter untuk memotong hujung wayar supaya lurus sekata. Tinggalkan panjang lebih kurang 1.5 cm." },
+    { step: 4, title: "Potong Rata (Trim)", desc: "Potong semua hujung wayar rata; panjang yang sesuai bergantung pada jenis plug supaya konduktor mencapai hadapan dan jaket terletak di bawah pengapit." },
     { step: 5, title: "Masukkan ke RJ45", desc: "Ikut rajah orientasi pin 1–8 pada penyambung yang digunakan; pastikan kedudukan klip/kontak konsisten. Semua konduktor mesti sampai ke hujung dan jaket kabel berada di bawah pengapit." },
-    { step: 6, title: "Ketip (Crimp) & Uji", desc: "Masukkan kepala RJ45 ke dalam Crimping Tool dan ketip dengan kuat. Uji kabel menggunakan Cable Tester." }
+    { step: 6, title: "Ketip (Crimp) & Uji", desc: "Crimp menggunakan slot penyambung yang betul dan uji wiremap/continuity dengan Cable Tester. Ujian asas bukan pensijilan prestasi kabel." }
   ],
   patchPanel: [
     { step: 1, title: "Susun Kabel di Belakang Panel", desc: "Kupas jaket kabel. Bawa kabel dari arah belakang Patch Panel dan sandarkan pada slot lurah (IDC) yang ditetapkan." },
@@ -1803,7 +1804,7 @@ export default function ModuleIKR3023({ onBackToPortal, demoMode = false, demoTa
                       <h4 className="font-bold text-white text-3xl sm:text-4xl flex items-center justify-center gap-3">
                         <ListOrdered className="text-teal-400" size={36}/> Infografik Prosedur Penamatan
                       </h4>
-                      <p className="text-slate-400 text-sm sm:text-base mt-4 max-w-2xl mx-auto">Ikuti langkah-langkah standard bagi mengelakkan kerosakan isyarat. Pemasangan yang kemas adalah kunci kepada kelajuan rangkaian gigabit.</p>
+                      <p className="text-slate-400 text-sm sm:text-base mt-4 max-w-2xl mx-auto">Ikuti langkah-langkah standard bagi mengelakkan kerosakan isyarat. Penamatan yang kemas dan tepat mengurangkan risiko ralat sambungan; prestasi kabel perlu disahkan melalui ujian yang sesuai.</p>
                     </div>
                   </div>
 
@@ -1818,27 +1819,11 @@ export default function ModuleIKR3023({ onBackToPortal, demoMode = false, demoTa
                          </div>
                        </div>
                        <a href="https://www.youtube.com/results?search_query=cara+crimping+kabel+lan+rj45" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 bg-red-100 text-red-600 px-4 py-2.5 rounded-xl hover:bg-red-200 transition-colors font-bold text-sm shadow-sm border border-red-200">
-                         <PlayCircle size={18}/> Tonton Tutorial
+                         <PlayCircle size={18}/> Cari Tutorial (Online)
                        </a>
                     </div>
                     
-                    <div className="p-6 md:p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {terminationSteps.rj45.map((step, idx) => (
-                         <div key={idx} className="bg-white border-2 border-slate-100 rounded-xl p-5 hover:border-blue-300 transition-colors relative group shadow-sm hover:shadow-md flex flex-col">
-                           <div className="absolute -top-4 -left-4 w-10 h-10 bg-blue-600 text-white font-black rounded-full flex items-center justify-center shadow-lg border-4 border-white group-hover:scale-110 transition-transform z-10">
-                             {step.step}
-                           </div>
-
-                           <h5 className="font-bold text-slate-800 text-lg mb-2 mt-4 group-hover:text-blue-600 transition-colors">{step.title}</h5>
-                           <p className="text-sm text-slate-600 leading-relaxed flex-grow">{step.desc}</p>
-                           
-                           {/* Garis hiasan untuk skrin besar */}
-                           {idx < terminationSteps.rj45.length - 1 && (
-                             <div className="hidden lg:block absolute top-1/2 -right-3 w-6 h-0.5 bg-slate-200"></div>
-                           )}
-                         </div>
-                      ))}
-                    </div>
+                    <RJ45TerminationWorkshop />
                   </div>
 
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
