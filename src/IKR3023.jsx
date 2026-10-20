@@ -1,3 +1,4 @@
+import IKR3023SafetyVisual from './IKR3023SafetyVisual';
 import OfflineEmbed from './OfflineEmbed';
 import { EnglishStudyGuide } from './EnglishGuides';
 import { useLanguage } from './LanguageContext';
@@ -65,6 +66,7 @@ import {
   PlayCircle,
   CheckSquare,
   Eye,
+  MonitorSpeaker,
 } from 'lucide-react';
 import TopicUnlockQuiz, { UNLOCK_PASS_MARK, getStudentNumber } from './TopicUnlockQuiz';
 
@@ -452,6 +454,12 @@ const ethernetEvolutionData = [
 // Foto alatan sebenar pilihan pengajar. Tambah fail ke src/assets/tool-photos/,
 // kemudian build semula. Jika belum dibekalkan, ilustrasi SVG asal kekal.
 const toolPhotoFiles = import.meta.glob('./assets/tool-photos/*.{jpg,jpeg,png,webp}', { eager: true, query: '?url', import: 'default' });
+const equipmentPhotoFiles = import.meta.glob('./assets/equipment-photos/*.{jpg,jpeg,png,webp}', { eager: true, query: '?url', import: 'default' });
+const equipmentGallery = [
+  { key: 'patch-panel', title: 'Patch Panel 24-Port', role: 'Titik pusat penamatan kabel dari bilik pengguna sebelum dihubungkan ke switch.', tip: 'Pelajar perlu cam nombor port dan fungsi pelabelan untuk troubleshooting yang cepat.' },
+  { key: 'network-switch', title: 'Network Switch', role: 'Peranti aktif yang mengagihkan sambungan rangkaian ke banyak port pengguna.', tip: 'Bandingkan port switch dengan port patch panel. Patch panel ialah pasif, switch ialah aktif.' },
+  { key: 'ups', title: 'UPS (Uninterruptible Power Supply)', role: 'Bekalan kuasa sokongan yang menstabilkan kuasa dan memberi masa untuk penutupan selamat semasa blackout.', tip: 'Terangkan kepada pelajar kenapa UPS diletakkan di bahagian bawah rak: berat dan perlu pusat graviti rendah.' },
+];
 const toolPhotoNames = ['crimping-tool', 'punch-down-tool', 'jacket-stripper', 'wire-cutter', 'long-nose-pliers', 'screwdriver'];
 const practicalToolNotes = [
   { use: 'Masukkan konduktor mengikut susunan T568A/B, semak kedudukan, kemudian crimp.', safety: 'Pastikan jenis plug 8P8C serasi dengan kabel dan alat.' },
@@ -911,7 +919,7 @@ export default function ModuleIKR3023({ onBackToPortal, demoMode = false, demoTa
            <button onClick={() => setView('inspection')} className="flex flex-col items-center justify-center p-6 bg-white rounded-xl shadow-md hover:shadow-xl hover:scale-[1.02] transition-all duration-200 border-t-4 border-t-yellow-400 text-center h-full">
               <div className="p-3 rounded-full bg-yellow-100 text-yellow-600 mb-3"><ShieldAlert size={28} /></div>
               <h3 className="text-lg font-bold text-gray-800">Prosedur Keselamatan</h3>
-              <p className="text-gray-500 text-xs mt-1">Amalan anti-statik & penyelenggaraan.</p>
+              <p className="text-gray-500 text-xs mt-1">{t('Foto sebenar, panduan kerja selamat & pemeriksaan.', 'Real photos, safety procedures and inspections.')}</p>
             </button>
 
             <button
@@ -1663,6 +1671,40 @@ export default function ModuleIKR3023({ onBackToPortal, demoMode = false, demoTa
                       </div>
                     </div>
 
+                    {/* Foto sebenar peralatan utama */}
+                    <div className="mt-10 bg-slate-950 rounded-2xl border border-slate-800 p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+                      <div className="absolute top-0 left-0 w-64 h-64 bg-cyan-500 opacity-5 blur-[100px] pointer-events-none"></div>
+                      <div className="text-center mb-8 relative z-10">
+                        <span className="inline-block py-1 px-3 rounded-full bg-cyan-900/40 text-cyan-300 font-bold text-[10px] mb-2 tracking-widest uppercase border border-cyan-500/30">Lihat Peralatan Sebenar</span>
+                        <h4 className="font-bold text-white text-xl sm:text-2xl flex items-center justify-center gap-2"><MonitorSpeaker className="text-cyan-400"/> Foto Peralatan Utama Rak Server</h4>
+                        <p className="text-slate-400 text-sm mt-2 max-w-3xl mx-auto">Bahagian ini membantu pelajar mengenal rupa sebenar peralatan rangkaian. Gunakan foto bersama penerangan fungsi supaya pelajar dapat mengaitkan teori dengan amali di bengkel.</p>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 relative z-10">
+                        {equipmentGallery.map((item) => {
+                          const photoKey = `./assets/equipment-photos/${item.key}.webp`;
+                          const photoSrc = equipmentPhotoFiles[photoKey];
+                          return (
+                            <div key={item.key} className="bg-slate-900 border border-slate-700 rounded-2xl overflow-hidden shadow-lg hover:border-cyan-500/40 transition-all">
+                              <div className="bg-white/95 p-4 h-48 flex items-center justify-center border-b border-slate-700/50">
+                                {photoSrc ? (
+                                  <img src={photoSrc} alt={item.title} className="max-h-full max-w-full object-contain" loading="lazy" />
+                                ) : (
+                                  <div className="text-center text-slate-500 text-sm px-4">Foto belum dimasukkan</div>
+                                )}
+                              </div>
+                              <div className="p-5 space-y-3 bg-gradient-to-b from-slate-800 to-slate-900">
+                                <h5 className="font-bold text-white text-lg">{item.title}</h5>
+                                <p className="text-sm text-slate-300 leading-relaxed"><strong>Fungsi:</strong> {item.role}</p>
+                                <div className="rounded-xl border border-cyan-500/20 bg-cyan-500/10 p-3">
+                                  <p className="text-sm text-cyan-100 leading-relaxed"><strong>Fokus pelajar:</strong> {item.tip}</p>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+
                     {/* Patch Panel Deep Dive */}
                     <div className="mt-10 bg-slate-950 rounded-2xl border border-slate-800 p-6 sm:p-8 shadow-2xl relative overflow-hidden">
                        <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500 opacity-5 blur-[100px] pointer-events-none"></div>
@@ -1978,44 +2020,49 @@ export default function ModuleIKR3023({ onBackToPortal, demoMode = false, demoTa
 
   const renderInspection = () => (
     <div className="animate-fade-in w-full">
-      <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
-        <div className="bg-amber-500 p-8 text-white relative">
-          <div className="flex justify-between items-start mb-4">
-            <button onClick={() => { setView('menu'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="inline-flex items-center gap-2 text-white bg-black/10 hover:bg-black/20 px-4 py-2 rounded-xl transition-all text-sm font-bold backdrop-blur-sm border border-white/20">
-              <Home size={18} /> Menu Utama
-            </button>
-          </div>
-          <h2 className="text-3xl font-bold flex items-center gap-3"><ShieldAlert size={36}/> Prosedur Keselamatan</h2>
-          <p className="opacity-90 mt-2 text-lg">Amalan terbaik dan peringatan keselamatan semasa mengendalikan proses penamatan kabel.</p>
+      <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-xl">
+        <div className="relative bg-gradient-to-r from-amber-600 to-orange-500 p-5 text-white sm:p-7 lg:p-8">
+          <button type="button" onClick={() => { setView('menu'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="mb-5 inline-flex items-center gap-2 rounded-xl border border-white/20 bg-black/15 px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-black/25">
+            <Home size={18} /> {t('Menu Utama', 'Main Menu')}
+          </button>
+          <h2 className="flex flex-wrap items-center gap-3 text-2xl font-extrabold sm:text-3xl"><ShieldAlert size={30} className="shrink-0"/> {t('Prosedur Keselamatan', 'Safety Procedures')}</h2>
+          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-white/95 sm:text-base">{t('Kenal komponen sebenar dan ikuti amalan selamat semasa penamatan RJ45, keystone jack, patch panel dan pemasangan pelindung kabel.', 'Recognize real hardware and follow safe practices for RJ45, keystone jacks, patch panels and cable cover installation.')}</p>
         </div>
-        
-        <div className="p-8 space-y-6">
-          <div className="bg-blue-50 p-6 rounded-xl border border-blue-200">
-            <h3 className="text-xl font-bold text-blue-800 mb-4 flex items-center gap-2"><Plug size={24}/> Penamatan Kepala RJ45</h3>
-            <ul className="space-y-3">
-              <li className="flex items-start gap-3"><Check className="text-blue-600 shrink-0 mt-1"/> <span className="text-gray-700"><strong>Awas Sisa Tembaga:</strong> Potongan wayar (off-cuts) yang dipotong menggunakan <em>Wire Cutter</em> sangat tajam dan boleh melukakan atau terpijak. Kumpul dan buang sisa segera.</span></li>
-              <li className="flex items-start gap-3"><Check className="text-blue-600 shrink-0 mt-1"/> <span className="text-gray-700"><strong>Bahaya Tersepit:</strong> Jauhkan jari dari mata pisau pada alat pengupas dan kawasan engsel pada <em>Crimping Tool</em> bagi mengelakkan jari terkepit.</span></li>
-              <li className="flex items-start gap-3"><Check className="text-blue-600 shrink-0 mt-1"/> <span className="text-gray-700"><strong>Kebersihan:</strong> Pastikan tangan bebas dari minyak atau peluh semasa menyusun wayar untuk mengelakkan kesan oksida pada pin tembaga.</span></li>
-            </ul>
-          </div>
 
-          <div className="bg-purple-50 p-6 rounded-xl border border-purple-200">
-            <h3 className="text-xl font-bold text-purple-800 mb-4 flex items-center gap-2"><Monitor size={24}/> Penamatan Modular Jack (Keystone)</h3>
-            <ul className="space-y-3">
-              <li className="flex items-start gap-3"><Check className="text-purple-600 shrink-0 mt-1"/> <span className="text-gray-700"><strong>Jangan Pegang Di Tapak Tangan:</strong> Semasa menekan <em>Punch Down Tool</em>, letakkan Jack pada permukaan meja rata atau gunakan blok penahan (*Punch Down Puck*). Mata pisau boleh tergelincir dan menikam tapak tangan anda.</span></li>
-              <li className="flex items-start gap-3"><Check className="text-purple-600 shrink-0 mt-1"/> <span className="text-gray-700"><strong>Tekanan Terkawal:</strong> Kenakan tekanan tegak 90-darjah supaya <em>Modular Jack</em> tidak pecah akibat hentakan yang tidak seimbang.</span></li>
-              <li className="flex items-start gap-3"><Check className="text-purple-600 shrink-0 mt-1"/> <span className="text-gray-700"><strong>Jauhkan Jari:</strong> Pastikan jari berada jauh dari lurah sisi Modular Jack tempat bilah Gunting <em>Punch Down</em> akan mendarat.</span></li>
-            </ul>
-          </div>
+        <div className="space-y-5 p-4 sm:space-y-6 sm:p-6 lg:p-8">
+          <IKR3023SafetyVisual language={language} />
 
-          <div className="bg-emerald-50 p-6 rounded-xl border border-emerald-200">
-            <h3 className="text-xl font-bold text-emerald-800 mb-4 flex items-center gap-2"><Layers size={24}/> Penamatan Patch Panel</h3>
-            <ul className="space-y-3">
-              <li className="flex items-start gap-3"><Check className="text-emerald-600 shrink-0 mt-1"/> <span className="text-gray-700"><strong>Bahaya Litar Pintas:</strong> Lebihan potongan wayar boleh jatuh ke dalam rongga pengudaraan peranti <em>Switch</em> di bawahnya. Tutup peranti di bawahnya dengan kain alas sementara menanam kabel.</span></li>
-              <li className="flex items-start gap-3"><Check className="text-emerald-600 shrink-0 mt-1"/> <span className="text-gray-700"><strong>Pengosongan Statik (ESD):</strong> Sentiasa gunakan <em>ESD Wrist Strap</em> (gelang anti-statik) jika bekerja berdekatan dengan perkakasan rak pelayan yang sedang aktif.</span></li>
-              <li className="flex items-start gap-3"><Check className="text-emerald-600 shrink-0 mt-1"/> <span className="text-gray-700"><strong>Ergonomik & Pencahayaan:</strong> Oleh kerana jumlah kabel yang banyak (Cth: 24 Port), gunakan pencahayaan tambahan (seperti lampu kepala) dan jaga postur badan untuk mengelakkan ketegangan tulang belakang.</span></li>
+          <section className="rounded-2xl border border-blue-200 bg-blue-50 p-4 sm:p-6" aria-labelledby="safety-rj45">
+            <h3 id="safety-rj45" className="mb-4 flex items-center gap-2 text-lg font-bold text-blue-900 sm:text-xl"><Plug size={22} className="shrink-0"/> {t('Penamatan Kepala RJ45', 'RJ45 Plug Termination')}</h3>
+            <ul className="space-y-3 text-sm leading-relaxed text-slate-800 sm:text-base">
+              <li className="flex items-start gap-3"><Check className="mt-0.5 h-5 w-5 shrink-0 text-blue-700"/><span><strong>{t('Sisa wayar tajam:', 'Sharp wire offcuts:')}</strong> {t('Potong kabel pada permukaan kerja yang stabil, jauhkan jari daripada mata pemotong dan kumpul sisa konduktor selepas kerja.', 'Cut cables on a stable work surface, keep fingers away from blades, and collect conductor offcuts after work.')}</span></li>
+              <li className="flex items-start gap-3"><Check className="mt-0.5 h-5 w-5 shrink-0 text-blue-700"/><span><strong>{t('Alat yang sesuai:', 'Correct tools:')}</strong> {t('Gunakan cable stripper dan crimping tool yang serasi dengan kabel serta plug. Jangan gunakan alat yang rosak.', 'Use a cable stripper and crimping tool suitable for the cable and plug. Never use damaged tools.')}</span></li>
+              <li className="flex items-start gap-3"><Check className="mt-0.5 h-5 w-5 shrink-0 text-blue-700"/><span><strong>{t('Semakan akhir:', 'Final check:')}</strong> {t('Semak susunan wayar T568A/B, sambungan mekanikal dan keputusan cable tester sebelum digunakan.', 'Check T568A/B wire order, mechanical termination and cable tester results before use.')}</span></li>
             </ul>
-          </div>
+          </section>
+
+          <section className="rounded-2xl border border-purple-200 bg-purple-50 p-4 sm:p-6" aria-labelledby="safety-jack">
+            <h3 id="safety-jack" className="mb-4 flex items-center gap-2 text-lg font-bold text-purple-900 sm:text-xl"><Monitor size={22} className="shrink-0"/> {t('Penamatan Modular Jack (Keystone)', 'Keystone Jack Termination')}</h3>
+            <ul className="space-y-3 text-sm leading-relaxed text-slate-800 sm:text-base">
+              <li className="flex items-start gap-3"><Check className="mt-0.5 h-5 w-5 shrink-0 text-purple-700"/><span><strong>{t('Jangan letak di tapak tangan:', 'Never hold in your palm:')}</strong> {t('Gunakan blok penahan (punch-down puck) yang sesuai pada meja stabil supaya mata alat tidak mencederakan tangan.', 'Use a suitable punch-down puck on a stable table to prevent the blade from injuring your hand.')}</span></li>
+              <li className="flex items-start gap-3"><Check className="mt-0.5 h-5 w-5 shrink-0 text-purple-700"/><span><strong>{t('Tekanan terkawal:', 'Controlled force:')}</strong> {t('Sejajarkan mata alat dengan terminal IDC dan tekan mengikut arahan pengeluar; elakkan tekanan senget atau berlebihan.', 'Align the tool blade with the IDC terminal and follow the manufacturer’s instructions; avoid angled or excessive force.')}</span></li>
+              <li className="flex items-start gap-3"><Check className="mt-0.5 h-5 w-5 shrink-0 text-purple-700"/><span><strong>{t('Jaga kedudukan bilah:', 'Check blade direction:')}</strong> {t('Pastikan sisi pemotong menghadap ke bahagian lebihan wayar, bukan ke arah kabel yang hendak dikekalkan.', 'Face the cutting edge toward the excess wire, not toward the cable you intend to retain.')}</span></li>
+            </ul>
+          </section>
+
+          <section className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 sm:p-6" aria-labelledby="safety-patch">
+            <h3 id="safety-patch" className="mb-4 flex items-center gap-2 text-lg font-bold text-emerald-900 sm:text-xl"><Layers size={22} className="shrink-0"/> {t('Patch Panel dan Rak Rangkaian', 'Patch Panel and Network Rack')}</h3>
+            <ul className="space-y-3 text-sm leading-relaxed text-slate-800 sm:text-base">
+              <li className="flex items-start gap-3"><Check className="mt-0.5 h-5 w-5 shrink-0 text-emerald-700"/><span><strong>{t('Elakkan serpihan konduktor:', 'Prevent conductive debris:')}</strong> {t('Kutip sisa potongan dan elakkan ia jatuh ke lubang pengudaraan switch. Matikan/asingkan peralatan apabila perlu; jangan tutup switch yang hidup dengan kain kerana boleh menghalang pengudaraan.', 'Collect offcuts and prevent them entering switch ventilation. Power down/isolate equipment where required; never cover a powered switch with cloth because airflow may be blocked.')}</span></li>
+              <li className="flex items-start gap-3"><Check className="mt-0.5 h-5 w-5 shrink-0 text-emerald-700"/><span><strong>{t('Elektrik dan ESD:', 'Electrical safety and ESD:')}</strong> {t('Ikut SOP pengasingan bekalan elektrik. Gelang ESD digunakan hanya mengikut prosedur untuk komponen sensitif statik pada stesen kerja selamat, bukan sebagai perlindungan daripada renjatan elektrik atau untuk kerja pada peralatan hidup.', 'Follow electrical isolation procedures. Use an ESD wrist strap only as directed for static-sensitive components at a safe workstation; it does not protect from electric shock and is not for live electrical work.')}</span></li>
+              <li className="flex items-start gap-3"><Check className="mt-0.5 h-5 w-5 shrink-0 text-emerald-700"/><span><strong>{t('Susunan kabel dan ergonomik:', 'Cable management and ergonomics:')}</strong> {t('Label port, sokong kabel agar tidak menarik terminal, gunakan pencahayaan cukup serta tangga kerja yang sesuai jika bekerja pada tempat tinggi.', 'Label ports, provide strain relief, ensure adequate lighting and use suitable access equipment for elevated work.')}</span></li>
+            </ul>
+          </section>
+
+          <section className="rounded-2xl border border-orange-200 bg-orange-50 p-4 sm:p-6" aria-labelledby="safety-route">
+            <h3 id="safety-route" className="mb-3 flex items-center gap-2 text-lg font-bold text-orange-900 sm:text-xl"><Cable size={22} className="shrink-0"/> {t('Faceplate dan Laluan Kabel', 'Faceplates and Cable Routing')}</h3>
+            <p className="text-sm leading-relaxed text-slate-800 sm:text-base">{t('Pastikan faceplate kemas dan tidak longgar. Pilih pelindung/trunking sesuai dengan lokasi, elakkan tepi tajam dan bahaya tersandung, jangan himpit kabel, serta asingkan kabel data daripada kabel kuasa mengikut spesifikasi dan peraturan pemasangan yang terpakai.', 'Secure faceplates properly. Choose cable covers/trunking suitable for the location, avoid sharp edges and trip hazards, do not crush cables, and segregate data from power cables according to applicable specifications and installation requirements.')}</p>
+          </section>
         </div>
         <BackButton />
       </div>
