@@ -79,3 +79,15 @@
  .mbx-modal-map{min-width:600px;}
  .mbx-modal-scroll .mbx-modal-map img{min-width:0;max-width:none;width:100%;}
 }
+
+/* v3.0: light locator navigation and genuine 44px touchscreen hit areas */
+.mbx-pin{width:29px!important;min-width:29px!important;height:29px!important;box-shadow:0 0 0 3px white,0 3px 14px #082d5460!important;outline-offset:7px}
+.mbx-pin::after{inset:-9px!important}
+.mbx-quiz-target{width:36px!important;height:36px!important;border-width:3px!important;box-shadow:0 0 0 2px white,0 0 0 8px #ffcc5361!important}
+.mbx-quiz-target::after{width:3px!important;height:3px!important}
+.mbx-detail{border-color:#dce8f8!important;box-shadow:0 9px 30px #14396a0a}
+.mbx-chip-list button,.mbx-categories button{min-height:44px!important}
+@media(max-width:640px){.mbx-pin{width:25px!important;min-width:25px!important;height:25px!important}.mbx-pin::after{inset:-11px!important}.mbx-quiz-target{width:32px!important;height:32px!important}.mbx-quiz-legend{font-size:12px}.mbx-choices button{font-size:13px;min-height:48px}}
+
+.mbx-quiz-legend{flex-wrap:wrap}.mbx-quiz-zone{margin-left:auto;background:#fff;border:1px solid #f4d494;border-radius:9px;padding:6px 9px;color:#79520d;font-size:11px}
+@media(max-width:640px){.mbx-quiz-zone{margin-left:0;width:100%;font-size:12px}}

@@ -603,7 +603,7 @@ const terminationSteps = {
 // ==========================================
 // KOMPONEN UTAMA
 // ==========================================
-export default function ModuleIKR3023({ onBackToPortal }) {
+export default function ModuleIKR3023({ onBackToPortal, demoMode = false, demoTarget = null }) {
   // BM/EN menggunakan React Context: semua label utama terus dikemas kini apabila bahasa bertukar.
   const { language, t } = useLanguage();
   const localiseTopic = (title) => language === 'en' ? translateVisibleText(title || '') : title;
@@ -635,11 +635,11 @@ export default function ModuleIKR3023({ onBackToPortal }) {
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, [view, activeTopic]);
-  useEffect(() => { try { if (studentNumber) localStorage.setItem(`ikr3023_quiz_unlock_v4_${studentNumber}`, unlockedTopicIndex.toString()); } catch (e) {} }, [unlockedTopicIndex, studentNumber]);
+  useEffect(() => { try { if (!demoMode && studentNumber) localStorage.setItem(`ikr3023_quiz_unlock_v4_${studentNumber}`, unlockedTopicIndex.toString()); } catch (e) {} }, [unlockedTopicIndex, studentNumber, demoMode]);
 
   const handleTopicClick = (topic, index) => {
     // Akses kad dikawal oleh hasil kuiz, bukan sekadar klik nota.
-    if (index > unlockedTopicIndex) return;
+    if (!demoMode && index > unlockedTopicIndex) return;
     setActiveTopic(topic);
     setView('topic');
     setActiveTab('basic');
@@ -647,7 +647,7 @@ export default function ModuleIKR3023({ onBackToPortal }) {
 
 
   const handleStudentSelected = (number) => {
-    if (!Number.isInteger(number) || number < 1 || number > 30) return;
+    if (demoMode || !Number.isInteger(number) || number < 1 || number > 30) return;
     setStudentNumber(number);
     try { localStorage.setItem('emodul_ikr_student_number_v1', String(number)); } catch { /* optional */ }
     const nextProgress = loadStudentProgress(number);
@@ -659,6 +659,7 @@ export default function ModuleIKR3023({ onBackToPortal }) {
   };
 
   const changeStudent = () => {
+    if (demoMode) return;
     const input = window.prompt(t('Nombor pelajar (1 hingga 30):', 'Student number (1 to 30):'), String(studentNumber || ''));
     if (input === null) return;
     const number = Number(input);
@@ -670,18 +671,27 @@ export default function ModuleIKR3023({ onBackToPortal }) {
   };
 
   const handleTopicQuizPassed = (score) => {
-    if (score < UNLOCK_PASS_MARK || !activeTopic) return;
+    if (demoMode || score < UNLOCK_PASS_MARK || !activeTopic) return;
     const topicIndex = topics.findIndex(item => item.id === activeTopic.id);
     if (topicIndex === -1 || topicIndex > unlockedTopicIndex) return;
     setUnlockedTopicIndex(prev => Math.max(prev, topicIndex + 1));
   };
+
+  useEffect(() => {
+    if (!demoMode || demoTarget?.index == null) return;
+    const chosen = topics[demoTarget.index];
+    if (!chosen) return;
+    setActiveTopic(chosen);
+    setActiveTab('basic');
+    setView('topic');
+  }, [demoMode, demoTarget]);
 
   const startTopicQuiz = () => { if (activeTopic) setView('topicQuiz'); };
 
   const openNextTopic = () => {
     if (!activeTopic) return;
     const index = topics.findIndex(item => item.id === activeTopic.id);
-    if (index === -1 || index + 1 >= topics.length || index + 1 > unlockedTopicIndex) return;
+    if (index === -1 || index + 1 >= topics.length || (!demoMode && index + 1 > unlockedTopicIndex)) return;
     handleTopicClick(topics[index + 1], index + 1);
   };
 
@@ -804,7 +814,7 @@ export default function ModuleIKR3023({ onBackToPortal }) {
 
     return (
       <div className="space-y-6 animate-fade-in pb-10">
-        <header className="text-center bg-gradient-to-r from-slate-900 to-blue-900 text-white p-8 rounded-2xl shadow-lg relative overflow-hidden">
+        <header className="em3-module-hero text-center bg-gradient-to-r from-slate-900 to-blue-900 text-white p-6 md:p-8 rounded-2xl shadow-lg relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
              <div className="absolute top-10 right-10 transform rotate-12"><Globe size={100}/></div>
              <div className="absolute bottom-5 left-10 transform -rotate-12"><Cable size={80}/></div>
@@ -834,7 +844,7 @@ export default function ModuleIKR3023({ onBackToPortal }) {
               <div>
                 <h3 className="font-bold text-slate-800 flex items-center gap-2 text-lg"><Activity className="text-blue-500" size={24} /> {t('Status Bacaan Modul', 'Module Learning Progress')}</h3>
                 <p className="text-sm text-slate-500 mt-1">
-                  {unlockedTopicIndex < topics.length 
+                  {!demoMode && unlockedTopicIndex < topics.length 
                     ? <span className="flex items-center gap-1.5"><ChevronRight size={16} className="text-blue-500"/> {t('Sila teliti nota:', 'Please read the notes:')} <strong className="text-blue-600">{localiseTopic(nextTopic?.title)}</strong></span> 
                     : <span className="flex items-center gap-1.5 text-green-600 font-bold"><CheckCircle size={16}/> {t('Selesai! Anda kini layak menduduki Ujian.', 'Completed! You can now take the final assessment.')}</span>}
                 </p>
@@ -853,7 +863,7 @@ export default function ModuleIKR3023({ onBackToPortal }) {
               <span>{Math.min(unlockedTopicIndex, topics.length)} {t('daripada', 'of')} {topics.length} {t('Topik Lulus Kuiz', 'Topics Passed')}</span>
               <button type="button" onClick={changeStudent} className="font-bold text-blue-600 hover:underline">{t('Pelajar:', 'Student:')} {studentNumber || t('Belum dipilih', 'Not selected')} • {t('Tukar', 'Change')}</button>
             </div>
-            {unlockedTopicIndex > 0 && (
+            {!demoMode && unlockedTopicIndex > 0 && (
               <div className="mt-4 text-center relative z-10">
                 <button onClick={() => { if(window.confirm(t('Adakah anda pasti mahu set semula (reset) semua kemajuan bacaan anda dari awal?', 'Are you sure you want to reset all your learning progress?'))) { setUnlockedTopicIndex(0); setQuizCompleted(false); setQuizScore(0); setQuizAnswers({}); if (studentNumber) localStorage.removeItem(`ikr3023_quiz_unlock_v4_${studentNumber}`); } }} className="text-[10px] sm:text-xs text-slate-400 hover:text-red-500 underline transition-colors">
                   {t('Mula Semula (Reset Progress)', 'Start Again (Reset Progress)')}
@@ -863,9 +873,9 @@ export default function ModuleIKR3023({ onBackToPortal }) {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 px-4 mt-6">
+        <div className="em3-topic-grid grid grid-cols-1 md:grid-cols-2 gap-4 px-2 sm:px-4 mt-6">
           {topics.map((topic, index) => {
-            const isLocked = index > unlockedTopicIndex;
+            const isLocked = !demoMode && index > unlockedTopicIndex;
             const isCompleted = index < unlockedTopicIndex;
             return (
               <button key={topic.id} onClick={() => !isLocked && handleTopicClick(topic, index)} className={`flex items-center p-6 bg-white rounded-xl shadow-md transition-all duration-200 border text-left group relative overflow-hidden ${isLocked ? 'opacity-60 cursor-not-allowed border-gray-200' : 'hover:shadow-xl hover:scale-[1.02] border-gray-100'}`}>
@@ -895,13 +905,13 @@ export default function ModuleIKR3023({ onBackToPortal }) {
               type="button"
               disabled={unlockedTopicIndex < topics.length}
               onClick={() => openOnlineResource('https://cablelabx.netlify.app/', language)}
-              className={`relative flex flex-col items-center justify-center p-6 bg-white rounded-xl shadow-md transition-all duration-300 border-t-4 text-center h-full ${unlockedTopicIndex < topics.length ? 'opacity-60 cursor-not-allowed border-t-gray-400' : 'hover:shadow-xl hover:scale-[1.02] border-t-green-500 ring-2 ring-green-400/50 ring-offset-2'}`}
+              className={`relative flex flex-col items-center justify-center p-6 bg-white rounded-xl shadow-md transition-all duration-300 border-t-4 text-center h-full ${!demoMode && unlockedTopicIndex < topics.length ? 'opacity-60 cursor-not-allowed border-t-gray-400' : 'hover:shadow-xl hover:scale-[1.02] border-t-green-500 ring-2 ring-green-400/50 ring-offset-2'}`}
             >
-              <div className={`p-3 rounded-full mb-3 ${unlockedTopicIndex < topics.length ? 'bg-gray-100 text-gray-500' : 'bg-green-100 text-green-600'}`}>
-                {unlockedTopicIndex < topics.length ? <Lock size={28} /> : <CheckCircle size={28} />}
+              <div className={`p-3 rounded-full mb-3 ${!demoMode && unlockedTopicIndex < topics.length ? 'bg-gray-100 text-gray-500' : 'bg-green-100 text-green-600'}`}>
+                {!demoMode && unlockedTopicIndex < topics.length ? <Lock size={28} /> : <CheckCircle size={28} />}
               </div>
               <h3 className="text-lg font-bold text-gray-800">Penilaian Akhir • CableLabX</h3>
-              <p className="text-gray-500 text-xs mt-1">{unlockedTopicIndex < topics.length ? 'Lulus semua kuiz topik dahulu' : 'Buka sistem penilaian luar di tab baharu.'}</p>
+              <p className="text-gray-500 text-xs mt-1">{!demoMode && unlockedTopicIndex < topics.length ? 'Lulus semua kuiz topik dahulu' : 'Buka sistem penilaian luar di tab baharu.'}</p>
               {unlockedTopicIndex >= topics.length && <ExternalLink size={16} className="mt-2 text-green-600"/>}
             </button>
 
@@ -2028,8 +2038,9 @@ export default function ModuleIKR3023({ onBackToPortal }) {
   );
 
   return (
-    <div className="min-h-screen bg-slate-100 font-sans text-slate-900 flex flex-col">
-      <div className="max-w-5xl mx-auto py-4 sm:py-8 px-4 flex-1 w-full">
+    <div className="em3-module min-h-screen bg-slate-50 font-sans text-gray-900 flex flex-col">
+      <div className="em3-module-content max-w-6xl mx-auto py-4 sm:py-8 px-4 flex-1 w-full">
+        {demoMode && <div className="em3-inline-demo" role="status"><Eye size={17}/><strong>MODE JURI • Pratonton</strong><span>Topik terbuka untuk demonstrasi sahaja. Tiada keputusan kuiz atau kemajuan pelajar disimpan.</span></div>}
         {view === 'menu' && renderMenu()}
         {view === 'topic' && renderTopic()}
         {view === 'topicQuiz' && activeTopic && (
@@ -2039,7 +2050,8 @@ export default function ModuleIKR3023({ onBackToPortal }) {
             topic={activeTopic}
             onBack={() => setView('topic')}
             onPassed={handleTopicQuizPassed}
-            onStudentSelected={handleStudentSelected}
+            demoMode={demoMode}
+            onStudentSelected={demoMode ? undefined : handleStudentSelected}
             onNextTopic={openNextTopic}
             isLastTopic={topics[topics.length - 1].id === activeTopic.id}
           />

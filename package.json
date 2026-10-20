@@ -1,7 +1,7 @@
 {
   "name": "emodul-ikr",
   "private": true,
-  "version": "1.2.0-offline-newic",
+  "version": "3.0.0-premium-newic",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -18,7 +18,8 @@
     "test:cards": "node scripts/test-card-english.mjs",
     "test:offline": "node scripts/test-offline.mjs",
     "test:motherboard": "node scripts/test-motherboard.mjs",
-    "test:quiz-marker": "node scripts/test-quiz-marker.mjs"
+    "test:quiz-marker": "node scripts/test-quiz-marker.mjs",
+    "test:v3": "node scripts/test-v3-premium.mjs"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.2.4",

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
-import { Box, Cpu, CircuitBoard, Network, Cable, ChevronRight, Loader2, Code2, Server, Database, GraduationCap, Map, ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { Box, Cpu, CircuitBoard, Network, Cable, ChevronRight, Loader2, Code2, Server, Database, GraduationCap, Map, ArrowLeft, CheckCircle2, Presentation, ShieldCheck, X, Eye, BookOpen } from 'lucide-react';
 
 import logoEmodul from './logo-emodul-mark.png';
 import { LanguageSwitcher } from './LanguageContext';
@@ -22,6 +22,28 @@ const LoadingScreen = () => (
 export default function PortalIKR() {
   const [activeModule, setActiveModule] = useState(null);
   const [showCurriculum, setShowCurriculum] = useState(false);
+  // DEMO IS EPHEMERAL: never write demo access or results to localStorage.
+  const [demoMode, setDemoMode] = useState(false);
+  const [demoTarget, setDemoTarget] = useState(null);
+  const startDemo = () => {setDemoMode(true);setActiveModule(null);setDemoTarget(null);setShowCurriculum(false);};
+  const stopDemo = () => {setDemoMode(false);setActiveModule(null);setDemoTarget(null);};
+  const demoNavigate = (code, index = null, focus = null) => {
+    setActiveModule(code);
+    setDemoTarget(index === null ? null : { index, focus, nonce: Date.now() });
+  };
+  const showcase = demoMode && (
+    <div className="em3-demo-toolbar" role="region" aria-label="Mode Juri - demonstrasi sahaja">
+      <span className="em3-demo-badge"><Eye size={15}/> MODE JURI · PRATONTON</span>
+      <div className="em3-demo-actions">
+        <button type="button" onClick={()=>demoNavigate(null)}><BookOpen size={15}/> Portal</button>
+        <button type="button" onClick={()=>demoNavigate('IKR3013',0)}>IKR3013</button>
+        <button type="button" onClick={()=>demoNavigate('IKR3013',1,'explorer')}><Cpu size={15}/> Explorer</button>
+        <button type="button" onClick={()=>demoNavigate('IKR3023',0)}>IKR3023</button>
+        <button type="button" onClick={stopDemo} className="em3-end-demo"><X size={15}/> Tamat Demo</button>
+      </div>
+      <span className="em3-demo-notice">Semua topik untuk pratonton sahaja · tiada markah atau kemajuan disimpan</span>
+    </div>
+  );
   const headerRef = useRef(null);
 
   useEffect(() => {
@@ -51,10 +73,10 @@ export default function PortalIKR() {
   if (activeModule === 'IKR3013') {
     return (
       <>
-        <div className="hidden sm:block"><LanguageSwitcher floating /></div>
+        {showcase}
         <MobileStudyDock moduleCode="IKR3013" />
         <Suspense fallback={<LoadingScreen />}>
-          <ModuleIKR3013 onBackToPortal={() => setActiveModule(null)} />
+          <ModuleIKR3013 key={`ikr3013-${demoMode}`} demoMode={demoMode} demoTarget={demoTarget} onBackToPortal={() => setActiveModule(null)} />
         </Suspense>
       </>
     );
@@ -63,17 +85,17 @@ export default function PortalIKR() {
   if (activeModule === 'IKR3023') {
     return (
       <>
-        <div className="hidden sm:block"><LanguageSwitcher floating /></div>
+        {showcase}
         <MobileStudyDock moduleCode="IKR3023" />
         <Suspense fallback={<LoadingScreen />}>
-          <ModuleIKR3023 onBackToPortal={() => setActiveModule(null)} />
+          <ModuleIKR3023 key={`ikr3023-${demoMode}`} demoMode={demoMode} demoTarget={demoTarget} onBackToPortal={() => setActiveModule(null)} />
         </Suspense>
       </>
     );
   }
 
   return (
-    <div className="min-h-screen font-sans flex flex-col selection:bg-blue-300 selection:text-blue-900 bg-slate-50 relative overflow-hidden">
+    <div className="em3-portal min-h-screen font-sans flex flex-col selection:bg-blue-300 selection:text-blue-900 bg-slate-50 relative overflow-hidden">
       
       {/* KOD CSS ANIMASI */}
       <style>{`
@@ -89,24 +111,25 @@ export default function PortalIKR() {
       `}</style>
 
 <MobileStudyDock />
+      {showcase}
 
       {/* LATAR BELAKANG TEMA IT */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <div 
-          className="absolute inset-0 opacity-[0.04]" 
+          className="absolute inset-0 opacity-[0.018]" 
           style={{ 
             backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)', 
             backgroundSize: '32px 32px' 
           }}>
         </div>
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] max-w-2xl max-h-2xl bg-blue-400 rounded-full mix-blend-multiply filter blur-[100px] opacity-30 animate-blob"></div>
-        <div className="absolute top-[20%] right-[-10%] w-[40%] h-[40%] max-w-2xl max-h-2xl bg-indigo-400 rounded-full mix-blend-multiply filter blur-[100px] opacity-30 animate-blob animation-delay-2000"></div>
-        <div className="absolute bottom-[-20%] left-[20%] w-[40%] h-[40%] max-w-2xl max-h-2xl bg-purple-400 rounded-full mix-blend-multiply filter blur-[100px] opacity-30 animate-blob animation-delay-4000"></div>
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] max-w-2xl max-h-2xl bg-blue-400 rounded-full mix-blend-multiply filter blur-[100px] opacity-15 animate-blob"></div>
+        <div className="absolute top-[20%] right-[-10%] w-[40%] h-[40%] max-w-2xl max-h-2xl bg-indigo-400 rounded-full mix-blend-multiply filter blur-[100px] opacity-15 animate-blob animation-delay-2000"></div>
+        <div className="absolute bottom-[-20%] left-[20%] w-[40%] h-[40%] max-w-2xl max-h-2xl bg-purple-400 rounded-full mix-blend-multiply filter blur-[100px] opacity-15 animate-blob animation-delay-4000"></div>
       </div>
 
       {/* HEADER GLASSMORPHISM (Responsif) */}
       <header ref={headerRef} className="bg-white/80 backdrop-blur-xl border-b border-white shadow-sm sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-3 sm:px-4 py-2.5 md:py-3 flex justify-between items-center gap-2">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2.5 md:py-3 flex justify-between items-center gap-2">
           {/* Logo eModul-IKR baharu: ikon asal + teks jelas pada mobile dan desktop */}
           <div className="flex min-w-0 shrink-0 items-center gap-1.5 sm:gap-3" aria-label="eModul-IKR">
             <img
@@ -135,6 +158,7 @@ export default function PortalIKR() {
               <span className={`hidden sm:inline-flex min-w-6 justify-center rounded-full px-1.5 py-0.5 text-[10px] ${showCurriculum ? 'bg-white/20 text-white' : 'bg-indigo-100 text-indigo-700'}`}>9</span>
               <ChevronRight size={14} className={`hidden sm:block transition-transform duration-200 ${showCurriculum ? 'rotate-90' : ''}`} aria-hidden="true" />
             </button>
+            {!demoMode && <button type="button" onClick={startDemo} className="em3-nav-demo" aria-label="Aktifkan Mode Juri untuk pratonton pembelajaran"><Presentation size={17}/><span className="hidden sm:inline">Mode Juri</span></button>}
             <div className="hidden md:flex items-center gap-1.5 text-[11px] lg:text-xs font-bold text-blue-700 bg-blue-100/80 border border-blue-200 px-3 lg:px-4 py-2 rounded-full shadow-inner">
               <GraduationCap size={17} className="text-blue-600 shrink-0" />
               <span className="whitespace-nowrap">Pusat E-Pembelajaran</span>
@@ -203,11 +227,11 @@ export default function PortalIKR() {
       </header>
 
       {/* KANDUNGAN UTAMA (Responsif) */}
-      <main className="flex-1 max-w-6xl mx-auto w-full px-4 py-8 md:py-12 relative z-10 flex flex-col justify-center">
+      <main className="flex-1 max-w-7xl mx-auto w-full px-4 py-8 md:py-12 relative z-10 flex flex-col justify-center">
         
         {/* HERO SECTION IT */}
-        <div className="text-center max-w-3xl mx-auto mb-10 md:mb-16 mt-4 md:mt-12 px-2">
-          <h2 className="text-3xl sm:text-4xl md:text-6xl font-extrabold mb-4 md:mb-6 tracking-tight text-slate-900 leading-[1.15] md:leading-[1.1]">
+        <div className="em3-portal-hero text-center max-w-3xl mx-auto mb-10 md:mb-14 mt-4 md:mt-10 px-2">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4 md:mb-6 tracking-tight text-slate-900 leading-[1.15] md:leading-[1.1]">
             Langkah ke Masa Depan <br className="hidden sm:block"/>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">
               Teknologi Rangkaian
@@ -220,12 +244,12 @@ export default function PortalIKR() {
         </div>
 
         {/* GRID KAD MODUL (Responsif) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 pb-12">
+        <div className="em3-module-grid grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 pb-12">
           
           {/* KAD IKR3013 */}
           <button 
             onClick={() => setActiveModule('IKR3013')}
-            className="group text-left bg-white/70 backdrop-blur-xl rounded-[2rem] p-6 md:p-8 border border-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(37,99,235,0.12)] hover:-translate-y-2 hover:border-blue-200 transition-all duration-500 relative overflow-hidden flex flex-col h-full"
+            className="em3-portal-card group text-left bg-white/70 backdrop-blur-xl rounded-[2rem] p-6 md:p-8 border border-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(37,99,235,0.12)] hover:-translate-y-2 hover:border-blue-200 transition-all duration-500 relative overflow-hidden flex flex-col h-full"
           >
             <div className="absolute top-0 right-0 w-24 h-24 md:w-32 md:h-32 bg-gradient-to-bl from-blue-100 to-transparent rounded-bl-full -z-10 transition-transform group-hover:scale-125 duration-700"></div>
             
@@ -245,7 +269,7 @@ export default function PortalIKR() {
             </div>
 
             <div className="relative z-10 mt-auto flex items-center gap-3 md:gap-4">
-              <div className="bg-slate-900 text-white p-2.5 md:p-3 rounded-xl group-hover:bg-blue-600 transition-colors shadow-md">
+              <div className="em3-card-action bg-slate-900 text-white p-2.5 md:p-3 rounded-xl group-hover:bg-blue-600 transition-colors shadow-md">
                 <ChevronRight size={18} className="md:w-5 md:h-5" />
               </div>
               <span className="text-xs md:text-sm font-bold text-slate-700 group-hover:text-blue-600 transition-colors uppercase tracking-wide">Buka Modul</span>
@@ -255,7 +279,7 @@ export default function PortalIKR() {
           {/* KAD IKR3023 */}
           <button 
             onClick={() => setActiveModule('IKR3023')}
-            className="group text-left bg-white/70 backdrop-blur-xl rounded-[2rem] p-6 md:p-8 border border-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(16,185,129,0.12)] hover:-translate-y-2 hover:border-emerald-200 transition-all duration-500 relative overflow-hidden flex flex-col h-full"
+            className="em3-portal-card group text-left bg-white/70 backdrop-blur-xl rounded-[2rem] p-6 md:p-8 border border-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(16,185,129,0.12)] hover:-translate-y-2 hover:border-emerald-200 transition-all duration-500 relative overflow-hidden flex flex-col h-full"
           >
             <div className="absolute top-0 right-0 w-24 h-24 md:w-32 md:h-32 bg-gradient-to-bl from-emerald-100 to-transparent rounded-bl-full -z-10 transition-transform group-hover:scale-125 duration-700"></div>
             
@@ -275,7 +299,7 @@ export default function PortalIKR() {
             </div>
 
             <div className="relative z-10 mt-auto flex items-center gap-3 md:gap-4">
-              <div className="bg-slate-900 text-white p-2.5 md:p-3 rounded-xl group-hover:bg-emerald-600 transition-colors shadow-md">
+              <div className="em3-card-action bg-slate-900 text-white p-2.5 md:p-3 rounded-xl group-hover:bg-emerald-600 transition-colors shadow-md">
                 <ChevronRight size={18} className="md:w-5 md:h-5" />
               </div>
               <span className="text-xs md:text-sm font-bold text-slate-700 group-hover:text-emerald-600 transition-colors uppercase tracking-wide">Buka Modul</span>

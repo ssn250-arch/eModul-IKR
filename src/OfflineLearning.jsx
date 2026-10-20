@@ -119,7 +119,7 @@ export default function OfflineLearning() {
   return (
     <>
     {expanded && <button type="button" aria-label={en ? 'Close offline settings' : 'Tutup tetapan offline'} onClick={() => setExpanded(false)} className="fixed inset-0 z-[134] bg-slate-950/40 backdrop-blur-[2px] sm:hidden" />}
-    <div data-no-translate className="pointer-events-none fixed bottom-[calc(env(safe-area-inset-bottom)+14px)] left-3 z-[135] max-w-[min(92vw,335px)] sm:bottom-24 sm:left-6" aria-label="Offline Learning Mode">
+    <div data-no-translate className="pointer-events-none fixed bottom-[calc(env(safe-area-inset-bottom)+14px)] right-3 z-[135] max-w-[min(92vw,335px)] sm:bottom-24 sm:right-6" aria-label="Offline Learning Mode">
       {expanded && (
         <section className="pointer-events-auto mb-2 max-h-[min(78dvh,620px)] w-[min(92vw,335px)] overflow-y-auto rounded-[25px] border border-indigo-100 bg-white/95 p-4 text-slate-800 shadow-[0_20px_65px_rgba(15,23,42,.27)] backdrop-blur-xl" aria-label={en ? 'Offline learning settings' : 'Tetapan pembelajaran offline'}>
           <div className="flex items-center justify-between gap-2">
@@ -142,7 +142,7 @@ export default function OfflineLearning() {
           {message && <p role="status" className="mt-2 rounded-lg bg-slate-100 p-2 text-[11px] text-slate-700">{message}</p>}
         </section>
       )}
-      <button type="button" onClick={() => setExpanded(v => !v)} aria-expanded={expanded} aria-label={en ? 'Offline status and settings' : 'Status dan tetapan offline'} className={`pointer-events-auto hidden max-w-full items-center gap-2 rounded-full border bg-white/95 px-3 py-2 text-xs font-bold shadow-lg backdrop-blur-sm transition hover:shadow-xl sm:inline-flex ${online ? 'border-indigo-200 text-indigo-700' : 'border-amber-200 text-amber-700'}`}>
+      <button type="button" onClick={() => setExpanded(v => !v)} aria-expanded={expanded} aria-label={en ? 'Offline status and settings' : 'Status dan tetapan offline'} className={`pointer-events-auto hidden max-w-full items-center gap-2 rounded-full border bg-white/95 px-3 py-2 text-xs font-bold shadow-lg backdrop-blur-sm transition hover:shadow-xl ${online ? 'border-indigo-200 text-indigo-700' : 'border-amber-200 text-amber-700'}`}>
         {online ? <Wifi size={15}/> : <WifiOff size={15}/>}
         <span>{status}</span>
         <ChevronUp size={13} className={`transition-transform ${expanded ? '' : 'rotate-180'}`}/>

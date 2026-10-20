@@ -73,7 +73,7 @@ export default function StudyChatbot({ moduleCode, topics = [], activeTopicId = 
   const clearChat = () => { setMessages(initialAssistant(moduleCode, language)); setDraft(''); };
 
   return (
-    <div onClick={(event) => { if (open && event.target === event.currentTarget) setOpen(false); }} className={open ? "fixed inset-0 z-[200] flex items-end justify-center bg-slate-950/45 backdrop-blur-[2px] sm:inset-auto sm:bottom-6 sm:right-6 sm:block sm:bg-transparent sm:backdrop-blur-none" : "hidden sm:fixed sm:bottom-6 sm:right-6 sm:z-[120] sm:block"} aria-label={`Pembantu Pembelajaran ${moduleCode}`}>
+    <div onClick={(event) => { if (open && event.target === event.currentTarget) setOpen(false); }} className={open ? "fixed inset-0 z-[200] flex items-end justify-center bg-slate-950/45 backdrop-blur-[2px] sm:inset-auto sm:bottom-6 sm:right-6 sm:block sm:bg-transparent sm:backdrop-blur-none" : "hidden"} aria-label={`Pembantu Pembelajaran ${moduleCode}`}>
       <style>{`
         @keyframes emodulChatEnter { from { opacity:0; transform: translateY(14px) scale(.97) } to { opacity:1; transform: translateY(0) scale(1) } }
         @keyframes emodulChatPulse { 0%,100% {box-shadow:0 0 0 0 rgba(79,70,229,.25)} 50% {box-shadow:0 0 0 8px rgba(79,70,229,0)} }

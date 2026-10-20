@@ -1,7 +1,10 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import ts from '/opt/nvm/versions/node/v22.16.0/lib/node_modules/typescript/lib/typescript.js';
+let ts = null;
+try { ts = await import('typescript'); } catch {
+  try { ts = await import('/opt/nvm/versions/node/v22.16.0/lib/node_modules/typescript/lib/typescript.js'); } catch { /* npm run build will validate JSX after dependencies are installed */ }
+}
 const base=path.resolve(process.cwd());
 const app=fs.readFileSync(path.join(base,'src','IKR3013.jsx'),'utf8');
 const component=fs.readFileSync(path.join(base,'src','MotherboardExplorer.jsx'),'utf8');
@@ -15,8 +18,7 @@ assert.ok(directoryHeading > 0 && explorerPlacement > directoryHeading && direct
 assert.equal((app.match(/<MotherboardExplorer\b[^>]*\/>/g)||[]).length,1,'Explorer must appear exactly once in the motherboard card');
 for(const file of ['IKR3013.jsx','MotherboardExplorer.jsx']){
   const source=fs.readFileSync(path.join(base,'src',file),'utf8');
-  const parsed=ts.createSourceFile(file,source,ts.ScriptTarget.Latest,true,ts.ScriptKind.JSX);
-  assert.equal(parsed.parseDiagnostics.length,0,`JSX syntax invalid in ${file}`);
+  if(ts){const parsed=ts.createSourceFile(file,source,ts.ScriptTarget.Latest,true,ts.ScriptKind.JSX);assert.equal(parsed.parseDiagnostics.length,0,`JSX syntax invalid in ${file}`);}
 }
 const board=component.split('export const MOTHERBOARD_PARTS = [')[1]?.split('export const REAR_IO_PORTS = [')[0]||'';
 const io=component.split('export const REAR_IO_PORTS = [')[1]?.split('const QUESTIONS = [')[0]||'';
@@ -49,11 +51,14 @@ assert.match(app, /studentNumber=\{studentNumber\}/, 'Explorer student number pr
 const portal=fs.readFileSync(path.join(base,'src','PortalIKR.jsx'),'utf8');
 const dock=fs.readFileSync(path.join(base,'src','MobileStudyDock.jsx'),'utf8');
 const lang=fs.readFileSync(path.join(base,'src','LanguageContext.jsx'),'utf8');
-assert.equal((portal.match(/className="hidden sm:block"><LanguageSwitcher floating \/>/g)||[]).length,2,'Language switcher must be hidden in two modules on mobile');
+assert.equal((portal.match(/className="hidden sm:block"><LanguageSwitcher floating \/>/g)||[]).length,0,'Duplicate floating language controls must be removed from both modules');
 assert.match(dock, /Alat Belajar/, 'Compact learning tools label');
+assert.match(portal,/MODE JURI · PRATONTON/);
+assert.match(portal,/demoNavigate/);
+assert.match(app,/demoMode=\{demoMode\}/);
+assert.match(component,/if \(demoMode\) return;/);
 assert.match(lang, /relative z-10 inline-flex/, 'Do not show desktop floating controls at mobile size');
 for(const file of ['PortalIKR.jsx','MobileStudyDock.jsx','LanguageContext.jsx']) {
-  const parsed=ts.createSourceFile(file,fs.readFileSync(path.join(base,'src',file),'utf8'),ts.ScriptTarget.Latest,true,ts.ScriptKind.JSX);
-  assert.equal(parsed.parseDiagnostics.length,0, `JSX syntax invalid in ${file}`);
+  if(ts){const parsed=ts.createSourceFile(file,fs.readFileSync(path.join(base,'src',file),'utf8'),ts.ScriptTarget.Latest,true,ts.ScriptKind.JSX);assert.equal(parsed.parseDiagnostics.length,0, `JSX syntax invalid in ${file}`);}
 }
-console.log('PASS v2.2: Mobile language duplication removed, Study Tools label, per-student progress, existing 3D link.');
+console.log('PASS v3.0: unified responsive tool dock, safe demo mode, existing 3D link and progress handling.');

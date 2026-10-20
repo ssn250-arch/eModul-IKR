@@ -62,14 +62,14 @@ function readProgress(studentNumber) {
   } catch { return new Set(); }
 }
 
-export default function MotherboardExplorer({ studentNumber = null }) {
+export default function MotherboardExplorer({ studentNumber = null, demoMode = false }) {
   const {language} = useLanguage();
   const en = language === 'en';
   const [tab,setTab] = useState('board');
   const [category,setCategory] = useState('cpu');
   const [active,setActive] = useState(1);
   const [query,setQuery] = useState('');
-  const [viewed,setViewed] = useState(() => readProgress(studentNumber));
+  const [viewed,setViewed] = useState(() => demoMode ? new Set() : readProgress(studentNumber));
   const [quiz,setQuiz] = useState(false);
   const [quizIndex,setQuizIndex] = useState(0);
   const [selected,setSelected] = useState(null);
@@ -95,23 +95,30 @@ export default function MotherboardExplorer({ studentNumber = null }) {
   const shownTab = quiz && !finished ? question.tab : tab;
   const imageSrc = `${assetRoot}${shownTab === 'board' ? 'motherboard-board.webp' : 'motherboard-rear-io.webp'}`;
   const progressCount = viewed.size;
+  const mapZone = (p) => {
+    if (!p) return '';
+    const vertical = p.y < 34 ? (en ? 'upper' : 'atas') : p.y > 68 ? (en ? 'lower' : 'bawah') : (en ? 'middle' : 'tengah');
+    const horizontal = p.x < 34 ? (en ? 'left' : 'kiri') : p.x > 68 ? (en ? 'right' : 'kanan') : '';
+    return `${en ? 'Photo area:' : 'Kawasan foto:'} ${vertical}${horizontal ? ' ' + horizontal : ''}`;
+  };
   const resetQuiz = ()=>{setQuiz(true);setQuizIndex(0);setSelected(null);setScore(0);setFullscreen(false);};
   const answer = (id)=>{ if(selected !== null) return; setSelected(id); if(id===question.point)setScore(x=>x+1);};
   const next = ()=>{setSelected(null);setQuizIndex(i=>i+1);};
   useEffect(() => {
+    if (demoMode) return;
     try { window.localStorage.setItem(progressKey(studentNumber), JSON.stringify([...viewed])); }
     catch { /* optional private browsing storage */ }
-  }, [viewed, studentNumber]);
+  }, [viewed, studentNumber, demoMode]);
   const viewExisting3D = () => {
     const target = document.getElementById('motherboard-3d-models');
     target?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
   };
   useEffect(()=>{ const esc=(e)=>{if(e.key==='Escape')setFullscreen(false);};window.addEventListener('keydown',esc);return ()=>window.removeEventListener('keydown',esc);},[]);
   useEffect(()=>{if(!fullscreen)return;const saved=document.body.style.overflow;document.body.style.overflow='hidden';return ()=>{document.body.style.overflow=saved;};},[fullscreen]);
-  return <section className="mbx" data-no-translate aria-label="Interactive Motherboard Explorer">
+  return <section className="mbx" data-no-translate aria-label="Explorer Papan Induk">
     <div className="mbx-hero">
       <div className="mbx-brand"><Sparkles size={15}/> IKR3013 <span>•</span> {en?'VISUAL LEARNING':'PEMBELAJARAN VISUAL'} <span className="mbx-version">EXPLORER</span></div>
-      <div className="mbx-hero-row"><div><h3>{en?'Interactive Motherboard Explorer':'Interactive Motherboard Explorer'}</h3><p>{en?'Explore component hotspots on a clean educational motherboard illustration and try a visual quiz.':'Teroka komponen pada ilustrasi papan induk tanpa label berselerak, kemudian cuba kuiz visual.'}</p></div><span className="mbx-hero-icon"><Cpu size={30}/></span></div>
+      <div className="mbx-hero-row"><div><h3>{en?'Explorer Papan Induk':'Explorer Papan Induk'}</h3><p>{en?'Explore component hotspots on a clean educational motherboard illustration and try a visual quiz.':'Teroka komponen pada ilustrasi papan induk tanpa label berselerak, kemudian cuba kuiz visual.'}</p></div><span className="mbx-hero-icon"><Cpu size={30}/></span></div>
       <div className="mbx-hero-stats"><span><Eye size={15}/> {en?'17 board components':'17 komponen papan induk'}</span><span><Zap size={15}/> {en?'6 I/O ports':'6 port I/O'}</span><span><ShieldCheck size={15}/> {en?'Works offline':'Boleh guna offline'}</span></div>
     </div>
 
@@ -132,19 +139,20 @@ export default function MotherboardExplorer({ studentNumber = null }) {
       {quiz && finished ? <div className="mbx-end" role="status"><div className="mbx-end-icon"><CheckCircle2 size={34}/></div><span className="mbx-small-label">{en?'VISUAL QUIZ COMPLETE':'KUIZ VISUAL SELESAI'}</span><strong>{score} / {QUESTIONS.length}</strong><p>{en?'This is a practice activity and does not replace the existing topic mastery quiz.':'Ini latihan pengukuhan dan tidak menggantikan kuiz penguasaan topik sedia ada.'}</p><div className="mbx-end-buttons"><button type="button" onClick={resetQuiz}><RotateCcw size={16}/>{en?'Try again':'Cuba Lagi'}</button><button type="button" className="mbx-light" onClick={()=>{setQuiz(false);chooseTab('board')}}><ArrowLeft size={16}/>{en?'Back to explorer':'Kembali ke Explorer'}</button></div></div> : <>
         <div className="mbx-main">
           <div className="mbx-image-column">
-            <div className="mbx-image-head"><span className="mbx-caption"><span className="mbx-pulse"/>{quiz?(en?'IDENTIFY THE MARKED POINT':'KENAL PASTI TITIK BERTANDA'):(shownTab==='board'?(en?'MOTHERBOARD COMPONENT MAP':'PETA KOMPONEN PAPAN INDUK'):'REAR PANEL I/O')}</span><button type="button" className="mbx-zoom" onClick={()=>setFullscreen(true)}><Maximize2 size={15}/> {en?'Enlarge':'Besarkan'}</button></div>
-            {quiz && !finished && <div className="mbx-quiz-legend"><span className="mbx-quiz-legend-ring" aria-hidden="true"/>{en?'Find the small yellow outline on the photo. The component remains visible.':'Cari cincin kuning kecil pada gambar. Komponen tidak dilindungi oleh penanda.'}</div>}
+            <div className="mbx-image-head"><span className="mbx-caption"><span className="mbx-pulse"/>{quiz?(en?'IDENTIFY THE MARKED POINT':'KENAL PASTI KOMPONEN'):(shownTab==='board'?(en?'MOTHERBOARD COMPONENT MAP':'PETA KOMPONEN PAPAN INDUK'):'REAR PANEL I/O')}</span><button type="button" className="mbx-zoom" onClick={()=>setFullscreen(true)}><Maximize2 size={15}/> {en?'Enlarge':'Besarkan'}</button></div>
+            {quiz && !finished && <div className="mbx-quiz-legend"><span className="mbx-quiz-legend-ring" aria-hidden="true"/>{en?'Find the yellow outline; zoom in if needed.':'Cari cincin kuning; besarkan gambar jika perlu.'}<strong className="mbx-quiz-zone">{mapZone(target)}</strong></div>}
             <div className="mbx-scroll" ref={scrollRef} tabIndex={0} aria-label={en?'Scrollable image with numbered component markers':'Imej dengan titik komponen bernombor, boleh ditatal ke kiri dan kanan'}>
               <div className={`mbx-map ${shownTab==='io'?'mbx-map-io':'mbx-map-board'}`}>
                 <img src={imageSrc} alt={shownTab==='board'?'Ilustrasi motherboard dan titik komponen bernombor':'Gambar panel port I/O belakang motherboard'} loading="lazy" draggable="false" />
                 {quiz && !finished && target ? <span className="mbx-quiz-target" style={{left:`${target.x}%`,top:`${target.y}%`}} role="img" aria-label={en?'Hollow yellow circle marking the component to identify':'Cincin kuning berongga menandakan komponen yang perlu dikenal pasti'} /> : imagePart.map(p=><button key={`${shownTab}-${p.id}`} type="button" className={`mbx-pin ${active===p.id?'is-active':''}`} style={{left:`${p.x}%`,top:`${p.y}%`}} onClick={()=>pick(p)} aria-label={`${p.id}. ${screenName(p)}`} aria-pressed={active===p.id}>{p.id}</button>)}
               </div>
             </div>
+            {!quiz && <div className="em3-locator" aria-live="polite"><span className="em3-locator-dot" aria-hidden="true"/><span>{en ? 'Selected location' : 'Lokasi dipilih'}:</span> <strong>{current.code} · {screenName(current)}</strong><span className="em3-locator-hint">{en?'Tap the numbered pin to learn more':'Tekan titik bernombor untuk belajar'}</span></div>}
             <div className="mbx-mobile-tip"><Lightbulb size={15}/>{en?'Tap a marker to view its function; enlarge when needed.':'Sentuh titik untuk melihat fungsi; besarkan jika perlu.'}</div>
             <div className="mbx-map-footer"><span><CheckCircle2 size={15}/>{en?'Components explored:':'Komponen diterokai:'} <b>{normalizeStatus(progressCount,23)}</b></span><button type="button" onClick={()=>setFullscreen(true)}><Expand size={15}/>{en?'Full view':'Paparan Penuh'}</button></div>
           </div>
 
-          {quiz ? <div className="mbx-detail mbx-quiz" aria-live="polite"><div className="mbx-step-label">{en?'VISUAL QUIZ':'KUIZ VISUAL'} · {quizIndex+1}/{QUESTIONS.length}</div><div className="mbx-progress"><span style={{width:`${((quizIndex+(selected===null?0:1))/QUESTIONS.length)*100}%`}}/></div><h4>{en?'Which component is outlined by the yellow ring?':'Apakah nama komponen yang dilingkari kuning pada gambar?'}</h4><p className="mbx-muted">{en?'Look at the small yellow ring, identify the component and select one answer.':'Perhatikan cincin kuning kecil, kenal pasti komponen dan pilih satu jawapan.'}</p><div className="mbx-choices">{question.options.map((id,idx)=>{const option=questionParts.find(p=>p.id===id);const answered=selected!==null;return <button key={id} type="button" onClick={()=>answer(id)} disabled={answered} className={answered&&id===question.point?'correct':answered&&id===selected?'wrong':''}><span>{String.fromCharCode(65+idx)}</span>{screenName(option)}{answered&&id===question.point?<CheckCircle2 size={19}/>:null}</button>;})}</div>{selected!==null&&<div className={`mbx-feedback ${selected===question.point?'is-correct':'is-incorrect'}`}><strong>{selected===question.point?(en?'Correct!':'Betul!'):(en?'Not quite.':'Belum tepat.')}</strong><p>{screenRole(target)}</p><button type="button" onClick={next}>{quizIndex===QUESTIONS.length-1?(en?'View score':'Lihat markah'):(en?'Next question':'Soalan seterusnya')}<ArrowRight size={15}/></button></div>}</div> :
+          {quiz ? <div className="mbx-detail mbx-quiz" aria-live="polite"><div className="mbx-step-label">{en?'VISUAL QUIZ':'KUIZ VISUAL'} · {quizIndex+1}/{QUESTIONS.length}</div><div className="mbx-progress"><span style={{width:`${((quizIndex+(selected===null?0:1))/QUESTIONS.length)*100}%`}}/></div><h4>{en?'Which component is outlined by the yellow ring?':'Apakah nama komponen yang dilingkari kuning pada gambar?'}</h4><p className="mbx-muted">{en?'Look at the small yellow ring, identify the component and select one answer.':'Lihat kedudukan cincin pada gambar, kemudian pilih nama komponen yang tepat.'}</p><div className="mbx-choices">{question.options.map((id,idx)=>{const option=questionParts.find(p=>p.id===id);const answered=selected!==null;return <button key={id} type="button" onClick={()=>answer(id)} disabled={answered} className={answered&&id===question.point?'correct':answered&&id===selected?'wrong':''}><span>{String.fromCharCode(65+idx)}</span>{screenName(option)}{answered&&id===question.point?<CheckCircle2 size={19}/>:null}</button>;})}</div>{selected!==null&&<div className={`mbx-feedback ${selected===question.point?'is-correct':'is-incorrect'}`}><strong>{selected===question.point?(en?'Correct!':'Betul!'):(en?'Not quite.':'Belum tepat.')}</strong><p>{screenRole(target)}</p><button type="button" onClick={next}>{quizIndex===QUESTIONS.length-1?(en?'View score':'Lihat markah'):(en?'Next question':'Soalan seterusnya')}<ArrowRight size={15}/></button></div>}</div> :
           <div className="mbx-detail" aria-live="polite"><div className="mbx-detail-top"><span className="mbx-small-label">{en?'SELECTED COMPONENT':'KOMPONEN DIPILIH'}</span><span className="mbx-id">{current.code}</span></div><div className="mbx-detail-title"><span className="mbx-detail-index">{current.id}</span><h4>{screenName(current)}</h4></div><div className="mbx-section-label"><BookOpen size={15}/>{en?'Function':'Fungsi'}</div><p>{screenRole(current)}</p><div className="mbx-tip"><Lightbulb size={17}/><div><strong>{en?'Workshop tip':'Tip Amali'}</strong><span>{screenTip(current)}</span></div></div><div className="mbx-navigation"><button type="button" onClick={()=>pick(parts[(parts.indexOf(current)+parts.length-1)%parts.length])}><ChevronLeft size={16}/>{en?'Previous':'Sebelum'}</button><button type="button" onClick={()=>pick(parts[(parts.indexOf(current)+1)%parts.length])}>{en?'Next':'Seterusnya'}<ChevronRight size={16}/></button></div></div>}
         </div>
         {!quiz&&<div className="mbx-explore-progress"><div><span>{en?'Exploration progress':'Kemajuan penerokaan'}</span><strong>{progressCount} / 23</strong></div><div className="mbx-explore-track"><span style={{width:`${(progressCount/23)*100}%`}}/></div></div>}

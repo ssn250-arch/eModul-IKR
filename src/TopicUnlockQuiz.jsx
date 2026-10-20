@@ -15,9 +15,9 @@ export const getStudentNumber = () => {
 
 // Enumerate 5-question combinations in increasing order. The first 30
 // permutations are guaranteed distinct when the bank has >= 8 questions.
-export default function TopicUnlockQuiz({ moduleCode, topic, onBack, onPassed, onNextTopic, onStudentSelected, isLastTopic = false }) {
+export default function TopicUnlockQuiz({ moduleCode, topic, onBack, onPassed, onNextTopic, onStudentSelected, isLastTopic = false, demoMode = false }) {
   const { language } = useLanguage();
-  const [studentNumber, setStudentNumber] = useState(getStudentNumber);
+  const [studentNumber, setStudentNumber] = useState(() => demoMode ? 1 : getStudentNumber());
   const [pendingStudent, setPendingStudent] = useState('');
   const [attempt, setAttempt] = useState(0);
   const [current, setCurrent] = useState(0);
@@ -32,6 +32,7 @@ export default function TopicUnlockQuiz({ moduleCode, topic, onBack, onPassed, o
   const confirmStudent = () => {
     const parsed = Number(pendingStudent);
     if (!Number.isInteger(parsed) || parsed < 1 || parsed > MAX_STUDENTS) return;
+    if (demoMode) return;
     try { localStorage.setItem(STUDENT_KEY, String(parsed)); } catch { /* Storan pelayar mungkin disekat. */ }
     onStudentSelected?.(parsed);
     setStudentNumber(parsed);
@@ -53,7 +54,7 @@ export default function TopicUnlockQuiz({ moduleCode, topic, onBack, onPassed, o
     else {
       setIsFinished(true);
       const score = questions.reduce((sum, q, i) => sum + (answers[i] === q.correct ? 1 : 0), 0);
-      if (score >= UNLOCK_PASS_MARK) onPassed(score);
+      if (!demoMode && score >= UNLOCK_PASS_MARK) onPassed(score);
     }
   };
 
@@ -67,6 +68,7 @@ export default function TopicUnlockQuiz({ moduleCode, topic, onBack, onPassed, o
   const enterStudent = !studentNumber || showChangeStudent;
   return (
     <div className="animate-fade-in w-full space-y-5">
+      {demoMode && <p className="em3-inline-demo" role="status">MODE JURI — kuiz contoh. Skor ini tidak membuka atau menyimpan kemajuan pelajar.</p>}
       <style>{`
         @keyframes unlockEnter { from { opacity: 0; transform: translateY(14px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
         @keyframes unlockGlow { 0%,100% { box-shadow: 0 0 0 0 rgba(14,165,233,.14); } 50% { box-shadow: 0 0 0 12px rgba(14,165,233,0); } }
@@ -77,11 +79,11 @@ export default function TopicUnlockQuiz({ moduleCode, topic, onBack, onPassed, o
       <section className="rounded-2xl bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-800 px-5 py-7 text-white shadow-xl sm:px-8">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <button onClick={onBack} className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/10 px-4 py-2 text-sm font-bold transition hover:bg-white/20"><ArrowLeft size={16}/> Kembali ke Nota</button>
-          <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-xs font-bold"><LockKeyhole size={15}/> Kuiz Unlock • {moduleCode}</span>
+          <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-xs font-bold"><LockKeyhole size={15}/> {demoMode ? 'Kuiz Demo' : 'Kuiz Unlock'} • {moduleCode}</span>
         </div>
         <div className="mt-6 flex items-center gap-3"><Sparkles size={30} className="text-amber-300"/><h2 className="text-2xl font-black sm:text-3xl">{topic.title}</h2></div>
         <p className="mt-2 text-sm leading-relaxed text-blue-100">Baca nota dahulu, kemudian jawab 5 soalan untuk membuka kad berikutnya. Markah lulus: <strong>{UNLOCK_PASS_MARK}/5</strong>.</p>
-        {!enterStudent && <div className="mt-5 flex flex-wrap items-center gap-3 text-xs"><span className="rounded-full bg-white/15 px-3 py-1.5 font-bold">Pelajar #{studentNumber}</span><button onClick={() => { setPendingStudent(String(studentNumber)); setShowChangeStudent(true); }} className="underline decoration-blue-200 underline-offset-2">Tukar nombor pelajar</button></div>}
+        {!enterStudent && <div className="mt-5 flex flex-wrap items-center gap-3 text-xs"><span className="rounded-full bg-white/15 px-3 py-1.5 font-bold">Pelajar #{studentNumber}</span><button disabled={demoMode} onClick={() => { setPendingStudent(String(studentNumber)); setShowChangeStudent(true); }} className="underline decoration-blue-200 underline-offset-2">Tukar nombor pelajar</button></div>}
       </section>
       {enterStudent ? (
         <section className="unlock-enter rounded-2xl border border-blue-100 bg-white p-7 shadow-lg">
@@ -99,9 +101,9 @@ export default function TopicUnlockQuiz({ moduleCode, topic, onBack, onPassed, o
       ) : isFinished ? (
         <section className="unlock-enter rounded-2xl border border-slate-200 bg-white p-7 text-center shadow-xl sm:p-10" aria-live="polite">
           <div className={`unlock-glow mx-auto flex h-20 w-20 items-center justify-center rounded-full ${passed ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-600'}`}>{passed ? <Award size={42}/> : <RefreshCw size={40}/>}</div>
-          <h3 className="mt-5 text-3xl font-black text-slate-800">{passed ? 'Tahniah! Kad Berjaya Dibuka' : 'Teruskan Usaha!'}</h3>
+          <h3 className="mt-5 text-3xl font-black text-slate-800">{demoMode ? 'Latihan Demo Selesai' : (passed ? 'Tahniah! Kad Berjaya Dibuka' : 'Teruskan Usaha!')}</h3>
           <p className="mt-3 text-5xl font-black text-blue-700">{result}<span className="text-2xl text-slate-400">/5</span></p>
-          <p className="mt-3 text-sm text-slate-600">{passed ? (isLastTopic ? 'Anda telah melengkapkan semua checkpoint modul.' : 'Topik seterusnya kini boleh diakses.') : 'Anda belum mencapai 3/5. Ulang kaji dan cuba set soalan baharu.'}</p>
+          <p className="mt-3 text-sm text-slate-600">{demoMode ? 'Sesi pratonton sahaja: markah ini tidak direkodkan dan tidak mengubah status topik sebenar.' : passed ? (isLastTopic ? 'Anda telah melengkapkan semua checkpoint modul.' : 'Topik seterusnya kini boleh diakses.') : 'Anda belum mencapai 3/5. Ulang kaji dan cuba set soalan baharu.'}</p>
           <div className="mx-auto mt-6 max-w-xl space-y-2 text-left">
             {questions.map((question, index) => <div key={index} className="rounded-xl border border-slate-100 bg-slate-50 p-3 text-sm">
               <div className="flex items-start gap-2">{answers[index] === question.correct ? <CheckCircle size={17} className="mt-0.5 shrink-0 text-emerald-600"/> : <XCircle size={17} className="mt-0.5 shrink-0 text-rose-500"/>}<span className="font-semibold text-slate-800">{index + 1}. {question.question}</span></div>

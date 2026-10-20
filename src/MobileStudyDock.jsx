@@ -53,7 +53,7 @@ export default function MobileStudyDock({ moduleCode = null }) {
   };
 
   return (
-    <div data-no-translate className="fixed bottom-[calc(env(safe-area-inset-bottom)+16px)] right-3 z-[125] sm:hidden" aria-label={label}>
+    <div data-no-translate className="fixed bottom-[calc(env(safe-area-inset-bottom)+16px)] right-3 sm:right-6 z-[125]" aria-label={label}>
       {open && <button type="button" tabIndex={-1} aria-label={language === 'en' ? 'Close tools' : 'Tutup alat'} onClick={() => setOpen(false)} className="fixed inset-0 z-0 bg-slate-950/20 backdrop-blur-[2px]" />}
       <div className={`relative z-10 origin-bottom-right transition-all duration-200 motion-reduce:transition-none ${visible || open ? 'translate-y-0 opacity-100' : 'translate-y-[calc(100%+38px)] opacity-0 pointer-events-none'}`}>
         {open && <section role="dialog" aria-label={label} className="mb-3 w-[min(310px,calc(100vw-24px))] overflow-hidden rounded-[26px] border border-white/80 bg-white/95 text-slate-800 shadow-[0_22px_65px_rgba(15,23,42,.23)] backdrop-blur-2xl">
@@ -69,7 +69,7 @@ export default function MobileStudyDock({ moduleCode = null }) {
               <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-blue-700">{online ? <CloudDownload size={19}/> : <WifiOff size={19}/>}</span>
               <span className="min-w-0 flex-1"><span className="block text-xs font-extrabold">{language === 'en' ? 'Offline Learning' : 'Simpan Offline'}</span><span className="block text-[10px] text-slate-500">{online ? (language === 'en' ? 'Save notes & learning progress' : 'Simpan nota & kemajuan') : (language === 'en' ? 'Offline mode' : 'Mod offline')}</span></span>
             </button>
-            <div className="rounded-2xl border border-slate-100 bg-slate-50 px-3 py-2.5">
+            <div className={`rounded-2xl border border-slate-100 bg-slate-50 px-3 py-2.5 ${!moduleCode ? 'sm:hidden' : ''}`}>
               <div className="mb-2 flex items-center gap-2 text-xs font-extrabold"><Languages size={17} className="text-indigo-600" />{language === 'en' ? 'Language' : 'Pilihan Bahasa'}</div>
               <div className="grid grid-cols-2 gap-2" role="group" aria-label="Pilih bahasa">
                 {[['ms','BM'],['en','EN']].map(([code,text]) => <button key={code} type="button" lang={code === 'ms' ? 'ms-MY' : 'en'} aria-pressed={language === code} onClick={() => switchTo(code)} className={`min-h-11 rounded-xl px-3 py-2 text-xs font-extrabold transition-colors focus-visible:outline-2 focus-visible:outline-indigo-600 ${language === code ? 'bg-indigo-700 text-white shadow-md' : 'border border-slate-200 bg-white text-slate-700'}`}>{text} {language === code ? '✓' : ''}</button>)}
