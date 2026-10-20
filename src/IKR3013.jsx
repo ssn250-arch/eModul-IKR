@@ -1,3 +1,4 @@
+import { InspectionWorkshopGuide, SelectionWorkshopGuide } from './IKR3013WorkshopGuides';
 import MotherboardExplorer from './MotherboardExplorer';
 import OfflineEmbed from './OfflineEmbed';
 import { openOnlineResource } from './offlineSupport';
@@ -3596,97 +3597,17 @@ export default function ModuleIKR3013({ onBackToPortal, demoMode = false, demoTa
     </div>
   );
 
+  // Panduan amali visual SKM Tahap 3 (offline, tidak ubah kemajuan/markah utama).
   const renderInspection = () => (
     <div className="animate-fade-in w-full">
-      <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
-        <div className="bg-yellow-500 p-8 text-white relative">
-          <button onClick={() => { setView('menu'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="mb-4 inline-flex items-center gap-2 text-white bg-black/10 hover:bg-black/20 px-4 py-2 rounded-xl transition-all text-sm font-bold backdrop-blur-sm border border-white/20">
-            <Home size={18} /> Menu Utama
-          </button>
-          <h2 className="text-3xl font-bold flex items-center gap-3"><AlertTriangle size={36}/> Prosedur Pemeriksaan & Penyelenggaraan</h2>
-          <p className="opacity-90 mt-2 text-lg">Langkah keselamatan dan amalan terbaik sebelum, semasa, dan selepas mengendalikan perkakasan.</p>
-        </div>
-        
-        <div className="p-8 space-y-8">
-          <div className="bg-yellow-50 p-6 rounded-xl border border-yellow-200">
-            <h3 className="text-xl font-bold text-yellow-800 mb-4 flex items-center gap-2"><ShieldCheck size={24}/> Keselamatan Diri (Anti-Statik)</h3>
-            <ul className="space-y-3">
-              <li className="flex items-start gap-3"><Check className="text-yellow-600 shrink-0 mt-1"/> <span className="text-gray-700">Sentiasa matikan bekalan kuasa (PSU) dan cabut palam dari soket dinding.</span></li>
-              <li className="flex items-start gap-3"><Check className="text-yellow-600 shrink-0 mt-1"/> <span className="text-gray-700">Gunakan gelang tangan anti-statik (ESD Wrist Strap) atau sentuh bahagian besi casing untuk membuang cas statik badan.</span></li>
-              <li className="flex items-start gap-3"><Check className="text-yellow-600 shrink-0 mt-1"/> <span className="text-gray-700">Elakkan bekerja di atas permaidani.</span></li>
-            </ul>
-          </div>
-
-          <div className="bg-blue-50 p-6 rounded-xl border border-blue-200">
-            <h3 className="text-xl font-bold text-blue-800 mb-4 flex items-center gap-2"><Search size={24}/> Pemeriksaan Visual (Visual Inspection)</h3>
-            <ul className="space-y-3">
-              <li className="flex items-start gap-3"><Check className="text-blue-600 shrink-0 mt-1"/> <span className="text-gray-700">Periksa kapasitor pada motherboard (pastikan tiada yang kembung atau bocor).</span></li>
-              <li className="flex items-start gap-3"><Check className="text-blue-600 shrink-0 mt-1"/> <span className="text-gray-700">Periksa kesan terbakar (burn marks) atau bau hangit pada komponen.</span></li>
-              <li className="flex items-start gap-3"><Check className="text-blue-600 shrink-0 mt-1"/> <span className="text-gray-700">Pastikan kipas (CPU, GPU, Casing) tidak tersangkut habuk tebal.</span></li>
-            </ul>
-          </div>
-
-          <div className="bg-green-50 p-6 rounded-xl border border-green-200">
-            <h3 className="text-xl font-bold text-green-800 mb-4 flex items-center gap-2"><Wrench size={24}/> Penyelenggaraan Berkala</h3>
-            <ul className="space-y-3">
-              <li className="flex items-start gap-3"><Check className="text-green-600 shrink-0 mt-1"/> <span className="text-gray-700">Bersihkan habuk menggunakan 'Compressed Air' setiap 3-6 bulan.</span></li>
-              <li className="flex items-start gap-3"><Check className="text-green-600 shrink-0 mt-1"/> <span className="text-gray-700">Ganti 'Thermal Paste' CPU setiap 1-2 tahun untuk pengaliran haba optimum.</span></li>
-              <li className="flex items-start gap-3"><Check className="text-green-600 shrink-0 mt-1"/> <span className="text-gray-700">Kemas kini BIOS dan pemacu peranti (drivers) untuk kestabilan sistem.</span></li>
-            </ul>
-          </div>
-        </div>
-      </div>
+      <InspectionWorkshopGuide demoMode={demoMode} onBack={() => setView('menu')} />
       <BackButton />
     </div>
   );
 
   const renderSelectionGuide = () => (
     <div className="animate-fade-in w-full">
-      <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
-        <div className="bg-purple-600 p-8 text-white relative">
-          <button onClick={() => { setView('menu'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="mb-4 inline-flex items-center gap-2 text-white bg-black/10 hover:bg-black/20 px-4 py-2 rounded-xl transition-all text-sm font-bold backdrop-blur-sm border border-white/20">
-            <Home size={18} /> Menu Utama
-          </button>
-          <h2 className="text-3xl font-bold flex items-center gap-3"><ShoppingCart size={36}/> Panduan Pemilihan & Keserasian</h2>
-          <p className="opacity-90 mt-2 text-lg">Bagaimana untuk memilih komponen yang serasi antara satu sama lain.</p>
-        </div>
-        
-        <div className="p-8 space-y-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="border-2 border-gray-100 rounded-xl p-6 hover:border-purple-300 transition-colors">
-              <div className="w-12 h-12 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mb-4"><Cpu size={24}/></div>
-              <h3 className="text-xl font-bold text-gray-800 mb-3">CPU & Motherboard</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">
-                Ini adalah pasangan paling kritikal. CPU Intel perlukan Motherboard Intel (soket LGA1700 dsb). CPU AMD perlukan Motherboard AMD (soket AM4/AM5). Anda tidak boleh mencampur-adukkannya. Periksa generasi soket sebelum membeli.
-              </p>
-            </div>
-
-            <div className="border-2 border-gray-100 rounded-xl p-6 hover:border-purple-300 transition-colors">
-              <div className="w-12 h-12 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mb-4"><MemoryStick size={24}/></div>
-              <h3 className="text-xl font-bold text-gray-800 mb-3">RAM & Motherboard</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">
-                Pastikan sama ada Motherboard anda menyokong DDR4 atau DDR5. Ia tidak "backwards compatible". Kelajuan pemindahan memori (MT/s) juga tertakluk kepada had yang disokong oleh papan induk dan CPU.
-              </p>
-            </div>
-
-            <div className="border-2 border-gray-100 rounded-xl p-6 hover:border-purple-300 transition-colors">
-              <div className="w-12 h-12 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mb-4"><BatteryCharging size={24}/></div>
-              <h3 className="text-xl font-bold text-gray-800 mb-3">PSU & Komponen (Wattage)</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">
-                Kira jumlah penggunaan kuasa (TDP) CPU dan Kad Grafik anda. Sentiasa tambah sekurang-kurangnya 20% - 30% kuasa lebihan pada kapasiti PSU (Headroom). Contoh: Jika sistem guna 400W, beli PSU 550W atau 600W.
-              </p>
-            </div>
-
-            <div className="border-2 border-gray-100 rounded-xl p-6 hover:border-purple-300 transition-colors">
-              <div className="w-12 h-12 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mb-4"><Monitor size={24}/></div>
-              <h3 className="text-xl font-bold text-gray-800 mb-3">Casing (Form Factor)</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">
-                Pastikan casing cukup besar untuk memuatkan saiz Motherboard (ATX, Micro-ATX, Mini-ITX). Juga, ukur panjang maksimum Kad Grafik (GPU Clearance) dan ketinggian Kipas CPU (Cooler Clearance).
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <SelectionWorkshopGuide demoMode={demoMode} onBack={() => setView('menu')} />
       <BackButton />
     </div>
   );

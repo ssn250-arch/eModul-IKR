@@ -19,7 +19,8 @@
     "test:offline": "node scripts/test-offline.mjs",
     "test:motherboard": "node scripts/test-motherboard.mjs",
     "test:quiz-marker": "node scripts/test-quiz-marker.mjs",
-    "test:v3": "node scripts/test-v3-premium.mjs"
+    "test:v3": "node scripts/test-v3-premium.mjs",
+    "test:workshop": "node scripts/test-workshop-guides.mjs"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.2.4",

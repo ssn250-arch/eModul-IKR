@@ -1,0 +1,14 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+const guide=fs.readFileSync('src/IKR3013WorkshopGuides.jsx','utf8');
+const module=fs.readFileSync('src/IKR3013.jsx','utf8');
+assert.match(module,/import \{ InspectionWorkshopGuide, SelectionWorkshopGuide \} from '\.\/IKR3013WorkshopGuides'/);
+for(const name of ['InspectionWorkshopGuide','SelectionWorkshopGuide']) assert.match(module,new RegExp('<'+name+' demoMode=\\{demoMode\\}'));
+for(const visual of ['EsdVisual','CapacitorVisual','FanVisual','WorkflowVisual','CpuVisual','RamVisual','PsuVisual','CaseVisual']) assert.match(guide,new RegExp('function '+visual+'\\('));
+for(const name of ['SOP Keselamatan & ESD','Pemeriksaan Visual Komponen','Kipas, Haba & Penyelenggaraan','Ujian Selamat & Rekod Kerja','CPU ↔ Motherboard','RAM DDR4 ↔ DDR5','Pemilihan PSU','Motherboard ↔ Casing']) assert.ok(guide.includes(name),name);
+assert.match(guide,/import\.meta\.env\.BASE_URL/);
+assert.doesNotMatch(guide.replace(/\/\*[\s\S]*?\*\//g,''),/fetch\(|localStorage|firebase|sessionStorage/);
+assert.match(guide,/setAnswers/);
+assert.match(guide,/demoMode=|demoMode=false/);
+assert.ok(fs.existsSync('public/motherboard-explorer/motherboard-board.webp'));
+console.log('PASS: 8 visual lessons, local photo, formative exercises, no storage/network calls, Mode Juri integration.');
