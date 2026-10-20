@@ -76,7 +76,8 @@ import {
   Terminal,
   Mouse,
   Keyboard,
-  Headphones
+  Headphones,
+  Eye,
 } from 'lucide-react';
 import TopicUnlockQuiz, { UNLOCK_PASS_MARK, getStudentNumber } from './TopicUnlockQuiz';
 

@@ -14,6 +14,9 @@ assert.match(quiz,/if \(demoMode\) return;/);
 assert.match(explorer,/if \(demoMode\) return;/);
 for(const code of ['IKR3013','IKR3023']){
  const m=read(`${code}.jsx`);
+ // Regression: juri banner must import the Eye icon used at render time.
+ assert.match(m, /\bEye\s*,?[\s\S]*?\} from 'lucide-react'/);
+ assert.match(m, /<Eye\s+size=\{17\}/);
  assert.match(m,/!demoMode && index > unlockedTopicIndex/);
  assert.match(m,/if \(demoMode \|\| score < UNLOCK_PASS_MARK/);
  assert.match(m,/!demoMode && studentNumber\) localStorage.setItem/);

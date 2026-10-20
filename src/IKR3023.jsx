@@ -64,7 +64,8 @@ import {
   Scissors,
   ListOrdered,
   PlayCircle,
-  CheckSquare
+  CheckSquare,
+  Eye,
 } from 'lucide-react';
 import TopicUnlockQuiz, { UNLOCK_PASS_MARK, getStudentNumber } from './TopicUnlockQuiz';
 
