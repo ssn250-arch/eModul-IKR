@@ -1,3 +1,4 @@
+import IKR3013IOWorkshop from './IKR3013IOWorkshop';
 import { InspectionWorkshopGuide, SelectionWorkshopGuide } from './IKR3013WorkshopGuides';
 import MotherboardExplorer from './MotherboardExplorer';
 import OfflineEmbed from './OfflineEmbed';
@@ -3502,6 +3503,9 @@ export default function ModuleIKR3013({ onBackToPortal, demoMode = false, demoTa
                   </div>
                 </div>
               )}
+
+              {/* SKM Tahap 3: kenal peranti, aliran data dan diagnostik interaktif */}
+              {activeTopic.id === 'io' && <IKR3013IOWorkshop language={language} />}
 
               {/* INPUT/OUTPUT CUSTOM INFOGRAPHICS */}
               {activeTopic.id === 'io' && (

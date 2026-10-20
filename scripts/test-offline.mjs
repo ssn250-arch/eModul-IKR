@@ -18,7 +18,9 @@ assert.match(m3013, /<OfflineEmbed/);
 assert.match(m3023, /<OfflineEmbed/);
 assert.doesNotMatch(m3013 + m3023, /<iframe/);
 assert.match(m3013, /openOnlineResource\('https:\/\/pcnexus\.netlify\.app\/', language\)/);
-assert.match(m3023, /openOnlineResource\('https:\/\/cablelabx\.netlify\.app\/', language\)/);
+assert.match(m3023, /href="https:\/\/cablelab2026\.netlify\.app\/index\.html"/);
+assert.match(m3023, /href="https:\/\/cablelabx\.netlify\.app\/"/);
+assert.match(m3023, /disabled=\{!demoMode && unlockedTopicIndex < topics\.length\}/);
 
 const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'emodul-offline-test-'));
 try {

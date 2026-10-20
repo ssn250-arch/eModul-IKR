@@ -1,5 +1,4 @@
 import OfflineEmbed from './OfflineEmbed';
-import { openOnlineResource } from './offlineSupport';
 import { EnglishStudyGuide } from './EnglishGuides';
 import { useLanguage } from './LanguageContext';
 import { translateVisibleText } from './translations.js';
@@ -450,6 +449,18 @@ const ethernetEvolutionData = [
   { category: 'Cat6A', speed: '10 Gbps', freq: '500 MHz', icon: <TrendingUp size={24} className="text-rose-400"/>, bgColor: 'bg-rose-900/20', borderColor: 'border-rose-500/30', headerColor: 'text-rose-400', pros: ['Kelajuan maksimum stabil.'], cons: ['Sangat mahal & rumit.'], aplikasi: 'Pusat Data (Data Center).' }
 ];
 
+// Foto alatan sebenar pilihan pengajar. Tambah fail ke src/assets/tool-photos/,
+// kemudian build semula. Jika belum dibekalkan, ilustrasi SVG asal kekal.
+const toolPhotoFiles = import.meta.glob('./assets/tool-photos/*.{jpg,jpeg,png,webp}', { eager: true, query: '?url', import: 'default' });
+const toolPhotoNames = ['crimping-tool', 'punch-down-tool', 'jacket-stripper', 'wire-cutter', 'long-nose-pliers', 'screwdriver'];
+const practicalToolNotes = [
+  { use: 'Masukkan konduktor mengikut susunan T568A/B, semak kedudukan, kemudian crimp.', safety: 'Pastikan jenis plug 8P8C serasi dengan kabel dan alat.' },
+  { use: 'Susun wayar pada terminal IDC, letak mata alat pada slot, kemudian tekan tegak.', safety: 'Pastikan sisi pemotong menghadap ke arah lebihan wayar.' },
+  { use: 'Laraskan bilah, putar perlahan pada jaket kabel, kemudian tarik jaket.', safety: 'Jangan calarkan penebat setiap konduktor.' },
+  { use: 'Ukur panjang yang diperlukan, kemudian potong tegak dan kemas.', safety: 'Jauhkan jari daripada mata pemotong.' },
+  { use: 'Pegang wayar/objek kecil dengan lembut dalam ruang sempit.', safety: 'Jangan gunakan sebagai pengganti punch-down untuk terminal IDC.' },
+  { use: 'Pilih hujung dan saiz yang tepat sebelum mengetatkan skru.', safety: 'Putuskan kuasa pada peralatan elektrik sebelum kerja yang berkaitan.' },
+];
 const toolsData = [
   {
     name: "Crimping Tool", icon: <Wrench size={32} className="text-blue-500"/>, color: "blue",
@@ -634,6 +645,7 @@ export default function ModuleIKR3023({ onBackToPortal, demoMode = false, demoTa
   const [recResult, setRecResult] = useState(null);
   const arContainerRef = useRef(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [showCableLabLinks, setShowCableLabLinks] = useState(false);
 
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, [view, activeTopic]);
   useEffect(() => { try { if (!demoMode && studentNumber) localStorage.setItem(`ikr3023_quiz_unlock_v4_${studentNumber}`, unlockedTopicIndex.toString()); } catch (e) {} }, [unlockedTopicIndex, studentNumber, demoMode]);
@@ -904,16 +916,18 @@ export default function ModuleIKR3023({ onBackToPortal, demoMode = false, demoTa
 
             <button
               type="button"
-              disabled={unlockedTopicIndex < topics.length}
-              onClick={() => openOnlineResource('https://cablelabx.netlify.app/', language)}
+              disabled={!demoMode && unlockedTopicIndex < topics.length}
+              onClick={() => setShowCableLabLinks(current => !current)}
+              aria-expanded={showCableLabLinks}
+              aria-controls="cablelabx-final-links"
               className={`relative flex flex-col items-center justify-center p-6 bg-white rounded-xl shadow-md transition-all duration-300 border-t-4 text-center h-full ${!demoMode && unlockedTopicIndex < topics.length ? 'opacity-60 cursor-not-allowed border-t-gray-400' : 'hover:shadow-xl hover:scale-[1.02] border-t-green-500 ring-2 ring-green-400/50 ring-offset-2'}`}
             >
               <div className={`p-3 rounded-full mb-3 ${!demoMode && unlockedTopicIndex < topics.length ? 'bg-gray-100 text-gray-500' : 'bg-green-100 text-green-600'}`}>
                 {!demoMode && unlockedTopicIndex < topics.length ? <Lock size={28} /> : <CheckCircle size={28} />}
               </div>
               <h3 className="text-lg font-bold text-gray-800">Penilaian Akhir • CableLabX</h3>
-              <p className="text-gray-500 text-xs mt-1">{!demoMode && unlockedTopicIndex < topics.length ? 'Lulus semua kuiz topik dahulu' : 'Buka sistem penilaian luar di tab baharu.'}</p>
-              {unlockedTopicIndex >= topics.length && <ExternalLink size={16} className="mt-2 text-green-600"/>}
+              <p className="text-gray-500 text-xs mt-1">{!demoMode && unlockedTopicIndex < topics.length ? 'Lulus semua kuiz topik dahulu' : 'Klik untuk pilih pautan penilaian luar.'}</p>
+              {(demoMode || unlockedTopicIndex >= topics.length) && <ExternalLink size={16} className="mt-2 text-green-600"/>}
             </button>
 
             <button onClick={() => setView('ar')} className="flex flex-col items-center justify-center p-6 bg-white rounded-xl shadow-md hover:shadow-xl hover:scale-[1.02] transition-all duration-200 border-t-4 border-t-indigo-500 text-center h-full">
@@ -922,6 +936,19 @@ export default function ModuleIKR3023({ onBackToPortal, demoMode = false, demoTa
               <p className="text-gray-500 text-xs mt-1">Lihat model 3D perkakasan rak server.</p>
             </button>
         </div>
+
+        {(demoMode || unlockedTopicIndex >= topics.length) && showCableLabLinks && (
+          <section id="cablelabx-final-links" className="mx-4 mt-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-5 shadow-sm" aria-label="Pautan CableLabX">
+            <h3 className="text-lg font-extrabold text-emerald-950">Buka Penilaian Akhir CableLabX</h3>
+            <p className="text-sm text-emerald-900 mt-1">Pautan di bawah dibuka terus melalui pelayar (elak sekatan pop-up). Internet diperlukan. Masuk ke bahagian Penilaian Akhir dalam sistem CableLabX selepas halaman dibuka.</p>
+            <div className="flex flex-wrap gap-3 mt-4">
+              <a href="https://cablelab2026.netlify.app/index.html" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-xl bg-emerald-700 px-5 py-3 font-extrabold text-white hover:bg-emerald-800"><ExternalLink size={17}/>Buka CableLabX (alamat asal)</a>
+              <a href="https://cablelabx.netlify.app/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-xl bg-white border border-emerald-400 px-5 py-3 font-bold text-emerald-900 hover:bg-emerald-100"><ExternalLink size={17}/>Pautan alternatif</a>
+            </div>
+            <p className="text-xs text-emerald-800 mt-3">Jika kedua-dua laman tidak boleh dibuka, semak URL deployment Netlify terkini. Fungsi Penilaian Akhir berada dalam aplikasi CableLabX yang berasingan, bukan kod eModul-IKR.</p>
+            {demoMode && <p className="text-xs font-bold text-amber-800 mt-2">Mod Juri: pautan dibuka untuk pratonton sahaja. Kemajuan pelajar eModul-IKR tidak berubah.</p>}
+          </section>
+        )}
 
         <div className="px-4 mt-8">
           <div className="bg-gradient-to-r from-slate-900 via-indigo-900 to-slate-800 rounded-2xl p-8 text-white shadow-xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between border border-indigo-800">
@@ -1475,12 +1502,22 @@ export default function ModuleIKR3023({ onBackToPortal, demoMode = false, demoTa
                       {toolsData.map((tool, idx) => (
                         <div key={idx} className="bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden flex flex-col hover:border-slate-500 hover:shadow-[0_10px_30px_rgba(0,0,0,0.5)] transition-all group">
                           
-                          {/* Tool Graphic Header */}
-                          <div className="bg-slate-950 p-6 h-48 sm:h-56 flex items-center justify-center relative overflow-hidden border-b border-slate-700/50">
-                            <div className={`absolute inset-0 opacity-10 bg-${tool.color}-500 blur-3xl rounded-full transform group-hover:scale-110 transition-transform duration-500`}></div>
-                            <div className="w-32 h-32 sm:w-40 sm:h-40 relative z-10 transform group-hover:scale-110 transition-transform duration-300">
-                              {tool.diagram}
-                            </div>
+                          {/* Foto sebenar digunakan apabila pengajar menambah fail. Jika tiada, papar rajah asal. */}
+                          <div className="bg-slate-950 h-48 sm:h-56 flex items-center justify-center relative overflow-hidden border-b border-slate-700/50">
+                            {(() => {
+                              const photoEntry = Object.entries(toolPhotoFiles).find(([path]) => new RegExp(`/` + toolPhotoNames[idx] + `[.](jpg|jpeg|png|webp)$`, 'i').test(path));
+                              return photoEntry ? (
+                                <figure className="w-full h-full relative bg-white">
+                                  <img src={photoEntry[1]} alt={`Foto sebenar ${tool.name}`} loading="lazy" className="w-full h-full object-contain"/>
+                                  <figcaption className="absolute bottom-2 left-2 bg-slate-950/80 text-white text-[10px] font-bold rounded-md px-2 py-1">Foto alatan sebenar</figcaption>
+                                </figure>
+                              ) : (
+                                <div className="w-full h-full flex flex-col items-center justify-center p-5">
+                                  <div className="w-28 h-28 sm:w-36 sm:h-36 group-hover:scale-110 transition-transform duration-300">{tool.diagram}</div>
+                                  <span className="text-slate-400 text-[10px] mt-2">Rajah alat • foto sebenar boleh ditambah</span>
+                                </div>
+                              );
+                            })()}
                           </div>
                           
                           {/* Tool Details Body */}
@@ -1497,6 +1534,12 @@ export default function ModuleIKR3023({ onBackToPortal, demoMode = false, demoTa
                               <p className="text-sm text-slate-300 font-medium leading-relaxed">{tool.fungsi}</p>
                             </div>
                             
+                            <div className="rounded-xl bg-amber-500/10 border border-amber-500/20 p-3 mb-4 text-xs text-amber-100 leading-relaxed">
+                              <strong className="block text-amber-300 mb-1">Cara Guna (Ringkas)</strong>
+                              {practicalToolNotes[idx].use}
+                              <strong className="block text-amber-300 mt-2 mb-1">Amalan Selamat</strong>
+                              {practicalToolNotes[idx].safety}
+                            </div>
                             <div className="mt-auto">
                               <h4 className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-2 border-b border-slate-700 pb-1"><Info size={12} className="inline mr-1"/>Ciri-ciri Fizikal</h4>
                               <ul className="space-y-2">
