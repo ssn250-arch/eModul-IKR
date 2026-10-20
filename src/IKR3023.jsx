@@ -69,6 +69,10 @@ import {
   MonitorSpeaker,
 } from 'lucide-react';
 import TopicUnlockQuiz, { UNLOCK_PASS_MARK, getStudentNumber } from './TopicUnlockQuiz';
+import IKR3023CableLab, { TwistedPairCableDiagram } from './IKR3023CableLab';
+import photoFaceplate from './assets/safety-photos/faceplate.webp';
+import photoModularJack from './assets/safety-photos/keystone-jack.webp';
+import photoFloorCover from './assets/safety-photos/floor-cable-cover.webp';
 
 // ==========================================
 // DATA UTAMA: NOTA IKR3023 (RANGKAIAN)
@@ -134,7 +138,7 @@ const topics = [
           title: "Kabel Tembaga (Copper)",
           points: [
             "UTP (Unshielded Twisted Pair): Wayar tembaga terpintal tanpa pelindung. Murah dan paling banyak digunakan (Cat5e, Cat6).",
-            "STP (Shielded Twisted Pair): Sama seperti UTP tetapi mempunyai kerajang (foil) pelindung dari gangguan elektromagnetik (EMI).",
+            "Kabel Twisted Pair Berperisai (contoh F/UTP, S/FTP): Pelindung foil dan/atau jaring membantu mengurangkan gangguan EMI; jenis perisai dan aksesori mesti dipadankan.",
             "Coaxial: Konduktor pusat dilindungi penebat tebal. Biasa digunakan untuk CCTV dan TV Kabel."
           ]
         }
@@ -408,28 +412,15 @@ const cablingStructureData = [
 const copperCablesData = [
   {
     name: 'UTP (Unshielded)', icon: <Cable size={24} className="text-blue-400"/>,
-    diagram: (
-      <svg viewBox="0 0 200 100" className="w-full h-full drop-shadow-md">
-        <path d="M10,25 L80,25 C85,25 85,75 80,75 L10,75 Z" fill="#334155" />
-        <path d="M75,35 Q 110,15 140,35 T 190,25" fill="none" stroke="#3b82f6" strokeWidth="4" />
-        <path d="M75,45 Q 110,25 140,45 T 190,35" fill="none" stroke="#f97316" strokeWidth="4" />
-        <path d="M75,55 Q 110,35 140,55 T 190,45" fill="none" stroke="#22c55e" strokeWidth="4" />
-        <path d="M75,65 Q 110,45 140,65 T 190,55" fill="none" stroke="#a16207" strokeWidth="4" />
-      </svg>
-    ),
-    ciri: ['4 pasang wayar terpilin.', 'Tiada lapisan perisai.', 'Murah & fleksibel.'], kegunaan: 'Rangkaian LAN pejabat & rumah.'
+    diagram: <TwistedPairCableDiagram />,
+
+    ciri: ['8 konduktor membentuk 4 pasangan terpilin.', 'Tiada foil atau jaring pelindung tambahan.', 'Lazim bagi pemasangan Ethernet LAN.'], kegunaan: 'Rangkaian LAN pejabat & rumah.'
   },
   {
     name: 'STP (Shielded)', icon: <ShieldCheck size={24} className="text-emerald-400"/>,
-    diagram: (
-      <svg viewBox="0 0 200 100" className="w-full h-full drop-shadow-md">
-        <path d="M10,20 L60,20 C65,20 65,80 60,80 L10,80 Z" fill="#1e293b" />
-        <path d="M55,23 L90,23 C95,23 95,77 90,77 L55,77 Z" fill="#94a3b8" />
-        <path d="M60,25 L85,45 M60,35 L85,55 M60,45 L85,65 M60,55 L85,75" stroke="#cbd5e1" strokeWidth="2" />
-        <path d="M85,35 Q 120,15 150,35 T 190,30" fill="none" stroke="#3b82f6" strokeWidth="4" />
-      </svg>
-    ),
-    ciri: ['Pembalut foil/jaring.', 'Kurang gangguan EMI.'], kegunaan: 'Kawasan kilang industri.'
+    diagram: <TwistedPairCableDiagram shielded />,
+
+    ciri: ['8 konduktor dalam 4 pasangan, bersama perisai foil atau jaring.', 'Jenis perisai dan pembumian peralatan perlu mengikut reka bentuk sistem.', 'Mengurangkan gangguan EMI apabila dipasang dengan betul.'], kegunaan: 'Kawasan kilang industri.'
   },
   {
     name: 'Kabel Coaxial', icon: <Radio size={24} className="text-orange-400"/>,
@@ -537,63 +528,49 @@ const toolsData = [
 
 const componentsData = [
   {
-    name: "Faceplate (Plat Dinding)", 
-    icon: <Monitor size={32} className="text-rose-500"/>, 
-    color: "rose",
-    diagram: (
-      <svg viewBox="0 0 200 200" className="w-full h-full text-rose-500 drop-shadow-md">
-        <rect x="50" y="30" width="100" height="140" rx="8" fill="#f8fafc" stroke="currentColor" strokeWidth="4"/>
-        <rect x="70" y="60" width="60" height="35" rx="4" fill="#1e293b"/>
-        <rect x="70" y="105" width="60" height="35" rx="4" fill="#1e293b"/>
-        <circle cx="100" cy="45" r="4" fill="#cbd5e1"/>
-        <circle cx="100" cy="155" r="4" fill="#cbd5e1"/>
-      </svg>
-    ),
-    fungsi: "Bingkai penutup pada dinding (Wall Box) yang menyediakan titik sambungan kemas untuk terminal pengguna.", 
+    name: 'Faceplate (Plat Dinding)',
+    icon: <Monitor size={30} className="text-rose-400" />,
+    photo: photoFaceplate,
+    photoAlt: 'Foto faceplate dinding sebenar dengan ruang label dan lokasi soket keystone',
+    photoLabel: 'Foto sebenar: plat dinding sebelum keystone dipasang',
+    style: { accent: 'border-rose-500', heading: 'text-rose-300', tint: 'bg-rose-500/10', border: 'hover:border-rose-500/60' },
+    fungsi: 'Plat kemasan yang menempatkan soket data di workstation; modular jack boleh dipasang pada bukaan yang sesuai.',
     ciri: [
-      <span key="1">Diperbuat daripada plastik tahan lasak ABS.</span>, 
-      <span key="2">Boleh memuatkan 1, 2, atau lebih soket (Port).</span>
-    ]
+      'Terdapat ruang label untuk kod titik data (contoh D-01).',
+      'Pastikan modul keystone dan plat mempunyai format pemasangan yang serasi.',
+      'Pilih lokasi yang selamat, kemas dan mudah dicapai pengguna.'
+    ],
+    periksa: 'Kenal pasti ruang modul dan label; foto ini belum menunjukkan RJ45 jack dipasang.'
   },
   {
-    name: "Modular Jack RJ45", 
-    icon: <Plug size={32} className="text-blue-500"/>, 
-    color: "blue",
-    diagram: (
-      <svg viewBox="0 0 200 200" className="w-full h-full text-blue-500 drop-shadow-md">
-        <rect x="65" y="50" width="70" height="100" rx="4" fill="currentColor"/>
-        <rect x="60" y="60" width="80" height="80" fill="#1e293b" rx="2"/>
-        <rect x="75" y="70" width="50" height="40" fill="#0f172a" rx="2"/>
-        <path d="M 80 75 L 80 90 M 86 75 L 86 90 M 92 75 L 92 90 M 98 75 L 98 90 M 104 75 L 104 90 M 110 75 L 110 90 M 116 75 L 116 90 M 122 75 L 122 90" stroke="#fbbf24" strokeWidth="2"/>
-        <rect x="70" y="125" width="60" height="15" fill="#334155" rx="2"/>
-      </svg>
-    ),
-    fungsi: "Soket 'betina' (Keystone Jack) yang menerima sambungan Patch Cord RJ45 dari komputer pekerja.", 
+    name: 'Modular Jack RJ45 (Keystone)',
+    icon: <Plug size={30} className="text-blue-400" />,
+    photo: photoModularJack,
+    photoAlt: 'Foto keystone jack RJ45 biru sebenar dengan terminal IDC dan label warna penamatan T568A dan T568B',
+    photoLabel: 'Foto sebenar: keystone jack RJ45 dengan kod warna IDC',
+    style: { accent: 'border-blue-500', heading: 'text-blue-300', tint: 'bg-blue-500/10', border: 'hover:border-blue-500/60' },
+    fungsi: 'Soket data betina yang menerima plug 8P8C pada patch cord; kabel horizontal ditamatkan pada terminal IDC di belakang.',
     ciri: [
-      <span key="1">Kabel utama (Backbone) ditanam di bahagian belakangnya menggunakan alat Punch Down.</span>, 
-      <span key="2">Mudah diklik masuk (Snap-in) ke dalam Faceplate.</span>
-    ]
+      'Padankan susunan T568A atau T568B mengikut spesifikasi pendawaian tapak.',
+      'Gunakan alat penamatan yang sepadan dengan jenis keystone jack.',
+      'Pasang jack ke faceplate dan uji pendawaian dengan cable tester.'
+    ],
+    periksa: 'Bezakan bahagian hadapan (soket RJ45) dengan bahagian belakang (terminal IDC).'
   },
   {
-    name: "Trunking & Conduit (Saluran)", 
-    icon: <Layers size={32} className="text-emerald-500"/>, 
-    color: "emerald",
-    diagram: (
-      <svg viewBox="0 0 200 200" className="w-full h-full text-emerald-500 drop-shadow-md">
-        <path d="M 20 130 L 160 130 L 180 90 L 40 90 Z" fill="#cbd5e1" stroke="currentColor" strokeWidth="3"/>
-        <path d="M 30 120 L 150 120 L 165 95 L 45 95" fill="none" stroke="#3b82f6" strokeWidth="4"/>
-        <path d="M 35 115 L 155 115 L 170 90 L 50 90" fill="none" stroke="#f97316" strokeWidth="4"/>
-        <path d="M 20 160 L 120 160 L 140 120 L 40 120 Z" fill="#f8fafc" stroke="currentColor" strokeWidth="3" opacity="0.95"/>
-        <line x1="80" y1="120" x2="80" y2="160" stroke="#94a3b8" strokeWidth="2" opacity="0.5"/>
-      </svg>
-    ),
-    fungsi: "Laluan paip dan saluran untuk menyembunyikan, menyusun, serta melindungi kabel dari kerosakan fizikal, haba, atau haiwan.", 
+    name: 'Saluran & Pelindung Kabel',
+    icon: <Layers size={30} className="text-emerald-400" />,
+    photo: photoFloorCover,
+    photoAlt: 'Foto contoh pelindung kabel lantai berprofil rendah dengan beberapa saiz laluan kabel',
+    photoLabel: 'Foto sebenar: pelindung kabel lantai berprofil rendah, BUKAN conduit',
+    style: { accent: 'border-emerald-500', heading: 'text-emerald-300', tint: 'bg-emerald-500/10', border: 'hover:border-emerald-500/60' },
+    fungsi: 'Trunking mengurus kabel dalam saluran berpenutup; conduit ialah paip pelindung; pelindung kabel lantai membantu melindungi kabel pada laluan permukaan.',
     ciri: [
-      <span key="1"><strong className="text-slate-200">PVC:</strong> Ringan dan kos lebih rendah; pilih jenis dengan penarafan keselamatan kebakaran sesuai untuk lokasi pemasangan.</span>,
-      <span key="2"><strong className="text-slate-200">Steel (Keluli):</strong> Tahan impak mekanikal tinggi (Sesuai untuk kilang industri).</span>,
-      <span key="3"><strong className="text-slate-200">Glass Reinforced Polyester (GRP):</strong> Kalis karat & tahan bahan kimia (Cuaca ekstrem).</span>,
-      <span key="4"><strong className="text-slate-200">Galvanized Rigid Conduit (GRC):</strong> Paip besi bergalvani tebal (Bawah tanah & luaran).</span>
-    ]
+      'Trunking PVC/logam: laluan kabel pada dinding atau permukaan sesuai.',
+      'Conduit: paip yang melindungi laluan kabel mengikut lokasi dan peraturan pemasangan.',
+      'Pelindung lantai (gambar): pilih profil, kapasiti serta ketahanan mekanikal yang sesuai; jangan menyekat laluan keluar.'
+    ],
+    periksa: 'Kenal pasti jenis saluran dahulu. Jangan tersalah anggap pelindung kabel lantai ini sebagai conduit.'
   }
 ];
 
@@ -1245,7 +1222,7 @@ export default function ModuleIKR3023({ onBackToPortal, demoMode = false, demoTa
                         <h5 className="font-bold text-slate-800 mb-3 flex items-center gap-2">
                           <Settings size={20} className="text-slate-500"/> Kod Warna Standard
                         </h5>
-                        <p className="text-sm text-slate-600 mb-5">Dua piawaian utama untuk menamatkan kabel UTP. <strong>T568B</strong> paling meluas digunakan secara komersial.</p>
+                        <p className="text-sm text-slate-600 mb-5">Dua susunan penamatan T568A dan T568B digunakan dalam rangkaian berstruktur. Pilih satu susunan secara konsisten mengikut spesifikasi tapak. Rujuk <strong>Lab Susunan Pin</strong> di bawah untuk nombor pin dan arah penyambung yang jelas.</p>
                         
                         <div className="space-y-6">
                           {/* Visual T568A */}
@@ -1261,7 +1238,7 @@ export default function ModuleIKR3023({ onBackToPortal, demoMode = false, demoTa
                               <div className="w-6 h-12 sm:w-8 sm:h-16 bg-white border border-slate-300 flex flex-col rounded-sm shadow-sm"><div className="h-1/2 bg-amber-800 rounded-t-sm"></div></div>
                               <div className="w-6 h-12 sm:w-8 sm:h-16 bg-amber-800 border border-slate-300 rounded-sm shadow-sm"></div>
                             </div>
-                            <p className="text-[9px] sm:text-[10px] text-slate-500 text-center uppercase tracking-widest font-mono font-bold">
+                            <p className="text-[11px] sm:text-xs text-slate-600 text-center font-mono font-bold leading-relaxed break-words">
                               P-Hj | Hj | P-Or | Biru | P-Biru | Or | P-Ck | Ck
                             </p>
                           </div>
@@ -1279,7 +1256,7 @@ export default function ModuleIKR3023({ onBackToPortal, demoMode = false, demoTa
                               <div className="w-6 h-12 sm:w-8 sm:h-16 bg-white border border-slate-300 flex flex-col rounded-sm shadow-sm"><div className="h-1/2 bg-amber-800 rounded-t-sm"></div></div>
                               <div className="w-6 h-12 sm:w-8 sm:h-16 bg-amber-800 border border-slate-300 rounded-sm shadow-sm"></div>
                             </div>
-                            <p className="text-[9px] sm:text-[10px] text-slate-500 text-center uppercase tracking-widest font-mono font-bold">
+                            <p className="text-[11px] sm:text-xs text-slate-600 text-center font-mono font-bold leading-relaxed break-words">
                               P-Or | Or | P-Hj | Biru | P-Biru | Hj | P-Ck | Ck
                             </p>
                           </div>
@@ -1294,7 +1271,7 @@ export default function ModuleIKR3023({ onBackToPortal, demoMode = false, demoTa
                             <div className="absolute top-0 right-0 w-16 h-16 bg-blue-100 rounded-bl-full -z-0"></div>
                             <h6 className="font-bold text-blue-800 text-lg mb-1 relative z-10">Straight-Through Cable</h6>
                             <p className="text-xs text-blue-600/80 font-bold mb-2 relative z-10">Hujung A (T568B) ━━━━ Hujung B (T568B)</p>
-                            <p className="text-sm text-slate-700 relative z-10">Menyambungkan <strong>peranti yang berbeza jenis</strong>.</p>
+                            <p className="text-sm text-slate-700 relative z-10">Kedua-dua hujung menggunakan <strong>piawaian sama</strong> (A–A atau B–B). Lazim untuk sambungan PC ke switch.</p>
                             <div className="mt-2 text-xs text-slate-600 font-medium flex items-center gap-2 relative z-10">
                               <span className="bg-white px-2 py-1 rounded border border-blue-100 shadow-sm">Komputer</span> 
                               <ArrowRightLeft size={12} className="text-blue-400"/>
@@ -1307,7 +1284,7 @@ export default function ModuleIKR3023({ onBackToPortal, demoMode = false, demoTa
                             <div className="absolute top-0 right-0 w-16 h-16 bg-rose-100 rounded-bl-full -z-0"></div>
                             <h6 className="font-bold text-rose-800 text-lg mb-1 relative z-10">Crossover Cable</h6>
                             <p className="text-xs text-rose-600/80 font-bold mb-2 relative z-10">Hujung A (T568A) ━━━━ Hujung B (T568B)</p>
-                            <p className="text-sm text-slate-700 relative z-10">Menyambungkan <strong>peranti yang sama jenis</strong> secara terus.</p>
+                            <p className="text-sm text-slate-700 relative z-10">Satu hujung <strong>T568A</strong> dan satu hujung <strong>T568B</strong>; digunakan pada peralatan lama tertentu. Kebanyakan peralatan moden menyokong Auto-MDI/MDIX.</p>
                             <div className="mt-2 text-xs text-slate-600 font-medium flex items-center gap-2 relative z-10">
                               <span className="bg-white px-2 py-1 rounded border border-rose-100 shadow-sm">Switch</span> 
                               <ArrowRightLeft size={12} className="text-rose-400"/>
@@ -1320,6 +1297,9 @@ export default function ModuleIKR3023({ onBackToPortal, demoMode = false, demoTa
                     </div>
                   </div>
 
+                  {/* LATIHAN PINOUT RESPONSIF 8 KONDUKTOR */}
+                  <IKR3023CableLab />
+
                   {/* SEKSYEN 3: INFOGRAFIK FIBER OPTIK */}
                   <div className="bg-slate-950 rounded-2xl border border-slate-800 shadow-2xl overflow-hidden text-white relative">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500 opacity-10 blur-[100px] pointer-events-none"></div>
@@ -1331,7 +1311,7 @@ export default function ModuleIKR3023({ onBackToPortal, demoMode = false, demoTa
                         <h4 className="font-bold text-white text-3xl flex items-center justify-center gap-3">
                           <Zap className="text-cyan-400" size={32}/> Infografik Fiber Optik
                         </h4>
-                        <p className="text-slate-400 text-sm mt-3 max-w-2xl mx-auto">Fiber Optik menghantar data bukan melalui elektrik, tetapi melalui <strong>kelipan isyarat cahaya</strong> (Poton) yang melantun di dalam gentian kaca (Core) bersaiz rambut.</p>
+                        <p className="text-slate-400 text-sm mt-3 max-w-2xl mx-auto">Fiber Optik menghantar data bukan melalui elektrik, tetapi melalui <strong>kelipan isyarat cahaya</strong> (foton) yang melantun di dalam gentian kaca (Core) bersaiz rambut.</p>
                       </div>
 
                       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -1356,11 +1336,11 @@ export default function ModuleIKR3023({ onBackToPortal, demoMode = false, demoTa
                             </li>
                             <li className="flex items-start gap-3 bg-slate-800/50 p-3 rounded-lg border border-slate-700/50">
                               <span className="text-cyan-400 font-bold shrink-0 w-24">Sumber Cahaya:</span>
-                              <span className="text-slate-300 text-sm">Pancaran Laser tertumpu (Straight).</span>
+                              <span className="text-slate-300 text-sm">Laser; cahaya merambat dalam satu mod pandu gelombang.</span>
                             </li>
                             <li className="flex items-start gap-3 bg-slate-800/50 p-3 rounded-lg border border-slate-700/50">
                               <span className="text-cyan-400 font-bold shrink-0 w-24">Jarak & Aplikasi:</span>
-                              <span className="text-slate-300 text-sm">Jarak melampau jauh (rentas bandar/lautan). Digunakan oleh ISP (TM Unifi).</span>
+                              <span className="text-slate-300 text-sm">Sesuai untuk pautan jarak jauh; jarak maksimum bergantung pada transceiver, panjang gelombang dan bajet kuasa optik.</span>
                             </li>
                           </ul>
                         </div>
@@ -1387,11 +1367,11 @@ export default function ModuleIKR3023({ onBackToPortal, demoMode = false, demoTa
                             </li>
                             <li className="flex items-start gap-3 bg-slate-800/50 p-3 rounded-lg border border-slate-700/50">
                               <span className="text-purple-400 font-bold shrink-0 w-24">Sumber Cahaya:</span>
-                              <span className="text-slate-300 text-sm">Cahaya LED yang memantul (Zig-Zag).</span>
+                              <span className="text-slate-300 text-sm">Ethernet multimode moden seperti OM3/OM4 lazimnya menggunakan laser VCSEL 850 nm; bukan semestinya LED.</span>
                             </li>
                             <li className="flex items-start gap-3 bg-slate-800/50 p-3 rounded-lg border border-slate-700/50">
                               <span className="text-purple-400 font-bold shrink-0 w-24">Jarak & Aplikasi:</span>
-                              <span className="text-slate-300 text-sm">Jarak dekat (kurang dari 2km). Sesuai untuk Backbone LAN dalam kawasan kilang/kampus.</span>
+                              <span className="text-slate-300 text-sm">Sesuai untuk pautan lebih pendek dalam bangunan dan pusat data. Jarak bergantung pada OM3/OM4/OM5 dan transceiver optik yang digunakan.</span>
                             </li>
                           </ul>
                         </div>
@@ -1399,7 +1379,7 @@ export default function ModuleIKR3023({ onBackToPortal, demoMode = false, demoTa
 
                       <div className="mt-8 bg-emerald-900/30 border border-emerald-800/50 p-5 rounded-xl text-center">
                         <h6 className="text-emerald-400 font-bold flex items-center justify-center gap-2 mb-2"><CheckCircle size={18}/> Mengapa Pilih Fiber Optik?</h6>
-                        <p className="text-sm text-emerald-100">100% Kebal terhadap gangguan elektromagnetik (EMI), kapasiti jalur lebar (Bandwidth) yang tiada tandingan, dan tidak berisiko kilat kerana tiada pengalir arus elektrik.</p>
+                        <p className="text-sm text-emerald-100">Gentian kaca tidak mengalirkan arus pada terasnya dan sangat tahan terhadap EMI. Namun sesetengah kabel fiber mempunyai komponen logam, jadi langkah pembumian dan keselamatan kilat masih perlu mengikut spesifikasi pemasangan.</p>
                       </div>
 
                     </div>
@@ -1775,46 +1755,37 @@ export default function ModuleIKR3023({ onBackToPortal, demoMode = false, demoTa
                        <p className="text-slate-400 text-sm mt-3 max-w-2xl mx-auto">Kenali aksesori fizikal yang melengkapkan pemasangan rangkaian di kawasan ruang kerja pengguna untuk memastikan kekemasan dan keselamatan kabel.</p>
                      </div>
 
-                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
-                       {componentsData.map((item, idx) => (
-                         <div key={idx} className={`bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden flex flex-col hover:border-${item.color}-500 hover:shadow-[0_10px_30px_rgba(0,0,0,0.5)] transition-all group`}>
-                           
-                           {/* Graphic Header */}
-                           <div className="bg-slate-950 p-6 h-48 flex items-center justify-center relative overflow-hidden border-b border-slate-700/50">
-                             <div className={`absolute inset-0 opacity-10 bg-${item.color}-500 blur-3xl rounded-full transform group-hover:scale-110 transition-transform duration-500`}></div>
-                             <div className="w-32 h-32 relative z-10 transform group-hover:scale-110 transition-transform duration-300">
-                               {item.diagram}
-                             </div>
+                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 relative z-10 items-stretch">
+                       {componentsData.map((item) => (
+                         <article key={item.name} className={`min-w-0 rounded-2xl border border-slate-700 bg-slate-800 overflow-hidden flex flex-col transition-colors shadow-lg ${item.style.border}`}>
+                           <div className="bg-white relative border-b border-slate-700 p-3 sm:p-5 h-48 sm:h-56 flex items-center justify-center">
+                             <img src={item.photo} alt={item.photoAlt} className="w-full h-full object-contain" loading="lazy" decoding="async" />
                            </div>
-                           
-                           {/* Details Body */}
-                           <div className="p-5 sm:p-6 flex flex-col flex-grow bg-gradient-to-b from-slate-800 to-slate-900">
-                             <div className="flex items-center gap-3 mb-4">
-                               <div className={`p-2 rounded-lg bg-${item.color}-900/30 border border-${item.color}-500/30 shrink-0`}>
-                                 {item.icon}
-                               </div>
-                               <h3 className="text-xl font-bold text-white leading-tight">{item.name}</h3>
+                           <div className="px-4 py-2 text-[11px] leading-snug text-slate-300 bg-slate-900 border-b border-slate-700">
+                             {item.photoLabel}
+                           </div>
+                           <div className="p-4 sm:p-5 flex-1 flex flex-col gap-4">
+                             <div className="flex items-center gap-3 min-w-0">
+                               <div className={`p-2.5 rounded-xl shrink-0 ${item.style.tint}`}>{item.icon}</div>
+                               <h5 className="text-lg sm:text-xl font-extrabold text-white leading-snug">{item.name}</h5>
                              </div>
-                             
-                             <div className={`bg-${item.color}-900/10 border-l-4 border-${item.color}-500 p-3 rounded-r-lg mb-4`}>
-                               <h4 className={`text-[10px] font-bold uppercase tracking-wider text-${item.color}-400 mb-1`}>Fungsi Utama</h4>
-                               <p className="text-sm text-slate-300 font-medium leading-relaxed">{item.fungsi}</p>
+                             <div className={`rounded-r-xl border-l-4 p-3 bg-slate-900/70 ${item.style.accent}`}>
+                               <h6 className={`text-xs font-bold uppercase tracking-wide mb-1 ${item.style.heading}`}>Fungsi Utama</h6>
+                               <p className="text-sm text-slate-200 leading-relaxed">{item.fungsi}</p>
                              </div>
-                             
-                             <div className="mt-auto">
-                               <h4 className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-2 border-b border-slate-700 pb-1"><Info size={12} className="inline mr-1"/>Ciri-ciri & Aplikasi</h4>
-                               <ul className="space-y-2">
-                                 {item.ciri.map((c, i) => (
-                                   <li key={i} className="flex items-start gap-2 text-sm text-slate-400">
-                                     <CheckCircle size={14} className={`text-${item.color}-500 shrink-0 mt-0.5 opacity-70`}/>
-                                     <span>{c}</span>
-                                   </li>
-                                 ))}
+                             <div>
+                               <h6 className="text-xs uppercase font-bold text-slate-300 mb-2">Ciri & Penggunaan</h6>
+                               <ul className="space-y-2.5 text-sm text-slate-300">
+                                 {item.ciri.map((c) => <li key={c} className="flex gap-2 items-start"><CheckCircle size={16} className="text-emerald-400 shrink-0 mt-0.5"/><span>{c}</span></li>)}
                                </ul>
                              </div>
+                             <div className="mt-auto rounded-xl border border-cyan-500/20 bg-cyan-500/10 p-3 text-sm text-cyan-100 leading-relaxed">
+                               <strong className="block text-cyan-300 text-xs mb-1">PERHATIKAN DALAM AMALI</strong>
+                               {item.periksa}
+                             </div>
+                             <a href={item.photo} target="_blank" rel="noopener noreferrer" className="min-h-11 inline-flex items-center justify-center gap-2 rounded-xl bg-slate-700 text-white text-sm font-bold hover:bg-slate-600 focus-visible:outline-2 focus-visible:outline-cyan-400 px-4 py-2" aria-label={`Besarkan foto ${item.name}`}><Maximize size={16}/> Besarkan Foto</a>
                            </div>
-
-                         </div>
+                         </article>
                        ))}
                      </div>
                    </div>
