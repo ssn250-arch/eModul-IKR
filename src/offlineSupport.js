@@ -1,8 +1,26 @@
 export const offlineReady = () => typeof navigator !== 'undefined' && navigator.onLine === false;
 
-/** Safely open external content only when browser reports an internet connection. */
+// Permainan di domain berasingan ini mempunyai PWA/cache offline tersendiri.
+// Portal boleh membuka URL asalnya walaupun tiada internet, asalkan game pernah
+// disediakan untuk offline pada pelayar/peranti yang sama.
+const OFFLINE_GAME_HOSTS = new Set([
+  'pcnexus.netlify.app',
+  'cablelabx.netlify.app',
+  'cablelab2026.netlify.app',
+]);
+
+function canLaunchOffline(url) {
+  try {
+    const target = new URL(url, window.location.href);
+    return target.protocol === 'https:' && OFFLINE_GAME_HOSTS.has(target.hostname);
+  } catch {
+    return false;
+  }
+}
+
+/** Open cached game PWAs while offline; keep the warning for other external resources. */
 export function openOnlineResource(url, language = 'ms') {
-  if (offlineReady()) {
+  if (offlineReady() && !canLaunchOffline(url)) {
     window.alert(language === 'en'
       ? 'This resource needs internet access. Your offline notes, quizzes and Smart Tutor are still available.'
       : 'Bahan ini memerlukan internet. Nota, kuiz dan Smart Tutor masih boleh digunakan secara offline.');
@@ -37,7 +55,6 @@ export async function askOfflineWorker(type = 'OFFLINE_STATUS', timeout = 18000)
     }
   });
 }
-
 // Export/import explicitly selected learning keys only; do not export unrelated browser data.
 const progressKey = /^(ikr3013|ikr3023)_quiz_unlock_v4_(?:[1-9]|[12][0-9]|30)$/;
 const otherKeys = new Set(['emodul_ikr_student_number_v1', 'emodul_ikr_language_v1']);
@@ -60,7 +77,6 @@ export function exportProgressBackup() {
   setTimeout(() => URL.revokeObjectURL(url), 1500);
   return Object.keys(progress).length;
 }
-
 export async function importProgressBackup(file) {
   if (!file || file.size > 200_000) throw new Error('Fail terlalu besar atau tidak sah.');
   const json = JSON.parse(await file.text());
